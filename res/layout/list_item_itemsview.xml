@@ -58,6 +58,7 @@
 
 	<LinearLayout
         android:orientation="horizontal"
+        android:gravity = "center|center_vertical"        
         android:layout_width="fill_parent"
         android:layout_height="48dip">
 
@@ -78,7 +79,7 @@
 	    
 	    <TextView android:id="@+id/comment"
 	        android:layout_width="30dip"
-	        android:layout_height="30dip"
+	        android:layout_height="25dip"
 	        android:gravity = "center|center_vertical"        
 	        android:drawSelectorOnTop="false" 
             android:textSize = "15sp"

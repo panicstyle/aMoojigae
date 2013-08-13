@@ -100,7 +100,7 @@ public class RecentItemsActivity extends ListActivity {
                 holder.name = (TextView) convertView.findViewById(R.id.name);
                 holder.subject = (TextView) convertView.findViewById(R.id.subject);
                 holder.comment = (TextView) convertView.findViewById(R.id.comment);
-                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+                holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
 
                 convertView.setTag(holder);
             } else {
@@ -120,10 +120,10 @@ public class RecentItemsActivity extends ListActivity {
             holder.name.setText(name);
             holder.subject.setText(subject);
             holder.comment.setText(comment);
-            if (isNew == "1") {
-            	holder.icon.setImageResource(R.drawable.icon_new);
+            if (isNew.equalsIgnoreCase("1")) {
+            	holder.iconnew.setImageResource(R.drawable.icon_new);
             } else {
-            	holder.icon.setImageResource(R.drawable.icon_none);
+            	holder.iconnew.setImageResource(R.drawable.icon_none);
             }
             if (comment.length() > 0) {
             	holder.comment.setBackgroundResource(R.drawable.circle);
@@ -139,7 +139,7 @@ public class RecentItemsActivity extends ListActivity {
             TextView name;
             TextView subject;
             TextView comment;
-            ImageView icon;
+            ImageView iconnew;
         }
     }
 	
