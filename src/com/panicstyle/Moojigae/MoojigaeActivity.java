@@ -147,7 +147,7 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
         AdView adView = (AdView)this.findViewById(R.id.adView);
         adView.loadAd(new AdRequest());
 
-        pd = ProgressDialog.show(this, "", "로딩중입니다. 잠시만 기다리십시오...", true, false);
+        pd = ProgressDialog.show(this, "", "로딩중", true, false);
 
         Thread thread = new Thread(this);
         thread.start();
@@ -163,7 +163,11 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
-    		pd.dismiss();
+            if(pd != null){
+                if(pd.isShowing()){
+                    pd.dismiss();
+                }
+            }
     		displayData();
     	}
     };        

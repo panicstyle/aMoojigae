@@ -92,7 +92,7 @@ public class CommentWrite extends Activity implements Runnable {
 			return;
     	}
     	
-        pd = ProgressDialog.show(this, "", "저장중입니다. 잠시만 기다리십시오...", true, false);
+        pd = ProgressDialog.show(this, "", "저장중", true, false);
 
         Thread thread = new Thread(this);
         thread.start();
@@ -108,7 +108,11 @@ public class CommentWrite extends Activity implements Runnable {
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
-    		pd.dismiss();
+            if(pd != null){
+                if(pd.isShowing()){
+                    pd.dismiss();
+                }
+            }
     		if (!bSaveStatus) {
 	    		AlertDialog.Builder ab = null;
 				ab = new AlertDialog.Builder( CommentWrite.this );

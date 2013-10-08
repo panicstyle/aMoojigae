@@ -213,7 +213,7 @@ public class ItemsActivity extends ListActivity implements Runnable {
     }
     
     public void LoadingData() {
-        pd = ProgressDialog.show(this, "", "로딩중입니다. 잠시만 기다리십시오...", true,
+        pd = ProgressDialog.show(this, "", "로딩중", true,
                 false);
 
         Thread thread = new Thread(this);
@@ -247,7 +247,11 @@ public class ItemsActivity extends ListActivity implements Runnable {
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
-    		pd.dismiss();
+            if(pd != null){
+                if(pd.isShowing()){
+                    pd.dismiss();
+                }
+            }
     		displayData();
     	}
     };

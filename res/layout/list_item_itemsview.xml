@@ -78,11 +78,11 @@
 	    </TextView>
 	    
 	    <TextView android:id="@+id/comment"
-	        android:layout_width="30dip"
-	        android:layout_height="25dip"
+	        android:layout_width="25dip"
+	        android:layout_height="20dip"
 	        android:gravity = "center|center_vertical"        
 	        android:drawSelectorOnTop="false" 
-            android:textSize = "15sp"
+            android:textSize = "13sp"
             android:textColor="#FFFFFF" >         
 	    </TextView>
     

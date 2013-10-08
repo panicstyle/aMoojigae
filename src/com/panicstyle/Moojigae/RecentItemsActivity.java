@@ -172,9 +172,7 @@ public class RecentItemsActivity extends ListActivity {
     }
     
     public void intenter() {
-//    	Intent intent = getIntent();  // ���� �������� ����Ʈ ��ü��
     	Bundle extras = getIntent().getExtras();
-    	// ������ ���� set���ִ� �κ�
     	
     	itemsTitle = extras.getString("ITEMS_TITLE").toString();
     	itemsLink = extras.getString("ITEMS_LINK").toString();
@@ -185,7 +183,7 @@ public class RecentItemsActivity extends ListActivity {
 		String url = "";
 		HttpRequest httpRequest = new HttpRequest();
 
-		ProgressDialog waitDialog = ProgressDialog.show(this, "", "�ε����Դϴ�. ��� ��ٷ��ּ���", true);
+		ProgressDialog waitDialog = ProgressDialog.show(this, "", "로딩중", true);
 		
 		if (itemsLink.equalsIgnoreCase("maul")) {
 			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvEduLove,mvEduSpring,mvEduDream,mvEduVillageSchool,mvGongDong,mvGongDongFacility,mvGongDongLocalcommunity,mvGongDongEvent,mvGongi,mvGuestbook,mvHorizonIntroduction,mvHorizonLivingStory,mvMarketBanChan,mvMarketThirdlyCookie,mvPhoto,mvPoomASee,mvSecretariat,mvSecretariatAddress,mvSecretariatOldData,mvTopic,mvVillageSchoolData,mvVillageSchoolExchange,mvVillageSchoolExpiredLecture,mvVillageSchoolLecture,mvVillageSchoolLecturePropose,mvVillageSchoolPhoto,mvMinutes,mvLibrary,mvPoomASeeBized,mvPoomASeeWantBiz,mvMarketBoard";
@@ -197,7 +195,7 @@ public class RecentItemsActivity extends ListActivity {
 		
         String result = httpRequest.requestPost(httpClient, httpContext, url, null, "http://121.134.211.159/board-list.do", "euc-kr");
 
-        // �� �׸� ã��
+        // ?? ??? a??
         HashMap<String, String> item;
         List<HashMap<String, String>> arrayItems = new ArrayList<HashMap<String, String>>();
 
@@ -285,8 +283,12 @@ public class RecentItemsActivity extends ListActivity {
 
             arrayItems.add( item );
         }
-        waitDialog.dismiss();
-        
+        if(waitDialog != null){
+            if(waitDialog.isShowing()){
+                waitDialog.dismiss();
+            }
+        }
+
         return arrayItems;
     }
 

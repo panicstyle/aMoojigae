@@ -46,4 +46,27 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+    final Console console = System.console();
+    if (console != null) {
+        signingConfigs {
+            release {
+                storeFile file("aMoojigae.keystore")
+                storePassword System.console().readLine("Enter keystore password: ")
+                keyAlias "amoojigae"
+                keyPassword System.console().readLine("Enter key password: ")
+            }
+        }
+    } else {
+        // Building from IDE
+        signingConfigs {
+            release {
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
