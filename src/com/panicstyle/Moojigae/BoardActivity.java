@@ -445,7 +445,7 @@ public class BoardActivity extends ListActivity implements Runnable {
 	        
 	        item = new HashMap<String, String>();
 	        item.put("link", "mjTeachingData");
-	        item.put("title", "교사자료실");
+	        item.put("title", "교사회의록");
 	        arrayItems.add( item );
 	        
 	        item = new HashMap<String, String>();
@@ -488,13 +488,18 @@ public class BoardActivity extends ListActivity implements Runnable {
 	        item.put("link", "msGongi");
 	        item.put("title", "중등 공지사항");
 	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msFreeBoard");
-	        item.put("title", "학교이야기방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
+
+            item = new HashMap<String, String>();
+            item.put("link", "msFreeBoard");
+            item.put("title", "학교이야기방");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "msOverRainbow");
+            item.put("title", "무지개너머");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
 	        item.put("link", "msFreeComment");
 	        item.put("title", "자유게시판");
 	        arrayItems.add( item );
@@ -518,13 +523,24 @@ public class BoardActivity extends ListActivity implements Runnable {
 	        item.put("link", "msStudentAssociation");
 	        item.put("title", "학생회방");
 	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msParent");
-	        item.put("title", "학부모방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
+
+            item = new HashMap<String, String>();
+            item.put("link", "msParent");
+            item.put("title", "학부모방");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "msRepresentative");
+            item.put("title", "대표자회");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "msMinutes");
+            item.put("title", "회의록");
+            arrayItems.add( item );
+
+
+            item = new HashMap<String, String>();
 	        item.put("link", "msPhoto");
 	        item.put("title", "사진첩&동영상");
 	        arrayItems.add( item );

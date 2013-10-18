@@ -189,7 +189,9 @@ public class ArticleView extends Activity implements Runnable {
         mContent = mContent.replaceAll("<td width=10></td>", "-->");
         mContent = mContent.replaceAll("<!-- 메모에 대한 답변 -->", "<!--");
         mContent = mContent.replaceAll("<!-- <font class=fMemoSmallGray>", "--><!--");
-        
+        mContent = mContent.replaceAll("<nobr class=bbscut id=subjectTtl name=subjectTtl>", "");
+        mContent = mContent.replaceAll("</nobr>", "");
+
         p = Pattern.compile("(<IMG style=)(.|\\n)*?(>)", Pattern.CASE_INSENSITIVE); 
         m = p.matcher(mContent);
         while (m.find()) { // Find each match in turn; String can't do this.     
