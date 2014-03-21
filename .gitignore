@@ -27,4 +27,6 @@ proguard/
 #*.iml
 #*.ipr
 #*.iws
-#.idea/
+.idea/
+.gradle/
+local.properties

@@ -173,9 +173,12 @@ public class ArticleView extends Activity implements Runnable {
         }
         
         String strTitle = "<div align='left'>" + g_Subject + "</div><br /><div align='right'>" + g_UserName + " [" + g_Date + "]</div><hr />";
-        
+
+/*
+        #1 일부 알수 없는 게시글에 대해서 패턴매칭이 안됨
 //      Pattern p = Pattern.compile("(?<=<!-- 게시물 레코드 반복-->)(.|\\n)*?(?=<!-- 메모 입력 -->)", Pattern.CASE_INSENSITIVE); 
-        Pattern p = Pattern.compile("(<!-- 내용 -->)(.|\\n)*?(<!-- 메모 입력 -->)", Pattern.CASE_INSENSITIVE); 
+        Pattern p = Pattern.compile("(<!-- 내용 -->)(.|\\n)*?(<!-- 메모 입력 -->)", Pattern.CASE_INSENSITIVE);
+
         Matcher m = p.matcher(result);
         
         if (m.find()) { // Find each match in turn; String can't do this.     
@@ -183,6 +186,12 @@ public class ArticleView extends Activity implements Runnable {
         } else {
         	mContent = "";
         }
+*/
+        int match1, match2;
+
+        match1 = result.indexOf("<!-- 내용 -->");
+        match2 = result.indexOf("<!-- 메모 입력 -->", match1);
+        mContent = result.substring(match1, match2);
 
 //        mContent = mContent.replaceAll("<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=euc-kr\\\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">");
         mContent = mContent.replaceAll("<td width=200 align=right class=fMemoSmallGray>", "<!--");
@@ -192,8 +201,8 @@ public class ArticleView extends Activity implements Runnable {
         mContent = mContent.replaceAll("<nobr class=bbscut id=subjectTtl name=subjectTtl>", "");
         mContent = mContent.replaceAll("</nobr>", "");
 
-        p = Pattern.compile("(<IMG style=)(.|\\n)*?(>)", Pattern.CASE_INSENSITIVE); 
-        m = p.matcher(mContent);
+        Pattern p = Pattern.compile("(<IMG style=)(.|\\n)*?(>)", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(mContent);
         while (m.find()) { // Find each match in turn; String can't do this.     
             String matchstr = m.group(0);
             
