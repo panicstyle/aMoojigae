@@ -186,11 +186,11 @@ public class RecentItemsActivity extends ListActivity {
 		ProgressDialog waitDialog = ProgressDialog.show(this, "", "로딩중", true);
 		
 		if (itemsLink.equalsIgnoreCase("maul")) {
-			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvEduLove,mvEduSpring,mvEduDream,mvEduVillageSchool,mvGongDong,mvGongDongFacility,mvGongDongLocalcommunity,mvGongDongEvent,mvGongi,mvGuestbook,mvHorizonIntroduction,mvHorizonLivingStory,mvMarketBanChan,mvMarketThirdlyCookie,mvPhoto,mvPoomASee,mvSecretariat,mvSecretariatAddress,mvSecretariatOldData,mvTopic,mvVillageSchoolData,mvVillageSchoolExchange,mvVillageSchoolExpiredLecture,mvVillageSchoolLecture,mvVillageSchoolLecturePropose,mvVillageSchoolPhoto,mvMinutes,mvLibrary,mvPoomASeeBized,mvPoomASeeWantBiz,mvMarketBoard";
+			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvEduBasicRight,mvTopic10Year,mvTopicGoBackHome,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvBuilding,mvBuildingComm";
 		} else if (itemsLink.equalsIgnoreCase("school1")) {
-			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=13&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjAmaDiary,mjPhoto,mjData,mjMinutes,mjParentMinutes";
+			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjData";
 		} else {
-			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=13&pid=msGongi,msFreeBoard,msTeacher,msTeachingData,msJunior,msParent,msAmaDiary,msPhoto,msData";
+			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=msGongi,msFreeBoard,msFreeComment,msTeacher,msSenior,msStudent,msStudentAssociation,msParent,msRepresentative,msMinutes,msPhoto,msData";
 		}
 		
         String result = httpRequest.requestPost(httpClient, httpContext, url, null, "http://121.134.211.159/board-list.do", "euc-kr");
