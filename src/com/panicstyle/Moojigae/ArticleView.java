@@ -190,7 +190,9 @@ public class ArticleView extends Activity implements Runnable {
         int match1, match2;
 
         match1 = result.indexOf("<!-- 내용 -->");
+        if (match1 < 0) return false;
         match2 = result.indexOf("<!-- 메모 입력 -->", match1);
+        if (match2 < 0) return false;
         mContent = result.substring(match1, match2);
 
 //        mContent = mContent.replaceAll("<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=euc-kr\\\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">");

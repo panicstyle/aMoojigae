@@ -55,13 +55,19 @@ public class HttpRequest {
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, encode), 8);
+/*
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				sb.append(line).append("\n");
 			}
-			is.close();
 			result = sb.toString();
+            is.close();
+*/
+            result = org.apache.commons.io.IOUtils.toString(reader);
+            result = result.replaceAll("\r\n", "\n");
+            is.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -108,6 +114,7 @@ public class HttpRequest {
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, encode), 8);
+/*
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -115,6 +122,11 @@ public class HttpRequest {
 			}
 			is.close();
 			result = sb.toString();
+*/
+            result = org.apache.commons.io.IOUtils.toString(reader);
+            result = result.replaceAll("\r\n", "\n");
+            is.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
