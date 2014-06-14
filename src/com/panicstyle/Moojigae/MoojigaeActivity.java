@@ -134,7 +134,7 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main2);
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
@@ -144,9 +144,10 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
         mLoginStatus = -1;
 
         // Look up the AdView as a resource and load a request.
+/*
         AdView adView = (AdView)this.findViewById(R.id.adView);
         adView.loadAd(new AdRequest());
-
+*/
         pd = ProgressDialog.show(this, "", "로딩중", true, false);
 
         Thread thread = new Thread(this);

@@ -191,7 +191,7 @@ public class ArticleView extends Activity implements Runnable {
 
         match1 = result.indexOf("<!-- 내용 -->");
         if (match1 < 0) return false;
-        match2 = result.indexOf("<!-- 메모 입력 -->", match1);
+        match2 = result.indexOf("<!-- 투표 -->", match1);
         if (match2 < 0) return false;
         mContent = result.substring(match1, match2);
 
@@ -219,16 +219,92 @@ public class ArticleView extends Activity implements Runnable {
             }
         }
 
+        match1 = result.indexOf("<!-- 별점수 -->");
+        if (match1 < 0) return false;
+        match2 = result.indexOf("<!-- 관련글 -->", match1);
+        if (match2 < 0) return false;
+        String strProfile_str = result.substring(match1, match2);
+
+        p = Pattern.compile("(?<=<td class=cContent>)(.|\\n)*?(?=</td>)", Pattern.CASE_INSENSITIVE);
+        m = p.matcher(strProfile_str);
+        String strProfile;
+        if (m.find()) { // Find each match in turn; String can't do this.
+            strProfile = m.group(0);
+        } else {
+            strProfile = "None";
+        }
+        strProfile = "<tr><td>" + strProfile + "</td></tr>";
+
+        match1 = result.indexOf("<!-- 메모글 반복 -->");
+        if (match1 < 0) return false;
+        match2 = result.indexOf("<!-- 메모 입력 -->", match1);
+        if (match2 < 0) return false;
+        String mComment_str = result.substring(match1, match2);
+
+        String mComment = "";
+
+        String[] items = mComment_str.split("<tr onMouseOver=this.style.backgroundColor='#F0F8FF'; onMouseOut=this.style.backgroundColor=''; class=bMemo>");
+        int i = 0;
+        for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
+            String matchstr = items[i];
+
+            // Name
+            p = Pattern.compile("(<font onclick=\\\"viewCharacter)(.|\\n)*?(</font>)", Pattern.CASE_INSENSITIVE);
+            m = p.matcher(matchstr);
+
+            String strName;
+            if (m.find()) { // Find each match in turn; String can't do this.
+                strName = m.group(0);
+            } else {
+                strName = "";
+            }
+            strName = strName.replaceAll("<((.|\\n)*?)+>", "");
+            mComment = mComment + "<tr><td><b>" + strName + " (";
+
+            // Date
+            p = Pattern.compile("(?<=<td width=200 align=right class=fMemoSmallGray>)(.|\\n)*?(?=</td>)", Pattern.CASE_INSENSITIVE);
+            m = p.matcher(matchstr);
+
+            String strDate;
+            if (m.find()) { // Find each match in turn; String can't do this.
+                strDate =  m.group(0);
+            } else {
+                strDate = "";
+            }
+            strDate = strDate.replaceAll("\n", "");
+            strDate = strDate.replaceAll("\r", "");
+            strDate = strDate.trim();
+            mComment = mComment + strDate + ")</b></td></tr>";
+
+            // comment
+            p = Pattern.compile("(<span id=memoReply_)(.|\\n)*?(</span>)", Pattern.CASE_INSENSITIVE);
+            m = p.matcher(matchstr);
+
+            String strComment;
+            if (m.find()) { // Find each match in turn; String can't do this.
+                strComment = m.group(0);
+            } else {
+                strComment = "";
+            }
+            strComment = strComment.replaceAll("\n", "");
+            strComment = strComment.replaceAll("\r", "");
+            strComment = strComment.replaceAll("<br>", "\n");
+            strComment = strComment.replaceAll("&nbsp;", " ");
+//            strComment = strComment.replaceAll("(<)(.|\\n)*?(>)", "");
+            mComment = mComment + "<tr><td>" + strComment + "</td></tr><tr><td><hr /></td></tr>";
+        }
+
         String strHeader = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
         strHeader += "<html><head>";
         strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
 //        strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
         strHeader += "</head><body>";
-        String strBottom = "</body></html>";
+        String strBottom = "</table></body></html>";
         String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
         String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
+        String strBody = "<body><table border=0 width=100%>";
 
-    	htmlDoc = strHeader + cssStr + strTitle + strResize + mContent + strBottom;
+    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + "<tr><td><hr /></td></tr>" + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
 
         return true;
     }

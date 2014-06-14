@@ -151,7 +151,7 @@ public class BoardActivity extends ListActivity implements Runnable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main2);
         
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
@@ -160,9 +160,10 @@ public class BoardActivity extends ListActivity implements Runnable {
         intenter();
 
         // Look up the AdView as a resource and load a request.
+/*
         AdView adView = (AdView)this.findViewById(R.id.adView);
         adView.loadAd(new AdRequest());
-
+*/
         arrayItems = new ArrayList<HashMap<String, String>>();
 		
         LoadingData();
@@ -416,12 +417,27 @@ public class BoardActivity extends ListActivity implements Runnable {
 	        item.put("link", "mvBuilding");
 	        item.put("title", " > 위원방");
 	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvBuildingComm");
-	        item.put("title", " > 소통방");
-	        arrayItems.add( item );
-	        
+
+            item = new HashMap<String, String>();
+            item.put("link", "mvBuildingComm");
+            item.put("title", " > 소통방");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "-");
+            item.put("title", "기금위");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "mvDonationGongi");
+            item.put("title", " > 공지사항");
+            arrayItems.add( item );
+
+            item = new HashMap<String, String>();
+            item.put("link", "mvDonationQnA");
+            item.put("title", " > Q & A");
+            arrayItems.add( item );
+
         } else if (boardCode.equalsIgnoreCase("school1")) {
 	        item = new HashMap<String, String>();
 	        item.put("link", "recent");

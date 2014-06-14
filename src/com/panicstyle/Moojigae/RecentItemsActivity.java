@@ -186,7 +186,7 @@ public class RecentItemsActivity extends ListActivity {
 		ProgressDialog waitDialog = ProgressDialog.show(this, "", "로딩중", true);
 		
 		if (itemsLink.equalsIgnoreCase("maul")) {
-			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvEduBasicRight,mvTopic10Year,mvTopicGoBackHome,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDong,Localcommunity,mvDonghowhe,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvBuildingComm";
+			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvEduBasicRight,mvTopic10Year,mvTopicGoBackHome,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDong,Localcommunity,mvDonghowhe,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvBuildingComm,mvDonationGongi,mvDonationQnA";
 		} else if (itemsLink.equalsIgnoreCase("school1")) {
 			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjData";
 		} else {
