@@ -314,7 +314,7 @@ public class ArticleView extends Activity implements Runnable {
         String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
         String strBody = "<body><table border=0 width=100%>";
 
-    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + "<tr><td><hr /></td></tr>" + strAttach + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
+    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + strAttach + "<tr><td><hr /></td></tr>" + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
 
         return true;
     }

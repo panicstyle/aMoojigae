@@ -134,7 +134,7 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main2);
+        setContentView(R.layout.main);
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
