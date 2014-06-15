@@ -19,12 +19,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
+import android.webkit.WebViewClient;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class ArticleView extends Activity implements Runnable {
 	/** Called when the activity is first created. */
@@ -150,7 +154,7 @@ public class ArticleView extends Activity implements Runnable {
 			webview.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
 		}
     }
-    
+
     public void intenter() {
 //    	Intent intent = getIntent();  // 값을 가져오는 인텐트 객체생성
     	Bundle extras = getIntent().getExtras();
@@ -218,6 +222,12 @@ public class ArticleView extends Activity implements Runnable {
             	mContent = mContent.replaceFirst("(<IMG style=)(.|\\n)*?(>)", img);
             }
         }
+
+        match1 = result.indexOf("<!-- 업로드 파일 정보  수정본 Edit By Yang --> ");
+        if (match1 < 0) return false;
+        match2 = result.indexOf("<!-- 평가 -->", match1);
+        if (match2 < 0) return false;
+        String strAttach = result.substring(match1, match2);
 
         match1 = result.indexOf("<!-- 별점수 -->");
         if (match1 < 0) return false;
@@ -304,7 +314,7 @@ public class ArticleView extends Activity implements Runnable {
         String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
         String strBody = "<body><table border=0 width=100%>";
 
-    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + "<tr><td><hr /></td></tr>" + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
+    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + "<tr><td><hr /></td></tr>" + strAttach + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
 
         return true;
     }
