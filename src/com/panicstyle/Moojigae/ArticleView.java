@@ -171,12 +171,11 @@ public class ArticleView extends Activity implements Runnable {
 		HttpRequest httpRequest = new HttpRequest();
 
         String result = httpRequest.requestGet(httpClient, httpContext, url, "", "euc-kr");
-        
+
         if (result.indexOf("onclick=\"userLogin()") > 0) {
         	return false;
         }
         
-        String strTitle = "<div align='left'>" + g_Subject + "</div><br /><div align='right'>" + g_UserName + " [" + g_Date + "]</div><hr />";
 
 /*
         #1 일부 알수 없는 게시글에 대해서 패턴매칭이 안됨
@@ -191,7 +190,58 @@ public class ArticleView extends Activity implements Runnable {
         	mContent = "";
         }
 */
+
+        Pattern p = Pattern.compile("(?<=<font class=fTitle><b>제목 : <font size=3>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(result);
+
+        String strSubject;
+        if (m.find()) { // Find each match in turn; String can't do this.
+            strSubject = m.group(0);
+        } else {
+            strSubject = "";
+        }
+
         int match1, match2;
+        String strTitle;
+
+        match1 = result.indexOf("<td class=fSubTitle>");
+        if (match1 < 0) return false;
+        match2 = result.indexOf("<td class=lReadTop></td>", match1);
+        if (match2 < 0) return false;
+        strTitle = result.substring(match1, match2);
+
+        p = Pattern.compile("(?<=textDecoration='none'>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
+        m = p.matcher(strTitle);
+
+        String strUser;
+        if (m.find()) { // Find each match in turn; String can't do this.
+            strUser = m.group(0);
+        } else {
+            strUser = "";
+        }
+
+        p = Pattern.compile("\\d\\d\\d\\d-\\d\\d-\\d\\d.\\d\\d:\\d\\d:\\d\\d", Pattern.CASE_INSENSITIVE);
+        m = p.matcher(strTitle);
+
+        String strUserDate;
+        if (m.find()) { // Find each match in turn; String can't do this.
+            strUserDate = m.group(0);
+        } else {
+            strUserDate = "";
+        }
+
+        p = Pattern.compile("(?<=<font style=font-style:italic>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
+        m = p.matcher(strTitle);
+
+        String strHit;
+        if (m.find()) { // Find each match in turn; String can't do this.
+            strHit = m.group(0);
+        } else {
+            strHit = "";
+        }
+
+        strTitle = "<div class='title'>" + strSubject + "</div><div class='name'><span>" + strUser + "</span>&nbsp;&nbsp;<span>" + strUserDate + "</span>&nbsp;&nbsp;<span>" + strHit + "</span>명이 읽음</div>";
+
 
         match1 = result.indexOf("<!-- 내용 -->");
         if (match1 < 0) return false;
@@ -206,9 +256,10 @@ public class ArticleView extends Activity implements Runnable {
         mContent = mContent.replaceAll("<!-- <font class=fMemoSmallGray>", "--><!--");
         mContent = mContent.replaceAll("<nobr class=bbscut id=subjectTtl name=subjectTtl>", "");
         mContent = mContent.replaceAll("</nobr>", "");
+        mContent = "<div class='content'>" + mContent + "</div>";
 
-        Pattern p = Pattern.compile("(<IMG style=)(.|\\n)*?(>)", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(mContent);
+        p = Pattern.compile("(<IMG style=)(.|\\n)*?(>)", Pattern.CASE_INSENSITIVE);
+        m = p.matcher(mContent);
         while (m.find()) { // Find each match in turn; String can't do this.     
             String matchstr = m.group(0);
             
@@ -228,6 +279,7 @@ public class ArticleView extends Activity implements Runnable {
         match2 = result.indexOf("<!-- 평가 -->", match1);
         if (match2 < 0) return false;
         String strAttach = result.substring(match1, match2);
+        strAttach = "<div class='attach'>" + strAttach + "</div>";
 
         match1 = result.indexOf("<!-- 별점수 -->");
         if (match1 < 0) return false;
@@ -243,7 +295,7 @@ public class ArticleView extends Activity implements Runnable {
         } else {
             strProfile = "None";
         }
-        strProfile = "<tr><td>" + strProfile + "</td></tr>";
+        strProfile = "<div class='profile'>" + strProfile + "</div>";
 
         match1 = result.indexOf("<!-- 메모글 반복 -->");
         if (match1 < 0) return false;
@@ -258,6 +310,13 @@ public class ArticleView extends Activity implements Runnable {
         for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
             String matchstr = items[i];
 
+            // is Re
+            if (matchstr.indexOf("i_memo_reply.gif") >= 0) {
+                mComment = mComment + "<div class='re_reply'>";
+            } else {
+                mComment = mComment + "<div class='reply'>";
+            }
+
             // Name
             p = Pattern.compile("(<font onclick=\\\"viewCharacter)(.|\\n)*?(</font>)", Pattern.CASE_INSENSITIVE);
             m = p.matcher(matchstr);
@@ -269,7 +328,7 @@ public class ArticleView extends Activity implements Runnable {
                 strName = "";
             }
             strName = strName.replaceAll("<((.|\\n)*?)+>", "");
-            mComment = mComment + "<tr><td><b>" + strName + " (";
+            mComment = mComment + "<div class='reply_header'>" + strName + " (";
 
             // Date
             p = Pattern.compile("(?<=<td width=200 align=right class=fMemoSmallGray>)(.|\\n)*?(?=</td>)", Pattern.CASE_INSENSITIVE);
@@ -284,7 +343,7 @@ public class ArticleView extends Activity implements Runnable {
             strDate = strDate.replaceAll("\n", "");
             strDate = strDate.replaceAll("\r", "");
             strDate = strDate.trim();
-            mComment = mComment + strDate + ")</b></td></tr>";
+            mComment = mComment + strDate + ")</div>";
 
             // comment
             p = Pattern.compile("(<span id=memoReply_)(.|\\n)*?(</span>)", Pattern.CASE_INSENSITIVE);
@@ -301,20 +360,21 @@ public class ArticleView extends Activity implements Runnable {
             strComment = strComment.replaceAll("<br>", "\n");
             strComment = strComment.replaceAll("&nbsp;", " ");
 //            strComment = strComment.replaceAll("(<)(.|\\n)*?(>)", "");
-            mComment = mComment + "<tr><td>" + strComment + "</td></tr><tr><td><hr /></td></tr>";
+            mComment = mComment + "<div class='reply_content'>" + strComment + "</div></div>";
         }
 
         String strHeader = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
         strHeader += "<html><head>";
         strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
-//        strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
-        strHeader += "</head><body>";
-        String strBottom = "</table></body></html>";
+        strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
+        strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.content{border-top:1px solid gray}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
+        strHeader += "</head>";
+        String strBottom = "</body></html>";
         String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
-        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
-        String strBody = "<body><table border=0 width=100%>";
+//        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
+        String strBody = "<body>";
 
-    	htmlDoc = strHeader + cssStr + strTitle + strResize + strBody + mContent + strAttach + "<tr><td><hr /></td></tr>" + strProfile + "<tr><td><hr /></td></tr>" + mComment + strBottom;
+    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
 
         return true;
     }
