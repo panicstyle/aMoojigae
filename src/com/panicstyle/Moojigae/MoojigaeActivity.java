@@ -31,7 +31,8 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.ads.*;
+
+import com.google.android.gms.ads.*;
 
 public class MoojigaeActivity extends ListActivity implements Runnable {
 	TextView selection;
@@ -136,6 +137,11 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
         httpContext = app.httpContext;
@@ -143,11 +149,6 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
         arrayItems = new ArrayList<HashMap<String, String>>();
         mLoginStatus = -1;
 
-        // Look up the AdView as a resource and load a request.
-/*
-        AdView adView = (AdView)this.findViewById(R.id.adView);
-        adView.loadAd(new AdRequest());
-*/
         pd = ProgressDialog.show(this, "", "로딩중", true, false);
 
         Thread thread = new Thread(this);

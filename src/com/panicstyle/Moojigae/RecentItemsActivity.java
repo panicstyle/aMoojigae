@@ -15,6 +15,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +26,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecentItemsActivity extends ListActivity {
-	TextView selection;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+public class RecentItemsActivity extends ListActivity implements Runnable {
+        TextView selection;
 //	String[] items;
 	
 	protected String itemsTitle;
@@ -33,8 +39,10 @@ public class RecentItemsActivity extends ListActivity {
 	protected HttpClient httpClient;
 	protected HttpContext httpContext;
     private List<HashMap<String, String>> arrayItems;
-    
-    private static class EfficientAdapter extends BaseAdapter {
+    private EfficientAdapter adapter;
+    private ProgressDialog pd;
+
+    private static class EfficientAdapter extends BaseAdapter{
         private LayoutInflater mInflater;
         private List<HashMap<String, String>> arrayItems;
 
@@ -148,29 +156,55 @@ public class RecentItemsActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.main);
-        
+        setContentView(R.layout.main);
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
         httpContext = app.httpContext;
 
         intenter();
 
-/*        
-        // Login
-		Login login = new Login();
-		
-		if (!login.LoginTo(httpClient, httpContext, cookieStore)) {
-			return;
-		}
-*/
-		
-		arrayItems = getData(httpClient, httpContext);
-		
-        setListAdapter(new EfficientAdapter(this, arrayItems));
+        arrayItems = new ArrayList<HashMap<String, String>>();
+
+        LoadingData();
         
     }
-    
+
+    public void LoadingData() {
+        pd = ProgressDialog.show(this, "", "로딩중", true,
+                false);
+
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void run() {
+        getData(httpClient, httpContext);
+        handler.sendEmptyMessage(0);
+    }
+
+    private Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            if(pd != null){
+                if(pd.isShowing()){
+                    pd.dismiss();
+                }
+            }
+            displayData();
+        }
+    };
+
+    public void displayData() {
+        adapter = new EfficientAdapter(RecentItemsActivity.this, arrayItems);
+        setListAdapter(adapter);
+    }
+
     public void intenter() {
     	Bundle extras = getIntent().getExtras();
     	
@@ -178,13 +212,11 @@ public class RecentItemsActivity extends ListActivity {
     	itemsLink = extras.getString("ITEMS_LINK").toString();
     }
     
-    protected List<HashMap<String, String>> getData(HttpClient httpClient, HttpContext httpContext) {		
+    protected boolean getData(HttpClient httpClient, HttpContext httpContext) {
 		
 		String url = "";
 		HttpRequest httpRequest = new HttpRequest();
 
-		ProgressDialog waitDialog = ProgressDialog.show(this, "", "로딩중", true);
-		
 		if (itemsLink.equalsIgnoreCase("maul")) {
 			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvEduBasicRight,mvTopic10Year,mvTopicGoBackHome,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDong,Localcommunity,mvDonghowhe,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvBuildingComm,mvDonationGongi,mvDonationQnA";
 		} else if (itemsLink.equalsIgnoreCase("school1")) {
@@ -197,7 +229,7 @@ public class RecentItemsActivity extends ListActivity {
 
         // ?? ??? a??
         HashMap<String, String> item;
-        List<HashMap<String, String>> arrayItems = new ArrayList<HashMap<String, String>>();
+//        List<HashMap<String, String>> arrayItems = new ArrayList<HashMap<String, String>>();
 
         Pattern p = Pattern.compile("(?<=<td width=\\\"2\\\")(.|\\n)*?(?=<th height=\\\"1\\\")", Pattern.CASE_INSENSITIVE); 
         Matcher m = p.matcher(result);
@@ -283,13 +315,8 @@ public class RecentItemsActivity extends ListActivity {
 
             arrayItems.add( item );
         }
-        if(waitDialog != null){
-            if(waitDialog.isShowing()){
-                waitDialog.dismiss();
-            }
-        }
 
-        return arrayItems;
+        return true;
     }
 
     public void onListItemClick(ListView parent, View v, int position, long id) {

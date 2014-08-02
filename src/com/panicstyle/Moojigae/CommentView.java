@@ -9,8 +9,6 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
 import com.panicstyle.Moojigae.ArticleView;
 import com.panicstyle.Moojigae.HttpRequest;
 

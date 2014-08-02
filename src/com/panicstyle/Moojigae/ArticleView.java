@@ -11,6 +11,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.panicstyle.Moojigae.HttpRequest;
 
 import android.app.Activity;
@@ -49,6 +51,7 @@ public class ArticleView extends Activity implements Runnable {
     String mCommentNo;
     String mUserID;
     protected int mLoginStatus;
+    private WebView webView;
 	
 	String g_isPNotice;
 	String g_isNotice;
@@ -61,8 +64,14 @@ public class ArticleView extends Activity implements Runnable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.main);
-        
+        setContentView(R.layout.main2);
+        webView = (WebView) findViewById(R.id.webView);
+
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
         httpContext = app.httpContext;
@@ -146,12 +155,12 @@ public class ArticleView extends Activity implements Runnable {
 			ab.setTitle( "로그인 오류" );
 			ab.show();
 		} else {
-			WebView webview = new WebView(ArticleView.this);
-			webview.getSettings().setJavaScriptEnabled(true);
-	//		webview.getSettings().setSupportZoom(true);
-	//		webview.getSettings().setBuiltInZoomControls(true);
-			setContentView(webview);
-			webview.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
+//			WebView webview = new WebView(ArticleView.this);
+			webView.getSettings().setJavaScriptEnabled(true);
+	//		webView.getSettings().setSupportZoom(true);
+	//		webView.getSettings().setBuiltInZoomControls(true);
+	//		setContentView(webView);
+            webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
 		}
     }
 

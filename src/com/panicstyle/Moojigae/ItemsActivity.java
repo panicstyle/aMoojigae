@@ -9,8 +9,8 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.*;
+
 import com.panicstyle.Moojigae.ArticleView;
 import com.panicstyle.Moojigae.HttpRequest;
 
@@ -203,8 +203,9 @@ public class ItemsActivity extends ListActivity implements Runnable {
         intenter();
 
         // Look up the AdView as a resource and load a request.
-        AdView adView = (AdView)this.findViewById(R.id.adView);
-        adView.loadAd(new AdRequest());
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         arrayItems = new ArrayList<HashMap<String, String>>();
         nPage = 1;
