@@ -43,6 +43,10 @@ public class ArticleView extends Activity implements Runnable {
     private ProgressDialog pd;
     String htmlDoc;
     String mContent;
+    String mContentOrig;
+    String mErrorMsg;
+    int nThreadMode = 0;
+    boolean bDeleteStatus;
     static final int REQUEST_WRITE = 1;
     static final int REQUEST_MODIFY = 2;
     static final int REQUEST_COMMENT_WRITE = 3;
@@ -97,39 +101,70 @@ public class ArticleView extends Activity implements Runnable {
         Thread thread = new Thread(this);
         thread.start();
 
+        nThreadMode = 1;
+
         return;
     }
 
     public void run() {
-    	if (!getData(httpClient, httpContext)) {
-            // Login
-    		Login login = new Login();
-    		
-    		mLoginStatus = login.LoginTo(httpClient, httpContext, ArticleView.this);
-    		
-    		if (mLoginStatus > 0) {
-    			if (getData(httpClient, httpContext)) {
-    				mLoginStatus = 1;
-    			} else {
-    				mLoginStatus = -2;
-    			}
-    		}
-    	} else {
-			mLoginStatus = 1;
-    	}
+        if (nThreadMode == 1) {     // Load Data
+            if (!getData(httpClient, httpContext)) {
+                // Login
+                Login login = new Login();
+
+                mLoginStatus = login.LoginTo(httpClient, httpContext, ArticleView.this);
+
+                if (mLoginStatus > 0) {
+                    if (getData(httpClient, httpContext)) {
+                        mLoginStatus = 1;
+                    } else {
+                        mLoginStatus = -2;
+                    }
+                }
+            } else {
+                mLoginStatus = 1;
+            }
+        } else if (nThreadMode == 2) {      // Delete Article
+            runDeleteArticle();
+        } else if (nThreadMode == 3) {      // Delete Comment
+            runDeleteComment();
+        }
     	handler.sendEmptyMessage(0);
     }
 
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
-            if(pd != null){
-                if(pd.isShowing()){
+            if (pd != null) {
+                if (pd.isShowing()) {
                     pd.dismiss();
                 }
             }
-    		displayData();
-    	}
+            if (nThreadMode == 1) {
+                displayData();
+            } else {
+                if (!bDeleteStatus) {
+                    AlertDialog.Builder ab = null;
+                    ab = new AlertDialog.Builder( ArticleView.this );
+                    ab.setMessage(mErrorMsg);
+                    ab.setPositiveButton(android.R.string.ok, null);
+                    ab.setTitle( "확인" );
+                    ab.show();
+                    return;
+                } else {
+                    if (nThreadMode == 2) {
+                        if (getParent() == null) {
+                            setResult(Activity.RESULT_OK, new Intent());
+                        } else {
+                            getParent().setResult(Activity.RESULT_OK, new Intent());
+                        }
+                        finish();
+                    } else {
+                        LoadData();
+                    }
+                }
+            }
+        }
     };
     
     public void displayData() {
@@ -184,6 +219,7 @@ public class ArticleView extends Activity implements Runnable {
         if (result.indexOf("onclick=\"userLogin()") > 0) {
         	return false;
         }
+        mContentOrig = result;
         
 
 /*
@@ -427,11 +463,11 @@ public class ArticleView extends Activity implements Runnable {
             startActivityForResult(intent, REQUEST_COMMENT_WRITE);
     	} else if (item.getItemId() == 4) {	// 답변댓글쓰기
             Intent intent = new Intent(this, CommentView.class);
-	        intent.putExtra("CONTENT", mContent);
+	        intent.putExtra("CONTENT", mContentOrig);
             startActivityForResult(intent, REQUEST_COMMENT_REPLY_VIEW);
     	} else if (item.getItemId() == 5) {	// 댓글삭제
             Intent intent = new Intent(this, CommentView.class);
-	        intent.putExtra("CONTENT", mContent);
+	        intent.putExtra("CONTENT", mContentOrig);
             startActivityForResult(intent, REQUEST_COMMENT_DELETE_VIEW);
     	}   
         return false;  
@@ -453,6 +489,17 @@ public class ArticleView extends Activity implements Runnable {
     }
     
     protected void DeleteArticle() {
+        pd = ProgressDialog.show(this, "", "삭제중", true, false);
+
+        Thread thread = new Thread(this);
+        thread.start();
+
+        nThreadMode = 2;
+
+        return;
+    }
+
+    protected void runDeleteArticle() {
 		HttpRequest httpRequest = new HttpRequest();
 		
 		String url = "http://121.134.211.159/board-save.do";
@@ -565,35 +612,35 @@ public class ArticleView extends Activity implements Runnable {
 		nameValuePairs.add(new BasicNameValuePair("pageScale", ""));
 		nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
 		nameValuePairs.add(new BasicNameValuePair("searchType", ""));
-		nameValuePairs.add(new BasicNameValuePair("tag", "1"));
+        nameValuePairs.add(new BasicNameValuePair("tag", "1"));
+        nameValuePairs.add(new BasicNameValuePair("Uid", mUserID));
 
 		String result = httpRequest.requestPost(httpClient, httpContext, url, nameValuePairs, referer, "euc-kr");
-		
+
+        bDeleteStatus = true;
         if (result.indexOf("parent.checkLogin()") < 0) {
             Pattern p = Pattern.compile("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", Pattern.CASE_INSENSITIVE); 
             Matcher m = p.matcher(result);
-            
+
+            bDeleteStatus = false;
             String strErrorMsg;
             if (m.find()) { // Find each match in turn; String can't do this.     
             	strErrorMsg = m.group(0);
             } else {
             	strErrorMsg = "";
             }
-    		AlertDialog.Builder ab = null;
-			ab = new AlertDialog.Builder( this );
-			strErrorMsg = "글 삭제중 오류가 발생했습니다. \n" + strErrorMsg; 
-			ab.setMessage(strErrorMsg);
-			ab.setPositiveButton(android.R.string.ok, null);
-			ab.setTitle( "확인" );
-			ab.show();
+			mErrorMsg = "글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
+
 			return;
         }
+/*
         if (getParent() == null) {
            	setResult(Activity.RESULT_OK, new Intent());
         } else {
         	getParent().setResult(Activity.RESULT_OK, new Intent());
         }
         finish();
+*/
     }
     
     protected void DeleteCommentConfirm() {
@@ -612,10 +659,21 @@ public class ArticleView extends Activity implements Runnable {
     }
     
     protected void DeleteComment() {
+        pd = ProgressDialog.show(this, "", "삭제중", true, false);
+
+        Thread thread = new Thread(this);
+        thread.start();
+
+        nThreadMode = 3;
+
+        return;
+    }
+
+    protected void runDeleteComment() {
 		HttpRequest httpRequest = new HttpRequest();
 		
 		String url = "http://121.134.211.159/memo-save.do";
-		String referer = "http://121.134.211.159/board-read.do?boardId=" + mBoardID + "&boardNo=" + mBoardNo;
+		String referer = "http://121.134.211.159/board-read.do?boardId=" + mBoardID + "&boardNo=" + mBoardNo + "&command=READ&page=1&categoryId=-1";
 		
 		// boardId=mvHorizonLivingStory&page=1&categoryId=-1&time=1374840174050&returnBoardNo=137482716411890&boardNo=137482716411890&command=MEMO_DELETE&totalPage=0&totalRecords=0&serialBadNick=&serialBadContent=&htmlImage=%2Fout&thumbnailSize=50&memoWriteable=true&list_yn=N&replyList_yn=N&defaultBoardSkin=default&boardWidth=710&multiView_yn=Y&titleCategory_yn=N&category_yn=N&titleNo_yn=Y&titleIcon_yn=N&titlePoint_yn=N&titleMemo_yn=Y&titleNew_yn=Y&titleThumbnail_yn=N&titleNick_yn=Y&titleTag_yn=Y&anonymity_yn=N&titleRead_yn=Y&boardModel_cd=A&titleDate_yn=Y&tag_yn=Y&thumbnailSize=50&readOver_color=%23336699&boardSerialBadNick=&boardSerialBadContent=&userPw=&userNick=&memoContent=&memoSeq=1&pollSeq=&returnURI=&beforeCommand=&starPoint=&provenance=board-read.do&tagsName=&pageScale=&searchOrKey=&searchType=&tag=1&Uid=panicstyle
 		// page=1&categoryId=-1&time=1374840174050&totalPage=0&totalRecords=0&serialBadNick=&serialBadContent=&htmlImage=%2Fout&thumbnailSize=50&memoWriteable=true&list_yn=N&replyList_yn=N&defaultBoardSkin=default&boardWidth=710&multiView_yn=Y&titleCategory_yn=N&category_yn=N&titleNo_yn=Y&titleIcon_yn=N&titlePoint_yn=N&titleMemo_yn=Y&titleNew_yn=Y&titleThumbnail_yn=N&titleNick_yn=Y&titleTag_yn=Y&anonymity_yn=N&titleRead_yn=Y&boardModel_cd=A&titleDate_yn=Y&tag_yn=Y&thumbnailSize=50&readOver_color=%23336699&boardSerialBadNick=&boardSerialBadContent=&userPw=&userNick=&memoContent=&memoSeq=1&pollSeq=&returnURI=&beforeCommand=&starPoint=&provenance=board-read.do&tagsName=&pageScale=&searchOrKey=&searchType=&tag=1&Uid=panicstyle
@@ -678,27 +736,22 @@ public class ArticleView extends Activity implements Runnable {
 		nameValuePairs.add(new BasicNameValuePair("Uid", mUserID));
 
 		String result = httpRequest.requestPost(httpClient, httpContext, url, nameValuePairs, referer, "euc-kr");
-		
+
+        bDeleteStatus = true;
         if (result.indexOf("function redirect") < 0) {
             Pattern p = Pattern.compile("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", Pattern.CASE_INSENSITIVE); 
             Matcher m = p.matcher(result);
-            
+
+            bDeleteStatus = false;
             String strErrorMsg;
             if (m.find()) { // Find each match in turn; String can't do this.     
             	strErrorMsg = m.group(0);
             } else {
             	strErrorMsg = "";
             }
-    		AlertDialog.Builder ab = null;
-			ab = new AlertDialog.Builder( this );
-			strErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg; 
-			ab.setMessage(strErrorMsg);
-			ab.setPositiveButton(android.R.string.ok, null);
-			ab.setTitle( "확인" );
-			ab.show();
+			mErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
 			return;
         }
-        LoadData();
     }
 
     @Override

@@ -27,7 +27,7 @@ public class HttpRequest {
 			HttpParams params = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(params, 30000);
 		    HttpConnectionParams.setSoTimeout(params, 30000);
-	
+
 			HttpPost httppost = new HttpPost(url);
 			if (referer.length() > 0) {
 				httppost.setHeader("referer", referer);
@@ -36,7 +36,7 @@ public class HttpRequest {
 				UrlEncodedFormEntity entityRequest = new UrlEncodedFormEntity(postData, encode);
 				httppost.setEntity(entityRequest);
 			}
-				
+
 			HttpResponse response = httpClient.execute(httppost, httpContext);
 /*
 			Header[] headers  = response.getAllHeaders();
@@ -48,10 +48,10 @@ public class HttpRequest {
             System.out.println("Header Name: "+hd.getName()
                     +"       "+" Header Value: "+ hd.getValue());
             }
-*/			
+*/
 			HttpEntity entityResponse = response.getEntity();
 			is = entityResponse.getContent();
-			
+
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, encode), 8);

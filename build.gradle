@@ -18,7 +18,7 @@ apply plugin: 'android'
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.+'
-    compile 'com.google.android.gms:play-services:5.0.77'
+    compile 'com.google.android.gms:play-services:5.0.+'
 }
 
 android {
@@ -53,9 +53,9 @@ android {
         signingConfigs {
             release {
                 storeFile file("aMoojigae.keystore")
-                storePassword System.console().readLine("Enter keystore password: ")
+                storePassword System.console().readLine("\nEnter keystore password: ")
                 keyAlias "amoojigae"
-                keyPassword System.console().readLine("Enter key password: ")
+                keyPassword System.console().readLine("\nEnter key password: ")
             }
         }
     } else {
