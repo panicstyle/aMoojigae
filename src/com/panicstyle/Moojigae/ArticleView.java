@@ -190,11 +190,7 @@ public class ArticleView extends Activity implements Runnable {
 			ab.setTitle( "로그인 오류" );
 			ab.show();
 		} else {
-//			WebView webview = new WebView(ArticleView.this);
 			webView.getSettings().setJavaScriptEnabled(true);
-	//		webView.getSettings().setSupportZoom(true);
-	//		webView.getSettings().setBuiltInZoomControls(true);
-	//		setContentView(webView);
             webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
 		}
     }
@@ -391,7 +387,7 @@ public class ArticleView extends Activity implements Runnable {
             mComment = mComment + strDate + ")</div>";
 
             // comment
-            p = Pattern.compile("(<span id=memoReply_)(.|\\n)*?(</span>)", Pattern.CASE_INSENSITIVE);
+            p = Pattern.compile("(<span id=memoReply_)(.|\\n)*?(<!-- 메모에 대한 답변 -->\n)", Pattern.CASE_INSENSITIVE);
             m = p.matcher(matchstr);
 
             String strComment;
