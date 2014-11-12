@@ -326,7 +326,7 @@ public class BoardActivity extends ListActivity implements Runnable {
             for (int i = 0; i < school2.length; i+=2) {
                 item = new HashMap<String, String>();
                 item.put("link",  school2[i]);
-                item.put("title",  school1[i + 1]);
+                item.put("title",  school2[i + 1]);
                 arrayItems.add( item );
             }
         }
