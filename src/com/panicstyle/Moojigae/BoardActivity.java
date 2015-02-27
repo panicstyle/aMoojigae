@@ -233,339 +233,102 @@ public class BoardActivity extends ListActivity implements Runnable {
         } else {
         	newString = "";
         }
-        
+
+        String[] maul = new String[]{
+            "recent", "최근글보기",
+            "-", "이야기방",
+            "mvTopic", " > 이야기방",
+            "mvEduBasicRight", " > 교육기본권",
+            "mvTopic10Year", " > 10주년 행사",
+            "mvTopicGoBackHome", " > 무지개 촌(村)",
+            "mvGongi", "마을 공지사항",
+            "-", "공동체사업부",
+            "mvGongDong", " > 공동체사업부",
+            "mvGongDongFacility", " > 시설기획팀",
+            "mvGongDongEvent", " > 행사기획팀",
+            "mvGongDongLocalcommunity",  " > 지역사업팀",
+            "mvDonghowhe", "마을 동아리방",
+            "-",  "어울림품앗이",
+            "mvPoomASee", " > 어울림품앗이",
+            "mvPoomASeeWantBiz", " > 거래하고싶어요",
+            "mvPoomASeeBized", " > 거래했어요",
+            "-", "교육사업부",
+            "mvEduLove", " > 교육사랑방",
+            "mvEduVillageSchool", " > 마을학교",
+            "mvEduDream", " > 또하나의꿈",
+            "mvEduSpring", " > 교육샘",
+            "mvEduSpring", " > 만두",
+            "mvMarketBoard", "무지개장터",
+            "-", "무지개지평선",
+            "mvHorizonIntroduction", " > 가족소개",
+            "mvHorizonLivingStory", " > 사는 얘기",
+            "-", "사무국",
+            "mvSecretariatAddress", " > 마을주민 연락처",
+            "mvSecretariatOldData", " > 마을 자료실",
+            "mvMinutes", "회의록방",
+            "mvDirectors", "이사회",
+            "mvCommittee", "운영위",
+            "mvHongbo", "홍보위",
+            "-", "건축위",
+            "mvBuilding", " > 위원방",
+            "mvBuildingComm", " > 소통방",
+            "-", "기금위",
+            "mvDonationGongi", " > 공지사항",
+            "mvDonationQnA", " > Q & A",
+        };
+        String[] school1 = new String[]{
+            "recent", "최근글보기",
+            "mjGongi", "초등 공지사항",
+            "mjFreeBoard", "자유게시판",
+            "mjTeacher", "교사방",
+            "mjTeachingData", "교사회의록",
+            "mjJunior", "아이들방",
+            "mjParent", "학부모방",
+            "mjParentMinutes", "학부모 회의록",
+            "mjAmaDiary", "품앗이분과",
+            "mjPhoto", "사진첩&동영상",
+            "mjData", "학교 자료실",
+        };
+        String[] school2 = new String[]{
+            "recent", "최근글보기",
+            "msGongi","중등 공지사항",
+            "msFreeBoard", "학교이야기방",
+            "msOverRainbow", "무지개너머",
+            "msFreeComment", "자유게시판",
+            "msTeacher", "교사방",
+            "msSenior", "숙제방",
+            "msStudent", "아이들방",
+            "msStudentAssociation", "학생회방",
+            "msParent", "학부모방",
+            "msRepresentative", "대표자회",
+            "msMinutes", "회의록",
+            "msPhoto", "사진첩&동영상",
+            "msData", "학교자료실",
+        };
         // 각 항목 찾기
         HashMap<String, String> item;
 
         if (boardCode.equalsIgnoreCase("maul")) {
-	        item = new HashMap<String, String>();
-	        item.put("link",  "recent");
-	        item.put("title",  "최근글보기");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "-");
-	        item.put("title",  "이야기방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "mvTopic");
-	        item.put("title",  " > 이야기방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "mvEduBasicRight");
-	        item.put("title", " > 교육기본권");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "mvTopic10Year");
-	        item.put("title",  " > 10주년 행사");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "mvTopicGoBackHome");
-	        item.put("title",  " > 무지개 촌(村)");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "mvGongi");
-	        item.put("title",  "마을 공지사항");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link",  "-");
-	        item.put("title",  "공동체사업부");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvGongDong");
-	        item.put("title", " > 공동체사업부");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvGongDongFacility");
-	        item.put("title", " > 시설기획팀");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvGongDongEvent");
-	        item.put("title", " > 행사기획팀");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvGongDongLocalcommunity");
-	        item.put("title", " > 지역사업팀");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvDonghowhe");
-	        item.put("title", "마을 동아리방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "-");
-	        item.put("title", "어울림품앗이");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvPoomASee");
-	        item.put("title", " > 어울림품앗이");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvPoomASeeWantBiz");
-	        item.put("title", " > 거래하고싶어요");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvPoomASeeBized");
-	        item.put("title", " > 거래했어요");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "-");
-	        item.put("title", "교육사업부");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvEduLove");
-	        item.put("title", " > 교육사랑방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvEduVillageSchool");
-	        item.put("title", " > 마을학교");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvEduDream");
-	        item.put("title", " > 또하나의꿈");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvEduSpring");
-	        item.put("title", " > 교육샘");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvEduSpring");
-	        item.put("title", " > 만두");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvMarketBoard");
-	        item.put("title", "무지개장터");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "-");
-	        item.put("title", "무지개지평선");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvHorizonIntroduction");
-	        item.put("title", " > 가족소개");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvHorizonLivingStory");
-	        item.put("title", " > 사는 얘기");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "-");
-	        item.put("title", "사무국");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvSecretariatAddress");
-	        item.put("title", " > 마을주민 연락처");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvSecretariatOldData");
-	        item.put("title", " > 마을 자료실");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvMinutes");
-	        item.put("title", "회의록방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvDirectors");
-	        item.put("title", "이사회");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvCommittee");
-	        item.put("title", "운영위");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvHongbo");
-	        item.put("title", "홍보위");
-	        arrayItems.add( item );
-
-	        item = new HashMap<String, String>();
-	        item.put("link", "-");
-	        item.put("title", "건축위");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mvBuilding");
-	        item.put("title", " > 위원방");
-	        arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "mvBuildingComm");
-            item.put("title", " > 소통방");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "-");
-            item.put("title", "기금위");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "mvDonationGongi");
-            item.put("title", " > 공지사항");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "mvDonationQnA");
-            item.put("title", " > Q & A");
-            arrayItems.add( item );
-
+            for (int i = 0; i < maul.length; i+=2) {
+    	        item = new HashMap<String, String>();
+                item.put("link",  maul[i]);
+                item.put("title",  maul[i + 1]);
+	            arrayItems.add( item );
+            }
         } else if (boardCode.equalsIgnoreCase("school1")) {
-	        item = new HashMap<String, String>();
-	        item.put("link", "recent");
-	        item.put("title", "최근글보기");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjGongi");
-	        item.put("title", "초등 공지사항");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjFreeBoard");
-	        item.put("title", "자유게시판");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjTeacher");
-	        item.put("title", "교사방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjTeachingData");
-	        item.put("title", "교사회의록");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjJunior");
-	        item.put("title", "아이들방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjParent");
-	        item.put("title", "학부모방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjParentMinutes");
-	        item.put("title", "학부모 회의록");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjAmaDiary");
-	        item.put("title", "품앗이분과");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjPhoto");
-	        item.put("title", "사진첩&동영상");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "mjData");
-	        item.put("title", "학교 자료실");
-	        arrayItems.add( item );
-	        
+            for (int i = 0; i < school1.length; i+=2) {
+                item = new HashMap<String, String>();
+                item.put("link",  school1[i]);
+                item.put("title",  school1[i + 1]);
+                arrayItems.add( item );
+            }
         } else {
-	        item = new HashMap<String, String>();
-	        item.put("link", "recent");
-	        item.put("title", "최근글보기");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msGongi");
-	        item.put("title", "중등 공지사항");
-	        arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "msFreeBoard");
-            item.put("title", "학교이야기방");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "msOverRainbow");
-            item.put("title", "무지개너머");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-	        item.put("link", "msFreeComment");
-	        item.put("title", "자유게시판");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msTeacher");
-	        item.put("title", "교사방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msSenior");
-	        item.put("title", "숙제방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msStudent");
-	        item.put("title", "아이들방");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msStudentAssociation");
-	        item.put("title", "학생회방");
-	        arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "msParent");
-            item.put("title", "학부모방");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "msRepresentative");
-            item.put("title", "대표자회");
-            arrayItems.add( item );
-
-            item = new HashMap<String, String>();
-            item.put("link", "msMinutes");
-            item.put("title", "회의록");
-            arrayItems.add( item );
-
-
-            item = new HashMap<String, String>();
-	        item.put("link", "msPhoto");
-	        item.put("title", "사진첩&동영상");
-	        arrayItems.add( item );
-	        
-	        item = new HashMap<String, String>();
-	        item.put("link", "msData");
-	        item.put("title", "학교자료실");
-	        arrayItems.add( item );
-        	
+            for (int i = 0; i < school2.length; i+=2) {
+                item = new HashMap<String, String>();
+                item.put("link",  school2[i]);
+                item.put("title",  school2[i + 1]);
+                arrayItems.add( item );
+            }
         }
         
         int i;
