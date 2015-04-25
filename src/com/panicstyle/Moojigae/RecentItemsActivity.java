@@ -218,7 +218,7 @@ public class RecentItemsActivity extends ListActivity implements Runnable {
 		HttpRequest httpRequest = new HttpRequest();
 
 		if (itemsLink.equalsIgnoreCase("maul")) {
-			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvTopic10Year,mvTopicGoBackHome,mvEduBasicRight,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvDonghowheMoojiageFC,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvDirectors,mvCommittee,mvEduResearch,mvBuilding,mvBuildingComm,mvDonationGongi,mvDonationQnA,toHomePageAdmin,mvUpgrade";
+			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvTopic10Year,mvTopicGoBackHome,mvEduBasicRight,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvDonghowheMoojiageFC,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvEduResearch,mvBuilding,mvBuildingComm,mvDonationGongi,mvDonationQnA,toHomePageAdmin,mvUpgrade";
 		} else if (itemsLink.equalsIgnoreCase("school1")) {
 			url = "http://121.134.211.159/Mboard-recent.do?part=index&rid=50&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjSchoolFood,mjPhoto,mjData";
 		} else {
