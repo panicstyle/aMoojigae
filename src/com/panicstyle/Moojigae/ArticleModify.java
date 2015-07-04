@@ -58,6 +58,7 @@ public class ArticleModify extends Activity implements Runnable {
         httpContext = app.httpContext;
 
         intenter();
+		setTitle("글편집");
         
         findViewById(R.id.okbtn).setOnClickListener(mClickListener);
         findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);

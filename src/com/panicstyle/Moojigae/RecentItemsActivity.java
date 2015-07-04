@@ -168,6 +168,7 @@ public class RecentItemsActivity extends ListActivity implements Runnable {
         httpContext = app.httpContext;
 
         intenter();
+        setTitle("최근글보기");
 
         arrayItems = new ArrayList<HashMap<String, String>>();
 

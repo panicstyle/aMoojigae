@@ -13,6 +13,7 @@ import com.google.android.gms.ads.*;
 
 import com.panicstyle.Moojigae.ItemsActivity;
 import com.panicstyle.Moojigae.RecentItemsActivity;
+import com.panicstyle.Moojigae.CalendarActivity;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -212,10 +213,13 @@ public class BoardActivity extends ListActivity implements Runnable {
     protected boolean getData(HttpClient httpClient, HttpContext httpContext) {
     	String boardLink;
     	if (boardCode.equalsIgnoreCase("maul")) {
+            setTitle("무지개교육마을");
     		boardLink = "MMain.do";
     	} else if (boardCode.equalsIgnoreCase("school1")) {
+            setTitle("초등무지개학교");
     		boardLink = "JMain.do";
     	} else {
+            setTitle("중등무지개학교");
     		boardLink = "SMain.do";
     	}
     
@@ -279,6 +283,7 @@ public class BoardActivity extends ListActivity implements Runnable {
             "mvDonationQnA", " > Q & A",
             "toHomePageAdmin", "홈피관련질문",
             "mvUpgrade", "등업요청(메일인증)",
+            "maul-cal", "전체일정",
         };
         String[] school1 = new String[]{
             "recent", "최근글보기",
@@ -293,6 +298,7 @@ public class BoardActivity extends ListActivity implements Runnable {
             "mjSchoolFood", "급식분과",
             "mjPhoto", "사진첩&동영상",
             "mjData", "학교 자료실",
+            "ama", "아마표",
         };
         String[] school2 = new String[]{
             "recent", "최근글보기",
@@ -310,6 +316,7 @@ public class BoardActivity extends ListActivity implements Runnable {
             "msMinutes", "회의록",
             "msPhoto", "사진첩&동영상",
             "msData", "학교자료실",
+            "school2-cal", "전체일정",
         };
         // 각 항목 찾기
         HashMap<String, String> item;
@@ -363,10 +370,15 @@ public class BoardActivity extends ListActivity implements Runnable {
         if (link.equalsIgnoreCase("-")) return;
         
         if (link.equalsIgnoreCase("recent")) {
-        	Intent intent = new Intent(this, RecentItemsActivity.class);
-	        intent.putExtra("ITEMS_TITLE", boardTitle);
-	        intent.putExtra("ITEMS_LINK", boardCode);
-	        startActivity(intent);
+            Intent intent = new Intent(this, RecentItemsActivity.class);
+            intent.putExtra("ITEMS_TITLE", boardTitle);
+            intent.putExtra("ITEMS_LINK", boardCode);
+            startActivity(intent);
+        } else if (link.equalsIgnoreCase("ama") || link.equalsIgnoreCase("maul-cal") || link.equalsIgnoreCase("school2-cal")) {
+            Intent intent = new Intent(this, CalendarActivity.class);
+            intent.putExtra("ITEMS_TITLE", title);
+            intent.putExtra("ITEMS_LINK", link);
+            startActivity(intent);
         } else {
         	Intent intent = new Intent(this, ItemsActivity.class);
 	        intent.putExtra("ITEMS_TITLE", title);

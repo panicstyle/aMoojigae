@@ -201,6 +201,7 @@ public class ItemsActivity extends ListActivity implements Runnable {
         httpContext = app.httpContext;
 
         intenter();
+		setTitle(itemsTitle);
 
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView) this.findViewById(R.id.adView);

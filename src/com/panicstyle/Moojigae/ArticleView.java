@@ -82,6 +82,7 @@ public class ArticleView extends Activity implements Runnable {
         mUserID = app.mUserID;
 		
         intenter();
+        setTitle("글보기");
         
         Pattern p = Pattern.compile("(?<=boardNo=)(.|\\n)*?(?=&)", Pattern.CASE_INSENSITIVE); 
         Matcher m = p.matcher(g_Link);

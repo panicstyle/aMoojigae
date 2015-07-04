@@ -56,6 +56,7 @@ public class CommentWrite extends Activity implements Runnable {
         httpContext = app.httpContext;
 
         intenter();
+		setTitle("댓글쓰기");
         
         findViewById(R.id.okbtn).setOnClickListener(mClickListener);
         findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);

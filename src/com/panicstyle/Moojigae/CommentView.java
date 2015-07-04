@@ -144,6 +144,7 @@ public class CommentView extends ListActivity implements Runnable {
         setContentView(R.layout.sub_main);
         
         intenter();
+        setTitle("댓글선택");
 
         arrayItems = new ArrayList<HashMap<String, String>>();
 		

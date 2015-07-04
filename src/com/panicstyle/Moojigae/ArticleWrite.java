@@ -56,7 +56,8 @@ public class ArticleWrite extends Activity implements Runnable {
         httpContext = app.httpContext;
 
         intenter();
-        
+		setTitle("글쓰기");
+
         findViewById(R.id.okbtn).setOnClickListener(mClickListener);
         findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);
     }
