@@ -2,6 +2,7 @@ package com.panicstyle.Moojigae;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import com.panicstyle.Moojigae.HttpRequest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,14 +27,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebViewClient;
 import android.webkit.WebView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class ArticleView extends Activity implements Runnable {
+public class ArticleView  extends ListActivity implements Runnable {
 	/** Called when the activity is first created. */
 //	protected String itemsTitle;
 //	protected String itemsLink;
@@ -40,8 +51,10 @@ public class ArticleView extends Activity implements Runnable {
 	protected String mBoardNo;
 	protected HttpClient httpClient;
 	protected HttpContext httpContext;
+    private List<HashMap<String, String>> arrayItems;
+    private EfficientAdapter adapter;
     private ProgressDialog pd;
-    String htmlDoc;
+    static String htmlDoc;
     String mContent;
     String mContentOrig;
     String mErrorMsg;
@@ -64,12 +77,150 @@ public class ArticleView extends Activity implements Runnable {
 	String g_UserID;
 	String g_Date;
 	String g_Link;
-	
+
+    private static class EfficientAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+        private List<HashMap<String, String>> arrayItems;
+
+        public EfficientAdapter(Context context, List<HashMap<String, String>> data) {
+            // Cache the LayoutInflate to avoid asking for a new one each time.
+            mInflater = LayoutInflater.from(context);
+
+            arrayItems = data;
+        }
+
+        /**
+         * The number of items in the list is determined by the number of speeches
+         * in our array.
+         *
+         * @see android.widget.ListAdapter#getCount()
+         */
+        public int getCount() {
+            return arrayItems.size() + 1;
+        }
+
+        /**
+         * Since the data comes from an array, just returning the index is
+         * sufficent to get at the data. If we were using a more complex data
+         * structure, we would return whatever object represents one row in the
+         * list.
+         *
+         * @see android.widget.ListAdapter#getItem(int)
+         */
+        public Object getItem(int position) {
+            return position;
+        }
+
+        /**
+         * Use the array index as a unique id.
+         *
+         * @see android.widget.ListAdapter#getItemId(int)
+         */
+        public long getItemId(int position) {
+            return position;
+        }
+
+        /**
+         * Make a view to hold each row.
+         *
+         * @see android.widget.ListAdapter#getView(int, android.view.View,
+         *      android.view.ViewGroup)
+         */
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (position == 0) {
+                WebViewHolder holder;
+                convertView = mInflater.inflate(R.layout.list_article_content, null);
+
+                holder = new WebViewHolder();
+                holder.webView = (WebView) convertView.findViewById(R.id.webView);
+                convertView.setTag(holder);
+                holder.webView.getSettings().setJavaScriptEnabled(true);
+                holder.webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
+            } else {
+                // A ViewHolder keeps references to children views to avoid unneccessary calls
+                // to findViewById() on each row.
+                ViewHolder holder;
+
+                if (convertView != null) {
+                    Object a = convertView.getTag();
+                    if (!(a instanceof ViewHolder)) {
+                        convertView = null;
+                    }
+                }
+
+                // When convertView is not null, we can reuse it directly, there is no need
+                // to reinflate it. We only inflate a new View when the convertView supplied
+                // by ListView is null.
+                if (convertView == null) {
+                    convertView = mInflater.inflate(R.layout.list_article_comment, null);
+
+                    // Creates a ViewHolder and store references to the two children views
+                    // we want to bind data to.
+                    holder = new ViewHolder();
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.name = (TextView) convertView.findViewById(R.id.name);
+                    holder.subject = (TextView) convertView.findViewById(R.id.subject);
+                    holder.comment = (TextView) convertView.findViewById(R.id.comment);
+                    holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
+                    holder.iconreply = (ImageView) convertView.findViewById(R.id.iconreply);
+
+                    convertView.setTag(holder);
+                } else {
+                    // Get the ViewHolder back to get fast access to the TextView
+                    // and the ImageView.
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                HashMap<String, String> item = new HashMap<String, String>();
+                item = (HashMap<String, String>)arrayItems.get(position - 1);
+                String date = (String)item.get("date");
+                String name = (String)item.get("name");
+                String subject = (String)item.get("subject");
+                String comment = (String)item.get("comment");
+                String isNew = (String)item.get("isNew");
+                String isReply = (String)item.get("isReply");
+                // Bind the data efficiently with the holder.
+                holder.date.setText(date);
+                holder.name.setText(name);
+                holder.subject.setText(subject);
+                holder.comment.setText(comment);
+                if (isNew.equalsIgnoreCase("1")) {
+                    holder.iconnew.setImageResource(R.drawable.icon_new);
+                } else {
+                    holder.iconnew.setImageResource(R.drawable.icon_none);
+                }
+                if (isReply.equalsIgnoreCase("1")) {
+                    holder.iconreply.setImageResource(R.drawable.i_re);
+                } else {
+                    holder.iconreply.setImageResource(R.drawable.icon_none);
+                }
+                if (comment.length() > 0) {
+                    holder.comment.setBackgroundResource(R.drawable.circle);
+                } else {
+                    holder.comment.setBackgroundResource(R.drawable.icon_none);
+                }
+            }
+            return convertView;
+        }
+
+        static class ViewHolder {
+            TextView date;
+            TextView name;
+            TextView subject;
+            TextView comment;
+            ImageView iconnew;
+            ImageView iconreply;
+        }
+
+        static class WebViewHolder {
+            WebView webView;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main2);
-        webView = (WebView) findViewById(R.id.webView);
+        setContentView(R.layout.main);
+//        webView = (WebView) findViewById(R.id.main);
 
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView) this.findViewById(R.id.adView);
@@ -83,7 +234,8 @@ public class ArticleView extends Activity implements Runnable {
 		
         intenter();
         setTitle("글보기");
-        
+        arrayItems = new ArrayList<HashMap<String, String>>();
+
         Pattern p = Pattern.compile("(?<=boardNo=)(.|\\n)*?(?=&)", Pattern.CASE_INSENSITIVE); 
         Matcher m = p.matcher(g_Link);
         
@@ -191,8 +343,8 @@ public class ArticleView extends Activity implements Runnable {
 			ab.setTitle( "로그인 오류" );
 			ab.show();
 		} else {
-			webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
+            adapter = new EfficientAdapter(ArticleView.this, arrayItems);
+            setListAdapter(adapter);
 		}
     }
 
@@ -218,21 +370,6 @@ public class ArticleView extends Activity implements Runnable {
         }
         mContentOrig = result;
         
-
-/*
-        #1 일부 알수 없는 게시글에 대해서 패턴매칭이 안됨
-//      Pattern p = Pattern.compile("(?<=<!-- 게시물 레코드 반복-->)(.|\\n)*?(?=<!-- 메모 입력 -->)", Pattern.CASE_INSENSITIVE); 
-        Pattern p = Pattern.compile("(<!-- 내용 -->)(.|\\n)*?(<!-- 메모 입력 -->)", Pattern.CASE_INSENSITIVE);
-
-        Matcher m = p.matcher(result);
-        
-        if (m.find()) { // Find each match in turn; String can't do this.     
-        	mContent = m.group(0);
-        } else {
-        	mContent = "";
-        }
-*/
-
         Pattern p = Pattern.compile("(?<=<font class=fTitle><b>제목 : <font size=3>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(result);
 
@@ -345,18 +482,22 @@ public class ArticleView extends Activity implements Runnable {
         if (match2 < 0) return false;
         String mComment_str = result.substring(match1, match2);
 
-        String mComment = "";
-
         String[] items = mComment_str.split("<tr onMouseOver=this.style.backgroundColor='#F0F8FF'; onMouseOut=this.style.backgroundColor=''; class=bMemo>");
         int i = 0;
+        // 각 항목 찾기
+        HashMap<String, String> item;
         for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
             String matchstr = items[i];
+            item = new HashMap<String, String>();
+            item.put("isNew", "0");
+            item.put("link", "");
+            item.put("comment", "");
 
             // is Re
             if (matchstr.indexOf("i_memo_reply.gif") >= 0) {
-                mComment = mComment + "<div class='re_reply'>";
+                item.put("isReply", "1");
             } else {
-                mComment = mComment + "<div class='reply'>";
+                item.put("isReply", "0");
             }
 
             // Name
@@ -370,7 +511,7 @@ public class ArticleView extends Activity implements Runnable {
                 strName = "";
             }
             strName = strName.replaceAll("<((.|\\n)*?)+>", "");
-            mComment = mComment + "<div class='reply_header'>" + strName + " (";
+            item.put("name", strName);
 
             // Date
             p = Pattern.compile("(?<=<td width=200 align=right class=fMemoSmallGray>)(.|\\n)*?(?=</td>)", Pattern.CASE_INSENSITIVE);
@@ -385,7 +526,7 @@ public class ArticleView extends Activity implements Runnable {
             strDate = strDate.replaceAll("\n", "");
             strDate = strDate.replaceAll("\r", "");
             strDate = strDate.trim();
-            mComment = mComment + strDate + ")</div>";
+            item.put("date", strDate);
 
             // comment
             p = Pattern.compile("(<span id=memoReply_)(.|\\n)*?(<!-- 메모에 대한 답변 -->\n)", Pattern.CASE_INSENSITIVE);
@@ -401,8 +542,16 @@ public class ArticleView extends Activity implements Runnable {
             strComment = strComment.replaceAll("\r", "");
             strComment = strComment.replaceAll("<br>", "\n");
             strComment = strComment.replaceAll("&nbsp;", " ");
-//            strComment = strComment.replaceAll("(<)(.|\\n)*?(>)", "");
-            mComment = mComment + "<div class='reply_content'>" + strComment + "</div></div>";
+            strComment = strComment.replaceAll("(<span id=memoReply_)(.|\\n)*?(>)", "");
+            strComment = strComment.replaceAll("<p>", " ");
+            strComment = strComment.replaceAll("</p>", " ");
+            strComment = strComment.replaceAll("</span>", " ");
+            strComment = strComment.replaceAll("<!-- 메모에 대한 답변 -->", " ");
+            strComment = strComment.replaceAll("(<)(.|\\n)*?(>)", "");
+            strComment = strComment.trim();
+            item.put("subject", strComment);
+
+            arrayItems.add(item);
         }
 
         String strHeader = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
@@ -416,60 +565,141 @@ public class ArticleView extends Activity implements Runnable {
 //        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
         String strBody = "<body>";
 
-    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
+//    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
+    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + strBottom;
 
         return true;
     }
 
     @Override  
     public boolean onCreateOptionsMenu(Menu menu) {  
-        super.onCreateOptionsMenu(menu);  
-          
-        menu.add(0, 0, 0, "글답변");  
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_article, menu);
+
+        menu.add(0, 0, 0, "글답변");
         menu.add(0, 1, 0, "글수정");
         menu.add(0, 2, 0, "글삭제");  
         menu.add(0, 3, 0, "댓글쓰기");  
         menu.add(0, 4, 0, "답변댓글쓰기");  
-        menu.add(0, 5, 0, "댓글삭제");  
-          
-        return true;  
+        menu.add(0, 5, 0, "댓글삭제");
+
+        return super.onCreateOptionsMenu(menu);
     }  
       
     @Override  
-    public boolean onOptionsItemSelected(MenuItem item) {  
-        
-    	if (item.getItemId() == 0) {	// 글답변
-            Intent intent = new Intent(this, ArticleWrite.class);
-	        intent.putExtra("BOARDID", mBoardID);
-	        intent.putExtra("BOARDNO",  mBoardNo);
-            startActivityForResult(intent, REQUEST_WRITE);
-    	} else if (item.getItemId() == 1) {	// 글수정
-            Intent intent = new Intent(this, ArticleModify.class);
-	        intent.putExtra("BOARDID", mBoardID);
-	        intent.putExtra("LINK", g_Link);
-            startActivityForResult(intent, REQUEST_MODIFY);
-            return true;  
-    	} else if (item.getItemId() == 2) {	// 글삭제
-    		DeleteArticleConfirm();
-    	} else if (item.getItemId() == 3) {	// 댓글쓰기
-            Intent intent = new Intent(this, CommentWrite.class);
-	        intent.putExtra("BOARDID", mBoardID);
-	        intent.putExtra("BOARDNO",  mBoardNo);
-	        intent.putExtra("COMMENTNO", "");
-	        intent.putExtra("COMMENT", "");
-            startActivityForResult(intent, REQUEST_COMMENT_WRITE);
-    	} else if (item.getItemId() == 4) {	// 답변댓글쓰기
-            Intent intent = new Intent(this, CommentView.class);
-	        intent.putExtra("CONTENT", mContentOrig);
-            startActivityForResult(intent, REQUEST_COMMENT_REPLY_VIEW);
-    	} else if (item.getItemId() == 5) {	// 댓글삭제
-            Intent intent = new Intent(this, CommentView.class);
-	        intent.putExtra("CONTENT", mContentOrig);
-            startActivityForResult(intent, REQUEST_COMMENT_DELETE_VIEW);
-    	}   
-        return false;  
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+                addReply();
+                return true;
+            case R.id.menu_more:
+                View menuItemView = findViewById(R.id.menu_more); // SAME ID AS MENU ID
+                showPopup(menuItemView);
+                return true;
+            case 0:         // 글답변
+                addReArticle();
+                return true;
+            case 1:     	// 글수정
+                modifyArticle();
+                return true;
+            case 2:         // 글삭제
+                DeleteArticle();
+                return true;
+            case 3:     	// 댓글쓰기
+                addReply();
+                return true;
+            case 4:     	// 답변댓글쓰기
+                addReReply();
+                return true;
+            case 5:     	// 댓글삭제
+                deleteReply();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-    
+
+    public void addReArticle() {
+        Intent intent = new Intent(this, ArticleWrite.class);
+        intent.putExtra("BOARDID", mBoardID);
+        intent.putExtra("BOARDNO",  mBoardNo);
+        startActivityForResult(intent, REQUEST_WRITE);
+    }
+
+    public void modifyArticle() {
+        Intent intent = new Intent(this, ArticleModify.class);
+        intent.putExtra("BOARDID", mBoardID);
+        intent.putExtra("LINK", g_Link);
+        startActivityForResult(intent, REQUEST_MODIFY);
+    }
+
+    public void deleteArticle() {
+        DeleteArticleConfirm();
+    }
+
+    public void addReply() {
+        Intent intent = new Intent(this, CommentWrite.class);
+        intent.putExtra("BOARDID", mBoardID);
+        intent.putExtra("BOARDNO",  mBoardNo);
+        intent.putExtra("COMMENTNO", "");
+        intent.putExtra("COMMENT", "");
+        startActivityForResult(intent, REQUEST_COMMENT_WRITE);
+    }
+
+    public void addReReply() {
+        Intent intent = new Intent(this, CommentView.class);
+        intent.putExtra("CONTENT", mContentOrig);
+        startActivityForResult(intent, REQUEST_COMMENT_REPLY_VIEW);
+    }
+
+    public void modifyReply() {
+    }
+
+    public void deleteReply() {
+        Intent intent = new Intent(this, CommentView.class);
+        intent.putExtra("CONTENT", mContentOrig);
+        startActivityForResult(intent, REQUEST_COMMENT_DELETE_VIEW);
+    }
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        Menu menu = popup.getMenu();
+        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+             @Override
+             public boolean onMenuItemClick(MenuItem item) {
+                 switch (item.getItemId()) {
+                     case 0:         // 글답변
+                         addReArticle();
+                         return true;
+                     case 1:        // 글수정
+                         modifyArticle();
+                         return true;
+                     case 2:         // 글삭제
+                         DeleteArticle();
+                         return true;
+                     case 3:        // 댓글쓰기
+                         addReply();
+                         return true;
+                     case 4:        // 답변댓글쓰기
+                         addReReply();
+                         return true;
+                     case 5:        // 댓글삭제
+                         deleteReply();
+                         return true;
+                 }
+                 return true;
+             }
+         });
+
+        menu.add(0, 0, 0, "글답변");
+        menu.add(0, 1, 0, "글수정");
+        menu.add(0, 2, 0, "글삭제");
+        menu.add(0, 3, 0, "댓글쓰기");
+        menu.add(0, 4, 0, "답변댓글쓰기");
+        menu.add(0, 5, 0, "댓글삭제");
+
+        popup.show();
+    }
+
     protected void DeleteArticleConfirm() {
 		AlertDialog.Builder ab = null;
 		ab = new AlertDialog.Builder( this );
@@ -556,7 +786,7 @@ public class ArticleView extends Activity implements Runnable {
 		searchType=&
 		tag=1
 		*/
-		
+
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("boardId", mBoardID));
 		nameValuePairs.add(new BasicNameValuePair("page=", "1"));

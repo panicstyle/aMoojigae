@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -451,26 +452,36 @@ public class ItemsActivity extends ListActivity implements Runnable {
     }
 
     @Override  
-    public boolean onCreateOptionsMenu(Menu menu) {  
-        super.onCreateOptionsMenu(menu);  
+    public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_item, menu);
           
         menu.add(0, 0, 0, "새글 작성");  
           
-        return true;  
+        return super.onCreateOptionsMenu(menu);
     }  
       
     @Override  
-    public boolean onOptionsItemSelected(MenuItem item) {  
-        if (item.getItemId() == 0) {
-            Intent intent = new Intent(this, ArticleWrite.class);
-	        intent.putExtra("BOARDID", itemsLink);
-	        intent.putExtra("BOARDNO",  "");
-            startActivityForResult(intent, REQUEST_WRITE);
-            return true;  
-        }   
-        return false;  
+    public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_add:
+				addArticle();
+				return true;
+			case 0:
+				addArticle();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
     }
-    
+
+	public void addArticle() {
+		Intent intent = new Intent(this, ArticleWrite.class);
+		intent.putExtra("BOARDID", itemsLink);
+		intent.putExtra("BOARDNO",  "");
+		startActivityForResult(intent, REQUEST_WRITE);
+	}
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);

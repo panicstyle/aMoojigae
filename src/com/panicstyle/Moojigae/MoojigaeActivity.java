@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -262,27 +263,44 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
     }
     
     @Override  
-    public boolean onCreateOptionsMenu(Menu menu) {  
-        super.onCreateOptionsMenu(menu);  
-          
-        menu.add(0, 0, 0, "설정");  
-        menu.add(0, 1, 0, "앱정보");  
-          
-        return true;  
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+
+        menu.add(0, 0, 0, "앱정보");
+        menu.add(0, 1, 0, "설정");
+
+        return super.onCreateOptionsMenu(menu);
     }  
       
     @Override  
-    public boolean onOptionsItemSelected(MenuItem item) {  
-        if (item.getItemId() == 0) {
-            Intent intent = new Intent(this, SetView.class);
-            startActivityForResult(intent, REQUEST_CODE);
-            return true;  
-        } else if (item.getItemId() == 1) {
-            Intent intent = new Intent(this, AboutView.class);
-            startActivity(intent);    
-            return true;  
-        }   
-        return false;  
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_info:
+                openInfo();
+                return true;
+            case R.id.menu_setting:
+                openSetting();
+                return true;
+            case 0:
+                openInfo();
+                return true;
+            case 1:
+                openSetting();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void openInfo() {
+        Intent intent = new Intent(this, AboutView.class);
+        startActivity(intent);
+    }
+
+    public void openSetting() {
+        Intent intent = new Intent(this, SetView.class);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
