@@ -135,6 +135,8 @@ public class ArticleView  extends ListActivity implements Runnable {
                 holder.webView = (WebView) convertView.findViewById(R.id.webView);
                 convertView.setTag(holder);
                 holder.webView.getSettings().setJavaScriptEnabled(true);
+                holder.webView.getSettings().setSupportZoom(true);
+                holder.webView.getSettings().setBuiltInZoomControls(true);
                 holder.webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
             } else {
                 // A ViewHolder keeps references to children views to avoid unneccessary calls
