@@ -258,6 +258,7 @@ public class BoardActivity extends ListActivity implements Runnable {
             "mvPoomASee", " > 어울림품앗이",
             "mvPoomASeeWantBiz", " > 거래하고싶어요",
             "mvPoomASeeBized", " > 거래했어요",
+            "mvPoomASeeVacation", " > 방학중품나누기",
             "-", "교육사업부",
             "mvEduLove", " > 교육사랑방",
             "mvEduVillageSchool", " > 마을학교",
