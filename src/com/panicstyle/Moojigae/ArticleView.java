@@ -129,14 +129,14 @@ public class ArticleView  extends ListActivity implements Runnable {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position == 0) {
                 WebViewHolder holder;
-                convertView = mInflater.inflate(R.layout.list_article_content, null);
+                convertView = mInflater.inflate(R.layout.list_article_content, parent, false);
 
                 holder = new WebViewHolder();
                 holder.webView = (WebView) convertView.findViewById(R.id.webView);
-                convertView.setTag(holder);
+//                convertView.setTag(holder);
                 holder.webView.getSettings().setJavaScriptEnabled(true);
-                holder.webView.getSettings().setSupportZoom(true);
-                holder.webView.getSettings().setBuiltInZoomControls(true);
+//                holder.webView.getSettings().setSupportZoom(true);
+//                holder.webView.getSettings().setBuiltInZoomControls(true);
                 holder.webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
             } else {
                 // A ViewHolder keeps references to children views to avoid unneccessary calls
@@ -154,7 +154,7 @@ public class ArticleView  extends ListActivity implements Runnable {
                 // to reinflate it. We only inflate a new View when the convertView supplied
                 // by ListView is null.
                 if (convertView == null) {
-                    convertView = mInflater.inflate(R.layout.list_article_comment, null);
+                    convertView = mInflater.inflate(R.layout.list_article_comment, parent, false);
 
                     // Creates a ViewHolder and store references to the two children views
                     // we want to bind data to.
