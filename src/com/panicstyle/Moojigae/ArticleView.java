@@ -38,12 +38,14 @@ import android.webkit.WebViewClient;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ArticleView  extends ListActivity implements Runnable {
+public class ArticleView  extends Activity implements Runnable {
 	/** Called when the activity is first created. */
 //	protected String itemsTitle;
 //	protected String itemsLink;
@@ -68,7 +70,9 @@ public class ArticleView  extends ListActivity implements Runnable {
     String mCommentNo;
     String mUserID;
     protected int mLoginStatus;
-    private WebView webView;
+    static private WebView webView;
+    static private ScrollView scrollView;
+    static private LinearLayout ll;
 	
 	String g_isPNotice;
 	String g_isNotice;
@@ -78,151 +82,12 @@ public class ArticleView  extends ListActivity implements Runnable {
 	String g_Date;
 	String g_Link;
 
-    private static class EfficientAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
-        private List<HashMap<String, String>> arrayItems;
-
-        public EfficientAdapter(Context context, List<HashMap<String, String>> data) {
-            // Cache the LayoutInflate to avoid asking for a new one each time.
-            mInflater = LayoutInflater.from(context);
-
-            arrayItems = data;
-        }
-
-        /**
-         * The number of items in the list is determined by the number of speeches
-         * in our array.
-         *
-         * @see android.widget.ListAdapter#getCount()
-         */
-        public int getCount() {
-            return arrayItems.size() + 1;
-        }
-
-        /**
-         * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
-         * structure, we would return whatever object represents one row in the
-         * list.
-         *
-         * @see android.widget.ListAdapter#getItem(int)
-         */
-        public Object getItem(int position) {
-            return position;
-        }
-
-        /**
-         * Use the array index as a unique id.
-         *
-         * @see android.widget.ListAdapter#getItemId(int)
-         */
-        public long getItemId(int position) {
-            return position;
-        }
-
-        /**
-         * Make a view to hold each row.
-         *
-         * @see android.widget.ListAdapter#getView(int, android.view.View,
-         *      android.view.ViewGroup)
-         */
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == 0) {
-                WebViewHolder holder;
-                convertView = mInflater.inflate(R.layout.list_article_content, parent, false);
-
-                holder = new WebViewHolder();
-                holder.webView = (WebView) convertView.findViewById(R.id.webView);
-//                convertView.setTag(holder);
-                holder.webView.getSettings().setJavaScriptEnabled(true);
-//                holder.webView.getSettings().setSupportZoom(true);
-//                holder.webView.getSettings().setBuiltInZoomControls(true);
-                holder.webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
-            } else {
-                // A ViewHolder keeps references to children views to avoid unneccessary calls
-                // to findViewById() on each row.
-                ViewHolder holder;
-
-                if (convertView != null) {
-                    Object a = convertView.getTag();
-                    if (!(a instanceof ViewHolder)) {
-                        convertView = null;
-                    }
-                }
-
-                // When convertView is not null, we can reuse it directly, there is no need
-                // to reinflate it. We only inflate a new View when the convertView supplied
-                // by ListView is null.
-                if (convertView == null) {
-                    convertView = mInflater.inflate(R.layout.list_article_comment, parent, false);
-
-                    // Creates a ViewHolder and store references to the two children views
-                    // we want to bind data to.
-                    holder = new ViewHolder();
-                    holder.date = (TextView) convertView.findViewById(R.id.date);
-                    holder.name = (TextView) convertView.findViewById(R.id.name);
-                    holder.subject = (TextView) convertView.findViewById(R.id.subject);
-                    holder.comment = (TextView) convertView.findViewById(R.id.comment);
-                    holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
-                    holder.iconreply = (ImageView) convertView.findViewById(R.id.iconreply);
-
-                    convertView.setTag(holder);
-                } else {
-                    // Get the ViewHolder back to get fast access to the TextView
-                    // and the ImageView.
-                    holder = (ViewHolder) convertView.getTag();
-                }
-                HashMap<String, String> item = new HashMap<String, String>();
-                item = (HashMap<String, String>)arrayItems.get(position - 1);
-                String date = (String)item.get("date");
-                String name = (String)item.get("name");
-                String subject = (String)item.get("subject");
-                String comment = (String)item.get("comment");
-                String isNew = (String)item.get("isNew");
-                String isReply = (String)item.get("isReply");
-                // Bind the data efficiently with the holder.
-                holder.date.setText(date);
-                holder.name.setText(name);
-                holder.subject.setText(subject);
-                holder.comment.setText(comment);
-                if (isNew.equalsIgnoreCase("1")) {
-                    holder.iconnew.setImageResource(R.drawable.icon_new);
-                } else {
-                    holder.iconnew.setImageResource(R.drawable.icon_none);
-                }
-                if (isReply.equalsIgnoreCase("1")) {
-                    holder.iconreply.setImageResource(R.drawable.i_re);
-                } else {
-                    holder.iconreply.setImageResource(R.drawable.icon_none);
-                }
-                if (comment.length() > 0) {
-                    holder.comment.setBackgroundResource(R.drawable.circle);
-                } else {
-                    holder.comment.setBackgroundResource(R.drawable.icon_none);
-                }
-            }
-            return convertView;
-        }
-
-        static class ViewHolder {
-            TextView date;
-            TextView name;
-            TextView subject;
-            TextView comment;
-            ImageView iconnew;
-            ImageView iconreply;
-        }
-
-        static class WebViewHolder {
-            WebView webView;
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-//        webView = (WebView) findViewById(R.id.main);
+        setContentView(R.layout.main3);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        ll = (LinearLayout) findViewById(R.id.ll);
 
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView) this.findViewById(R.id.adView);
@@ -345,8 +210,53 @@ public class ArticleView  extends ListActivity implements Runnable {
 			ab.setTitle( "로그인 오류" );
 			ab.show();
 		} else {
-            adapter = new EfficientAdapter(ArticleView.this, arrayItems);
-            setListAdapter(adapter);
+            webView = (WebView) findViewById(R.id.webView);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
+
+            for (int i = 0; i < arrayItems.size(); i++)
+            {
+                LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.list_article_comment, null);
+
+                TextView dateView = (TextView) view.findViewById(R.id.date);
+                TextView nameView = (TextView) view.findViewById(R.id.name);
+                TextView subjectView = (TextView) view.findViewById(R.id.subject);
+                TextView commentView = (TextView) view.findViewById(R.id.comment);
+                ImageView iconnewView = (ImageView) view.findViewById(R.id.iconnew);
+                ImageView iconreplyView = (ImageView) view.findViewById(R.id.iconreply);
+
+                HashMap<String, String> item = new HashMap<String, String>();
+                item = (HashMap<String, String>)arrayItems.get(i);
+                String date = (String)item.get("date");
+                String name = (String)item.get("name");
+                String subject = (String)item.get("subject");
+                String comment = (String)item.get("comment");
+                String isNew = (String)item.get("isNew");
+                String isReply = (String)item.get("isReply");
+                // Bind the data efficiently with the holder.
+                dateView.setText(date);
+                nameView.setText(name);
+                subjectView.setText(subject);
+                commentView.setText(comment);
+                if (isNew.equalsIgnoreCase("1")) {
+                    iconnewView.setImageResource(R.drawable.icon_new);
+                } else {
+                    iconnewView.setImageResource(R.drawable.icon_none);
+                }
+                if (isReply.equalsIgnoreCase("1")) {
+                    iconreplyView.setImageResource(R.drawable.i_re);
+                } else {
+                    iconreplyView.setImageResource(R.drawable.icon_none);
+                }
+                if (comment.length() > 0) {
+                    commentView.setBackgroundResource(R.drawable.circle);
+                } else {
+                    commentView.setBackgroundResource(R.drawable.icon_none);
+                }
+
+                ll.addView(view);
+            }
 		}
     }
 
