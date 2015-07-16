@@ -54,7 +54,6 @@ public class ArticleView  extends Activity implements Runnable {
 	protected HttpClient httpClient;
 	protected HttpContext httpContext;
     private List<HashMap<String, String>> arrayItems;
-    private EfficientAdapter adapter;
     private ProgressDialog pd;
     static String htmlDoc;
     String mContent;
@@ -216,44 +215,30 @@ public class ArticleView  extends Activity implements Runnable {
 
             for (int i = 0; i < arrayItems.size(); i++)
             {
-                LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.list_article_comment, null);
-
-                TextView dateView = (TextView) view.findViewById(R.id.date);
-                TextView nameView = (TextView) view.findViewById(R.id.name);
-                TextView subjectView = (TextView) view.findViewById(R.id.subject);
-                TextView commentView = (TextView) view.findViewById(R.id.comment);
-                ImageView iconnewView = (ImageView) view.findViewById(R.id.iconnew);
-                ImageView iconreplyView = (ImageView) view.findViewById(R.id.iconreply);
-
                 HashMap<String, String> item = new HashMap<String, String>();
                 item = (HashMap<String, String>)arrayItems.get(i);
                 String date = (String)item.get("date");
                 String name = (String)item.get("name");
                 String subject = (String)item.get("subject");
-                String comment = (String)item.get("comment");
-                String isNew = (String)item.get("isNew");
                 String isReply = (String)item.get("isReply");
+
+                LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view;
+
+                if (isReply.equalsIgnoreCase("0")) {
+                    view = inflater.inflate(R.layout.list_article_comment, null);
+                } else {
+                    view = inflater.inflate(R.layout.list_article_recomment, null);
+                }
+
+                TextView dateView = (TextView) view.findViewById(R.id.date);
+                TextView nameView = (TextView) view.findViewById(R.id.name);
+                TextView subjectView = (TextView) view.findViewById(R.id.subject);
+
                 // Bind the data efficiently with the holder.
                 dateView.setText(date);
                 nameView.setText(name);
                 subjectView.setText(subject);
-                commentView.setText(comment);
-                if (isNew.equalsIgnoreCase("1")) {
-                    iconnewView.setImageResource(R.drawable.icon_new);
-                } else {
-                    iconnewView.setImageResource(R.drawable.icon_none);
-                }
-                if (isReply.equalsIgnoreCase("1")) {
-                    iconreplyView.setImageResource(R.drawable.i_re);
-                } else {
-                    iconreplyView.setImageResource(R.drawable.icon_none);
-                }
-                if (comment.length() > 0) {
-                    commentView.setBackgroundResource(R.drawable.circle);
-                } else {
-                    commentView.setBackgroundResource(R.drawable.icon_none);
-                }
 
                 ll.addView(view);
             }
@@ -401,9 +386,7 @@ public class ArticleView  extends Activity implements Runnable {
         for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
             String matchstr = items[i];
             item = new HashMap<String, String>();
-            item.put("isNew", "0");
             item.put("link", "");
-            item.put("comment", "");
 
             // is Re
             if (matchstr.indexOf("i_memo_reply.gif") >= 0) {
