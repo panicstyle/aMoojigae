@@ -1,71 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTitle" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#666666"
+        android:layout_marginTop="5dip" />
+
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:inputType="textMultiLine"
+        android:layout_weight="1"
+        android:ems="10"
+        android:id="@+id/editContent" />
 
-        <LinearLayout
-            android:id="@+id/ll"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#666666"
+        android:layout_marginTop="5dip" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="#666666"
-                android:layout_marginTop="5dip" />
+        <ImageView android:id="@+id/attach1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ImageView>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/editText2" />
+        <ImageView android:id="@+id/attach2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ImageView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="#666666"
-                android:layout_marginTop="5dip" />
+        <ImageView android:id="@+id/iconadd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera_enhance_black_24dp"
+            android:baselineAlignBottom="false"
+            android:onClick="clickComment"
+            android:layout_gravity="bottom|right">
+        </ImageView>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView android:id="@+id/attach1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                </ImageView>
-
-                <ImageView android:id="@+id/attach2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                </ImageView>
-
-                <ImageView android:id="@+id/iconadd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_camera_enhance_black_24dp"
-                    android:baselineAlignBottom="false"
-                    android:onClick="clickComment"
-                    android:layout_gravity="bottom|right">
-                </ImageView>
-
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

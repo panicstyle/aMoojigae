@@ -49,7 +49,7 @@ public class ArticleWrite extends Activity implements Runnable {
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.article_write);    
+        setContentView(R.layout.main4);
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
@@ -58,8 +58,8 @@ public class ArticleWrite extends Activity implements Runnable {
         intenter();
 		setTitle("글쓰기");
 
-        findViewById(R.id.okbtn).setOnClickListener(mClickListener);
-        findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);
+//        findViewById(R.id.okbtn).setOnClickListener(mClickListener);
+//        findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);
     }
 
     public void intenter() {
