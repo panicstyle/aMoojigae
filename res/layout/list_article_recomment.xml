@@ -85,8 +85,9 @@
 		<ImageView android:id="@+id/iconmore"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:src="@drawable/ic_perm_data_setting_black_36dp"
+			android:src="@drawable/ic_menu_black_24dp"
 			android:baselineAlignBottom="false"
+			android:onClick="clickComment"
 			android:layout_gravity="bottom|right">
 		</ImageView>
 

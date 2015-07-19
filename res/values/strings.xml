@@ -26,9 +26,11 @@
     <string name="button_send">Send</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="menu_info">info</string>
-    <string name="menu_setting">setting</string>
-    <string name="menu_add">add</string>
-    <string name="menu_more">more</string>
+    <string name="menu_info">정보</string>
+    <string name="menu_setting">설정</string>
+    <string name="menu_add">새글</string>
+    <string name="menu_more">더보기</string>
+    <string name="menu_modify">수정</string>
+    <string name="menu_delete">삭제</string>
 
 </resources>

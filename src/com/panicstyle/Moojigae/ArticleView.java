@@ -58,6 +58,7 @@ public class ArticleView  extends Activity implements Runnable {
     static String htmlDoc;
     String mContent;
     String mContentOrig;
+    String m_strProfile;
     String mErrorMsg;
     int nThreadMode = 0;
     boolean bDeleteStatus;
@@ -70,6 +71,8 @@ public class ArticleView  extends Activity implements Runnable {
     String mUserID;
     protected int mLoginStatus;
     static private WebView webView;
+    static private TextView m_profile;
+    static private TextView m_CommentCnt;
     static private ScrollView scrollView;
     static private LinearLayout ll;
 	
@@ -212,6 +215,13 @@ public class ArticleView  extends Activity implements Runnable {
             webView = (WebView) findViewById(R.id.webView);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
+
+            m_profile = (TextView) findViewById(R.id.profile);
+            m_profile.setText(m_strProfile);
+
+            String strCommentCnt = String.valueOf(arrayItems.size()) + " 개의 댓글";
+            m_CommentCnt = (TextView) findViewById(R.id.commentcnt);
+            m_CommentCnt.setText(strCommentCnt);
 
             for (int i = 0; i < arrayItems.size(); i++)
             {
@@ -365,13 +375,16 @@ public class ArticleView  extends Activity implements Runnable {
 
         p = Pattern.compile("(?<=<td class=cContent>)(.|\\n)*?(?=</td>)", Pattern.CASE_INSENSITIVE);
         m = p.matcher(strProfile_str);
-        String strProfile;
+
         if (m.find()) { // Find each match in turn; String can't do this.
-            strProfile = m.group(0);
+            m_strProfile = m.group(0);
         } else {
-            strProfile = "None";
+            m_strProfile = "None";
         }
-        strProfile = "<div class='profile'>" + strProfile + "</div>";
+        m_strProfile = m_strProfile.replaceAll("<br><br>", "\n");
+        m_strProfile = m_strProfile.replaceAll("<br>", "\n");
+        m_strProfile = m_strProfile.replaceAll("(<)(.|\\n)*?(>)", "");
+        m_strProfile = m_strProfile.replaceAll("&nbsp;", " ");
 
         match1 = result.indexOf("<!-- 메모글 반복 -->");
         if (match1 < 0) return false;
@@ -461,7 +474,7 @@ public class ArticleView  extends Activity implements Runnable {
         String strBody = "<body>";
 
 //    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
-    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + strBottom;
+    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strBottom;
 
         return true;
     }
@@ -485,7 +498,7 @@ public class ArticleView  extends Activity implements Runnable {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add:
-                addReply();
+                addComment();
                 return true;
             case R.id.menu_more:
                 View menuItemView = findViewById(R.id.menu_more); // SAME ID AS MENU ID
@@ -501,13 +514,13 @@ public class ArticleView  extends Activity implements Runnable {
                 DeleteArticle();
                 return true;
             case 3:     	// 댓글쓰기
-                addReply();
+                addComment();
                 return true;
             case 4:     	// 답변댓글쓰기
-                addReReply();
+                addReComment();
                 return true;
             case 5:     	// 댓글삭제
-                deleteReply();
+                deleteComment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -532,7 +545,7 @@ public class ArticleView  extends Activity implements Runnable {
         DeleteArticleConfirm();
     }
 
-    public void addReply() {
+    public void addComment() {
         Intent intent = new Intent(this, CommentWrite.class);
         intent.putExtra("BOARDID", mBoardID);
         intent.putExtra("BOARDNO",  mBoardNo);
@@ -541,16 +554,16 @@ public class ArticleView  extends Activity implements Runnable {
         startActivityForResult(intent, REQUEST_COMMENT_WRITE);
     }
 
-    public void addReReply() {
+    public void addReComment() {
         Intent intent = new Intent(this, CommentView.class);
         intent.putExtra("CONTENT", mContentOrig);
         startActivityForResult(intent, REQUEST_COMMENT_REPLY_VIEW);
     }
 
-    public void modifyReply() {
+    public void modifyComment() {
     }
 
-    public void deleteReply() {
+    public void deleteComment() {
         Intent intent = new Intent(this, CommentView.class);
         intent.putExtra("CONTENT", mContentOrig);
         startActivityForResult(intent, REQUEST_COMMENT_DELETE_VIEW);
@@ -572,13 +585,13 @@ public class ArticleView  extends Activity implements Runnable {
                          DeleteArticle();
                          return true;
                      case 3:        // 댓글쓰기
-                         addReply();
+                         addComment();
                          return true;
                      case 4:        // 답변댓글쓰기
-                         addReReply();
+                         addReComment();
                          return true;
                      case 5:        // 댓글삭제
-                         deleteReply();
+                         deleteComment();
                          return true;
                  }
                  return true;
@@ -594,6 +607,32 @@ public class ArticleView  extends Activity implements Runnable {
 
         popup.show();
     }
+
+    public void clickComment(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        Menu menu = popup.getMenu();
+        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:         // 글답변
+                        modifyComment();
+                        return true;
+                    case 1:        // 댓글삭제
+                        deleteComment();
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        menu.add(0, 0, 0, "수정");
+        menu.add(0, 1, 0, "삭제");
+
+        popup.show();
+        return;
+    }
+
 
     protected void DeleteArticleConfirm() {
 		AlertDialog.Builder ab = null;
