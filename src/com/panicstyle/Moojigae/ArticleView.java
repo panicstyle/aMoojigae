@@ -37,6 +37,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebViewClient;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -119,6 +120,8 @@ public class ArticleView  extends Activity implements Runnable {
         
     public void LoadData() {
 		pd = ProgressDialog.show(this, "", "로딩중", true, false);
+
+        arrayItems.clear();
 
         Thread thread = new Thread(this);
         thread.start();
@@ -223,6 +226,7 @@ public class ArticleView  extends Activity implements Runnable {
             m_CommentCnt = (TextView) findViewById(R.id.commentcnt);
             m_CommentCnt.setText(strCommentCnt);
 
+            ll.removeAllViews();
             for (int i = 0; i < arrayItems.size(); i++)
             {
                 HashMap<String, String> item = new HashMap<String, String>();
@@ -231,6 +235,7 @@ public class ArticleView  extends Activity implements Runnable {
                 String name = (String)item.get("name");
                 String subject = (String)item.get("subject");
                 String isReply = (String)item.get("isReply");
+                String commentNo = (String)item.get("commentno");
 
                 LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view;
@@ -244,11 +249,13 @@ public class ArticleView  extends Activity implements Runnable {
                 TextView dateView = (TextView) view.findViewById(R.id.date);
                 TextView nameView = (TextView) view.findViewById(R.id.name);
                 TextView subjectView = (TextView) view.findViewById(R.id.subject);
+                ImageButton iconMore = (ImageButton) view.findViewById(R.id.iconmore);
 
                 // Bind the data efficiently with the holder.
                 dateView.setText(date);
                 nameView.setText(name);
                 subjectView.setText(subject);
+                iconMore.setContentDescription(commentNo);
 
                 ll.addView(view);
             }
@@ -399,7 +406,17 @@ public class ArticleView  extends Activity implements Runnable {
         for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
             String matchstr = items[i];
             item = new HashMap<String, String>();
-            item.put("link", "");
+
+            // Comment ID
+            p = Pattern.compile("(?<=<span id=memoReply_\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d_)(.|\\n)*?(?=>)", Pattern.CASE_INSENSITIVE);
+            m = p.matcher(matchstr);
+
+            if (m.find()) { // Find each match in turn; String can't do this.
+                item.put("commentno", m.group(0));
+            } else {
+                item.put("commentno", "");
+            }
+
 
             // is Re
             if (matchstr.indexOf("i_memo_reply.gif") >= 0) {
@@ -572,67 +589,70 @@ public class ArticleView  extends Activity implements Runnable {
         PopupMenu popup = new PopupMenu(this, v);
         Menu menu = popup.getMenu();
         popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-             @Override
-             public boolean onMenuItemClick(MenuItem item) {
-                 switch (item.getItemId()) {
-                     case 0:         // 글답변
-                         addReArticle();
-                         return true;
-                     case 1:        // 글수정
-                         modifyArticle();
-                         return true;
-                     case 2:         // 글삭제
-                         DeleteArticle();
-                         return true;
-                     case 3:        // 댓글쓰기
-                         addComment();
-                         return true;
-                     case 4:        // 답변댓글쓰기
-                         addReComment();
-                         return true;
-                     case 5:        // 댓글삭제
-                         deleteComment();
-                         return true;
-                 }
-                 return true;
-             }
-         });
-
-        menu.add(0, 0, 0, "글답변");
-        menu.add(0, 1, 0, "글수정");
-        menu.add(0, 2, 0, "글삭제");
-        menu.add(0, 3, 0, "댓글쓰기");
-        menu.add(0, 4, 0, "답변댓글쓰기");
-        menu.add(0, 5, 0, "댓글삭제");
-
-        popup.show();
-    }
-
-    public void clickComment(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        Menu menu = popup.getMenu();
-        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:         // 글답변
-                        modifyComment();
+                        addReArticle();
                         return true;
-                    case 1:        // 댓글삭제
-                        deleteComment();
+                    case 1:        // 글수정
+                        modifyArticle();
+                        return true;
+                    case 2:         // 글삭제
+                        DeleteArticle();
+                        return true;
+                    case 3:        // 댓글쓰기
+                        addComment();
                         return true;
                 }
                 return true;
             }
         });
 
-        menu.add(0, 0, 0, "수정");
+        menu.add(0, 0, 0, "글답변");
+        menu.add(0, 1, 0, "글수정");
+        menu.add(0, 2, 0, "글삭제");
+        menu.add(0, 3, 0, "댓글쓰기");
+
+        popup.show();
+    }
+
+    public void clickComment(View v) {
+        ImageView iv = (ImageView)v;
+        mCommentNo = (String)iv.getContentDescription();
+        PopupMenu popup = new PopupMenu(this, v);
+        Menu menu = popup.getMenu();
+        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:         // 댓글답변
+                        ReplayComment();
+                        return true;
+                    case 1:        // 댓글삭제
+                        DeleteCommentConfirm();
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        menu.add(0, 0, 0, "답변");
         menu.add(0, 1, 0, "삭제");
 
         popup.show();
         return;
     }
 
+    protected void ReplayComment() {
+        Intent newIntent;
+
+        newIntent = new Intent(this, CommentWrite.class);
+        newIntent.putExtra("BOARDID", mBoardID);
+        newIntent.putExtra("BOARDNO", mBoardNo);
+        newIntent.putExtra("COMMENTNO", mCommentNo);
+        startActivityForResult(newIntent, REQUEST_COMMENT_WRITE);
+    }
 
     protected void DeleteArticleConfirm() {
 		AlertDialog.Builder ab = null;
@@ -918,9 +938,6 @@ public class ArticleView  extends Activity implements Runnable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);
-    	Bundle extras;
-    	String strCommentNo;
-    	Intent newIntent;
     	switch(requestCode) {
     	case REQUEST_WRITE:
     	case REQUEST_MODIFY:
@@ -928,27 +945,6 @@ public class ArticleView  extends Activity implements Runnable {
     		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
     			LoadData();
     	    }
-    		break;
-    	case REQUEST_COMMENT_REPLY_VIEW:
-    		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
-	        	// 가져온 값을 set해주는 부분
-    			extras = intent.getExtras();
-    			strCommentNo = extras.getString("COMMENTNO").toString();
-	
-	        	newIntent = new Intent(this, CommentWrite.class);
-		        newIntent.putExtra("BOARDID", mBoardID);
-		        newIntent.putExtra("BOARDNO", mBoardNo);
-		        newIntent.putExtra("COMMENTNO", strCommentNo);
-		        startActivityForResult(newIntent, REQUEST_COMMENT_WRITE);
-    		}
-    		break;
-    	case REQUEST_COMMENT_DELETE_VIEW:
-    		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
-	        	// 가져온 값을 set해주는 부분
-    			extras = intent.getExtras();
-	        	mCommentNo = extras.getString("COMMENTNO").toString();
-	        	DeleteCommentConfirm();
-    		}
     		break;
     	}
     }

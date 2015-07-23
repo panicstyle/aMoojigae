@@ -82,14 +82,15 @@
 
 		</LinearLayout>
 
-		<ImageView android:id="@+id/iconmore"
+		<ImageButton android:id="@+id/iconmore"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:src="@drawable/ic_menu_black_24dp"
 			android:baselineAlignBottom="false"
 			android:onClick="clickComment"
+			android:background="@android:color/transparent"
 			android:layout_gravity="bottom|right">
-		</ImageView>
+		</ImageButton>
 
 	</LinearLayout>
 

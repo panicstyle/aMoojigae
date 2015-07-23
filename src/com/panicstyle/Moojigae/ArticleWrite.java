@@ -7,11 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -164,6 +166,8 @@ public class ArticleWrite extends Activity implements Runnable {
 
 		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
 		entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+		Charset chars = Charset.forName("euc-kr");
+		entityBuilder.setCharset(chars);
 
 		entityBuilder.addTextBody("userEmail", "");
 		entityBuilder.addTextBody("userHomepage", "");
@@ -171,11 +175,10 @@ public class ArticleWrite extends Activity implements Runnable {
 		entityBuilder.addTextBody("whatmode_uEdit", "on");
 		entityBuilder.addTextBody("editContent", "");
 		entityBuilder.addTextBody("tagsName", "");
-		entityBuilder.addTextBody("whatmode_uEdit", "on");
-		entityBuilder.addTextBody("whatmode_uEdit", "on");
-		entityBuilder.addTextBody("whatmode_uEdit", "on");
-		entityBuilder.addTextBody("whatmode_uEdit", "on");
-		entityBuilder.addTextBody("whatmode_uEdit", "on");
+
+		HttpEntity entity = entityBuilder.build();
+
+		String result = httpRequest.requestPostWithAttach(httpClient, httpContext, url, entity, referer, "euc-kr");
 
 		return true;
 	}
