@@ -176,6 +176,8 @@ public class ArticleWrite extends Activity implements Runnable {
 		entityBuilder.addTextBody("editContent", "");
 		entityBuilder.addTextBody("tagsName", "");
 
+		// ImageView 저장된 파일 저장
+
 		HttpEntity entity = entityBuilder.build();
 
 		String result = httpRequest.requestPostWithAttach(httpClient, httpContext, url, entity, referer, "euc-kr");

@@ -71,12 +71,21 @@ public class ArticleView  extends Activity implements Runnable {
     String mCommentNo;
     String mUserID;
     protected int mLoginStatus;
+    static private TextView m_Title;
+    static private TextView m_Name;
+    static private TextView m_Date;
+    static private TextView m_Hit;
     static private WebView webView;
     static private TextView m_profile;
     static private TextView m_CommentCnt;
     static private ScrollView scrollView;
     static private LinearLayout ll;
-	
+
+    String m_strTitle;
+    String m_strName;
+    String m_strDate;
+    String m_strHit;
+
 	String g_isPNotice;
 	String g_isNotice;
 	String g_Subject;
@@ -215,6 +224,18 @@ public class ArticleView  extends Activity implements Runnable {
 			ab.setTitle( "로그인 오류" );
 			ab.show();
 		} else {
+            m_Title = (TextView) findViewById(R.id.title);
+            m_Title.setText(m_strTitle);
+
+            m_Name = (TextView) findViewById(R.id.name);
+            m_Name.setText(m_strName);
+
+            m_Date = (TextView) findViewById(R.id.date);
+            m_Date.setText(m_strDate);
+
+            m_Hit = (TextView) findViewById(R.id.hit);
+            m_Hit.setText(m_strHit);
+
             webView = (WebView) findViewById(R.id.webView);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadDataWithBaseURL("http://121.134.211.159", htmlDoc, "text/html", "utf-8", "");
@@ -287,11 +308,10 @@ public class ArticleView  extends Activity implements Runnable {
         Pattern p = Pattern.compile("(?<=<font class=fTitle><b>제목 : <font size=3>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(result);
 
-        String strSubject;
         if (m.find()) { // Find each match in turn; String can't do this.
-            strSubject = m.group(0);
+            m_strTitle = m.group(0);
         } else {
-            strSubject = "";
+            m_strTitle = "";
         }
 
         int match1, match2;
@@ -308,9 +328,9 @@ public class ArticleView  extends Activity implements Runnable {
 
         String strUser;
         if (m.find()) { // Find each match in turn; String can't do this.
-            strUser = m.group(0);
+            m_strName = m.group(0);
         } else {
-            strUser = "";
+            m_strName = "";
         }
 
         p = Pattern.compile("\\d\\d\\d\\d-\\d\\d-\\d\\d.\\d\\d:\\d\\d:\\d\\d", Pattern.CASE_INSENSITIVE);
@@ -318,9 +338,9 @@ public class ArticleView  extends Activity implements Runnable {
 
         String strUserDate;
         if (m.find()) { // Find each match in turn; String can't do this.
-            strUserDate = m.group(0);
+            m_strDate = m.group(0);
         } else {
-            strUserDate = "";
+            m_strDate = "";
         }
 
         p = Pattern.compile("(?<=<font style=font-style:italic>)(.|\\n)*?(?=</font>)", Pattern.CASE_INSENSITIVE);
@@ -328,12 +348,12 @@ public class ArticleView  extends Activity implements Runnable {
 
         String strHit;
         if (m.find()) { // Find each match in turn; String can't do this.
-            strHit = m.group(0);
+            m_strHit = m.group(0);
         } else {
-            strHit = "";
+            m_strHit = "";
         }
 
-        strTitle = "<div class='title'>" + strSubject + "</div><div class='name'><span>" + strUser + "</span>&nbsp;&nbsp;<span>" + strUserDate + "</span>&nbsp;&nbsp;<span>" + strHit + "</span>명이 읽음</div>";
+//        strTitle = "<div class='title'>" + strSubject + "</div><div class='name'><span>" + strUser + "</span>&nbsp;&nbsp;<span>" + strUserDate + "</span>&nbsp;&nbsp;<span>" + strHit + "</span>명이 읽음</div>";
 
 
         match1 = result.indexOf("<!-- 내용 -->");
@@ -491,7 +511,7 @@ public class ArticleView  extends Activity implements Runnable {
         String strBody = "<body>";
 
 //    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
-    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strBottom;
+    	htmlDoc = strHeader + strResize + strBody + mContent + strAttach + strBottom;
 
         return true;
     }
@@ -686,61 +706,6 @@ public class ArticleView  extends Activity implements Runnable {
 		String url = "http://121.134.211.159/board-save.do";
 		String referer = "http://121.134.211.159/board-edit.do";
 
-		/*
-		boardId=mvHorizonLivingStory&
-		page=1&
-		categoryId=-1&
-		time=1334217622773&
-		returnBoardNo=133404944519504&
-		boardNo=133404944519504&
-		command=DELETE&
-		totalPage=0&
-		totalRecords=0&
-		serialBadNick=&
-		serialBadContent=&
-		htmlImage=%2Fout&
-		thumbnailSize=50&
-		memoWriteable=true&
-		list_yn=N&
-		replyList_yn=N&
-		defaultBoardSkin=default&
-		boardWidth=710&
-		multiView_yn=Y&
-		titleCategory_yn=N&
-		category_yn=N&
-		titleNo_yn=Y&
-		titleIcon_yn=N&
-		titlePoint_yn=N&
-		titleMemo_yn=Y&
-		titleNew_yn=Y&
-		titleThumbnail_yn=N&
-		titleNick_yn=Y&
-		titleTag_yn=Y&
-		anonymity_yn=N&
-		titleRead_yn=Y&
-		boardModel_cd=A&
-		titleDate_yn=Y&
-		tag_yn=Y&
-		thumbnailSize=50&
-		readOver_color=%23336699&
-		boardSerialBadNick=&
-		boardSerialBadContent=&
-		userPw=&
-		userNick=&
-		memoContent=&
-		memoSeq=&
-		pollSeq=&
-		returnURI=&
-		beforeCommand=&
-		starPoint=&
-		provenance=board-read.do&
-		tagsName=&
-		pageScale=&
-		searchOrKey=&
-		searchType=&
-		tag=1
-		*/
-
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("boardId", mBoardID));
 		nameValuePairs.add(new BasicNameValuePair("page=", "1"));
@@ -814,14 +779,6 @@ public class ArticleView  extends Activity implements Runnable {
 
 			return;
         }
-/*
-        if (getParent() == null) {
-           	setResult(Activity.RESULT_OK, new Intent());
-        } else {
-        	getParent().setResult(Activity.RESULT_OK, new Intent());
-        }
-        finish();
-*/
     }
     
     protected void DeleteCommentConfirm() {
@@ -856,10 +813,7 @@ public class ArticleView  extends Activity implements Runnable {
 		String url = "http://121.134.211.159/memo-save.do";
 		String referer = "http://121.134.211.159/board-read.do?boardId=" + mBoardID + "&boardNo=" + mBoardNo + "&command=READ&page=1&categoryId=-1";
 		
-		// boardId=mvHorizonLivingStory&page=1&categoryId=-1&time=1374840174050&returnBoardNo=137482716411890&boardNo=137482716411890&command=MEMO_DELETE&totalPage=0&totalRecords=0&serialBadNick=&serialBadContent=&htmlImage=%2Fout&thumbnailSize=50&memoWriteable=true&list_yn=N&replyList_yn=N&defaultBoardSkin=default&boardWidth=710&multiView_yn=Y&titleCategory_yn=N&category_yn=N&titleNo_yn=Y&titleIcon_yn=N&titlePoint_yn=N&titleMemo_yn=Y&titleNew_yn=Y&titleThumbnail_yn=N&titleNick_yn=Y&titleTag_yn=Y&anonymity_yn=N&titleRead_yn=Y&boardModel_cd=A&titleDate_yn=Y&tag_yn=Y&thumbnailSize=50&readOver_color=%23336699&boardSerialBadNick=&boardSerialBadContent=&userPw=&userNick=&memoContent=&memoSeq=1&pollSeq=&returnURI=&beforeCommand=&starPoint=&provenance=board-read.do&tagsName=&pageScale=&searchOrKey=&searchType=&tag=1&Uid=panicstyle
-		// page=1&categoryId=-1&time=1374840174050&totalPage=0&totalRecords=0&serialBadNick=&serialBadContent=&htmlImage=%2Fout&thumbnailSize=50&memoWriteable=true&list_yn=N&replyList_yn=N&defaultBoardSkin=default&boardWidth=710&multiView_yn=Y&titleCategory_yn=N&category_yn=N&titleNo_yn=Y&titleIcon_yn=N&titlePoint_yn=N&titleMemo_yn=Y&titleNew_yn=Y&titleThumbnail_yn=N&titleNick_yn=Y&titleTag_yn=Y&anonymity_yn=N&titleRead_yn=Y&boardModel_cd=A&titleDate_yn=Y&tag_yn=Y&thumbnailSize=50&readOver_color=%23336699&boardSerialBadNick=&boardSerialBadContent=&userPw=&userNick=&memoContent=&memoSeq=1&pollSeq=&returnURI=&beforeCommand=&starPoint=&provenance=board-read.do&tagsName=&pageScale=&searchOrKey=&searchType=&tag=1&Uid=panicstyle
 		String strParam = "";
-		
 
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("boardId", mBoardID));
