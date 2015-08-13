@@ -101,17 +101,12 @@ public class ArticleWrite extends Activity implements Runnable {
     	mContent = textContent.getText().toString();
     	
     	if (mTitle.length() <= 0 || mContent.length() <= 0) {
-    		AlertDialog.Builder ab = null;
-			ab = new AlertDialog.Builder( this );
-			ab.setMessage( "입력된 내용이 없습니다. 종료하시겠습니까?");
-			ab.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					finish();
-				}
-			});
-			ab.setNegativeButton(android.R.string.cancel, null);
-			ab.setTitle( "확인" );
-			ab.show();
+			AlertDialog.Builder notice = null;
+			notice = new AlertDialog.Builder( ArticleWrite.this );
+			notice.setTitle("알림");
+			notice.setMessage("입력된 내용이 없습니다.");
+			notice.setPositiveButton(android.R.string.ok, null);
+			notice.show();
 			return;
     	}
     	
@@ -358,6 +353,8 @@ public class ArticleWrite extends Activity implements Runnable {
 	}
 
 	public void clickAddImage(View v) {
+// 다음 버전에 추가할 것.
+/*
 		nSelected = -1;
 		if (nAttached < 5) {
 			for (int i = 0; i < 5; i++) {
@@ -372,6 +369,7 @@ public class ArticleWrite extends Activity implements Runnable {
 			photoPickerIntent.setType("image/*");
 			startActivityForResult(photoPickerIntent, SELECT_PHOTO);
 		}
+*/
 		return;
 	}
 
