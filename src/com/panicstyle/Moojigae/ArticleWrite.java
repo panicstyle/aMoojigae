@@ -93,7 +93,6 @@ public class ArticleWrite extends Activity implements Runnable {
     }
 	
     public void SaveData() {
-    	
     	EditText textTitle = (EditText)findViewById(R.id.editTitle);
     	EditText textContent = (EditText)findViewById(R.id.editContent);
 
@@ -141,7 +140,14 @@ public class ArticleWrite extends Activity implements Runnable {
 				ab.show();
 				return;
     		}
-            finish();
+
+			if (getParent() == null) {
+				setResult(Activity.RESULT_OK, new Intent());
+			} else {
+				getParent().setResult(Activity.RESULT_OK, new Intent());
+			}
+
+			finish();
     	}
     };        
     	
@@ -419,31 +425,28 @@ public class ArticleWrite extends Activity implements Runnable {
 	}
 
 	public void CancelData() {
-    	finish();
+		if (getParent() == null) {
+			setResult(Activity.RESULT_CANCELED, new Intent());
+		} else {
+			getParent().setResult(Activity.RESULT_CANCELED, new Intent());
+		}
+
+		finish();
     }
     
     Button.OnClickListener mClickListener = new View.OnClickListener()
     {
       public void onClick(View v)
       {
-          switch (v.getId())
-          {
-          case R.id.okbtn:
-               if (getParent() == null) {
-               	setResult(Activity.RESULT_OK, new Intent());
-               } else {
-               	getParent().setResult(Activity.RESULT_OK, new Intent());
-               }
-               SaveData();
-               break;
-          case R.id.cancelbtn:
-               if (getParent() == null) {
-               	setResult(Activity.RESULT_CANCELED, new Intent());
-               } else {
-               	getParent().setResult(Activity.RESULT_CANCELED, new Intent());
-               }
-               CancelData();
-               break;
+          switch (v.getId()) {
+			  case R.id.okbtn:
+				   SaveData();
+				   break;
+			  case R.id.cancelbtn:
+				   CancelData();
+				   break;
+			  default:
+				  break;
           }
       }
     };
