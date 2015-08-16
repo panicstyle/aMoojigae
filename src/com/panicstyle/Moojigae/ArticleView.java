@@ -525,8 +525,6 @@ public class ArticleView  extends Activity implements Runnable {
         menu.add(0, 1, 0, "글수정");
         menu.add(0, 2, 0, "글삭제");  
         menu.add(0, 3, 0, "댓글쓰기");  
-        menu.add(0, 4, 0, "답변댓글쓰기");  
-        menu.add(0, 5, 0, "댓글삭제");
 
         return super.onCreateOptionsMenu(menu);
     }  
@@ -552,12 +550,6 @@ public class ArticleView  extends Activity implements Runnable {
                 return true;
             case 3:     	// 댓글쓰기
                 addComment();
-                return true;
-            case 4:     	// 답변댓글쓰기
-                addReComment();
-                return true;
-            case 5:     	// 댓글삭제
-                deleteComment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -591,20 +583,9 @@ public class ArticleView  extends Activity implements Runnable {
         startActivityForResult(intent, REQUEST_COMMENT_WRITE);
     }
 
-    public void addReComment() {
-        Intent intent = new Intent(this, CommentView.class);
-        intent.putExtra("CONTENT", mContentOrig);
-        startActivityForResult(intent, REQUEST_COMMENT_REPLY_VIEW);
-    }
-
     public void modifyComment() {
     }
 
-    public void deleteComment() {
-        Intent intent = new Intent(this, CommentView.class);
-        intent.putExtra("CONTENT", mContentOrig);
-        startActivityForResult(intent, REQUEST_COMMENT_DELETE_VIEW);
-    }
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         Menu menu = popup.getMenu();
