@@ -156,7 +156,7 @@ public class MoojigaeActivity extends ListActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MoojigaeActivity.this );
             notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("-방학중품나누기 게시판이 추가되었습니다.");
+            notice.setMessage("-메뉴방식이 변경되었습니다. 상단의 아이콘을 주목하세요.\n-글보기에서 일부 메뉴 오류가 수정되었습니다.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
 
