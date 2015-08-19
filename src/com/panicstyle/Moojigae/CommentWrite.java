@@ -31,6 +31,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.util.Xml;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +52,7 @@ public class CommentWrite extends Activity implements Runnable {
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.comment_write);    
+        setContentView(R.layout.main5);
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         httpClient = app.httpClient;
@@ -58,8 +61,6 @@ public class CommentWrite extends Activity implements Runnable {
         intenter();
 		setTitle("댓글쓰기");
         
-        findViewById(R.id.okbtn).setOnClickListener(mClickListener);
-        findViewById(R.id.cancelbtn).setOnClickListener(mClickListener);
     }
 
     public void intenter() {
@@ -92,8 +93,14 @@ public class CommentWrite extends Activity implements Runnable {
 			ab.show();
 			return;
     	}
-    	
-        pd = ProgressDialog.show(this, "", "저장중", true, false);
+
+		if (getParent() == null) {
+			setResult(Activity.RESULT_OK, new Intent());
+		} else {
+			getParent().setResult(Activity.RESULT_OK, new Intent());
+		}
+
+		pd = ProgressDialog.show(this, "", "저장중", true, false);
 
         Thread thread = new Thread(this);
         thread.start();
@@ -275,32 +282,33 @@ public class CommentWrite extends Activity implements Runnable {
     }
     	
     public void CancelData() {
-    	finish();
-    }
-    
-    Button.OnClickListener mClickListener = new View.OnClickListener()
-    {
-      public void onClick(View v)
-      {
-          switch (v.getId())
-          {
-          case R.id.okbtn:
-               if (getParent() == null) {
-               	setResult(Activity.RESULT_OK, new Intent());
-               } else {
-               	getParent().setResult(Activity.RESULT_OK, new Intent());
-               }
-               SaveData();
-               break;
-          case R.id.cancelbtn:
-               if (getParent() == null) {
-               	setResult(Activity.RESULT_CANCELED, new Intent());
-               } else {
-               	getParent().setResult(Activity.RESULT_CANCELED, new Intent());
-               }
-               CancelData();
-               break;
-          }
-      }
-    };
+		if (getParent() == null) {
+			setResult(Activity.RESULT_CANCELED, new Intent());
+		} else {
+			getParent().setResult(Activity.RESULT_CANCELED, new Intent());
+		}
+
+		finish();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_write, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_cancel:
+				CancelData();
+				return true;
+			case R.id.menu_save:
+				SaveData();
+				return true;
+		}
+		return true;
+	}
 }

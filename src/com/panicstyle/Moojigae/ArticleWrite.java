@@ -108,7 +108,13 @@ public class ArticleWrite extends Activity implements Runnable {
 			notice.show();
 			return;
     	}
-    	
+
+		if (getParent() == null) {
+			setResult(Activity.RESULT_OK, new Intent());
+		} else {
+			getParent().setResult(Activity.RESULT_OK, new Intent());
+		}
+
         pd = ProgressDialog.show(this, "", "저장중", true, false);
 
         Thread thread = new Thread(this);
@@ -140,12 +146,6 @@ public class ArticleWrite extends Activity implements Runnable {
 				ab.show();
 				return;
     		}
-
-			if (getParent() == null) {
-				setResult(Activity.RESULT_OK, new Intent());
-			} else {
-				getParent().setResult(Activity.RESULT_OK, new Intent());
-			}
 
 			finish();
     	}
@@ -433,21 +433,4 @@ public class ArticleWrite extends Activity implements Runnable {
 
 		finish();
     }
-    
-    Button.OnClickListener mClickListener = new View.OnClickListener()
-    {
-      public void onClick(View v)
-      {
-          switch (v.getId()) {
-			  case R.id.okbtn:
-				   SaveData();
-				   break;
-			  case R.id.cancelbtn:
-				   CancelData();
-				   break;
-			  default:
-				  break;
-          }
-      }
-    };
 }
