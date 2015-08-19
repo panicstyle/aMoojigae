@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.panicstyle.Moojigae"
-    android:versionCode="28"
-    android:versionName="2.2.0" >
+    android:versionCode="29"
+    android:versionName="2.3.0" >
 
     <uses-sdk android:minSdkVersion="11" />
 
@@ -41,7 +41,6 @@
         <activity android:name=".ArticleWrite" />
         <activity android:name=".ArticleModify" />
         <activity android:name=".CommentWrite" />
-        <activity android:name=".CommentView" />
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />

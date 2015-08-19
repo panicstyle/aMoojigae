@@ -486,13 +486,16 @@ public class ArticleView  extends Activity implements Runnable {
             strComment = strComment.replaceAll("\n", "");
             strComment = strComment.replaceAll("\r", "");
             strComment = strComment.replaceAll("<br>", "\n");
-            strComment = strComment.replaceAll("&nbsp;", " ");
-            strComment = strComment.replaceAll("(<span id=memoReply_)(.|\\n)*?(>)", "");
-            strComment = strComment.replaceAll("<p>", " ");
-            strComment = strComment.replaceAll("</p>", " ");
-            strComment = strComment.replaceAll("</span>", " ");
-            strComment = strComment.replaceAll("<!-- 메모에 대한 답변 -->", " ");
+            strComment = strComment.replaceAll("<br/>", "\n");
+            strComment = strComment.replaceAll("<br />", "\n");
+            strComment = strComment.replaceAll("</div>", "\n");
             strComment = strComment.replaceAll("(<)(.|\\n)*?(>)", "");
+            strComment = strComment.replaceAll("&nbsp;", " ");
+            strComment = strComment.replaceAll("&lt;", "<");
+            strComment = strComment.replaceAll("&gt;", ">");
+            strComment = strComment.replaceAll("&amp;", "&");
+            strComment = strComment.replaceAll("&quot;", "\"");
+            strComment = strComment.replaceAll("&apos;", "'");
             strComment = strComment.trim();
             item.put("subject", strComment);
 
@@ -874,13 +877,20 @@ public class ArticleView  extends Activity implements Runnable {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);
     	switch(requestCode) {
-    	case REQUEST_WRITE:
     	case REQUEST_MODIFY:
     	case REQUEST_COMMENT_WRITE:
     		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
     			LoadData();
     	    }
     		break;
+        case REQUEST_WRITE:
+            if (getParent() == null) {
+                setResult(Activity.RESULT_OK, new Intent());
+            } else {
+                getParent().setResult(Activity.RESULT_OK, new Intent());
+            }
+            finish();
+            break;
     	}
     }
 

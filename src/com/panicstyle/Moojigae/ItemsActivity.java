@@ -487,15 +487,7 @@ public class ItemsActivity extends ListActivity implements Runnable {
     	super.onActivityResult(requestCode, resultCode, intent);
     	switch(requestCode) {
     	case REQUEST_WRITE:
-    		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
-    	        arrayItems.clear();
-        		adapter.notifyDataSetChanged();
-    	        nPage = 1;
-    			
-    	        LoadingData();
-    	    }
-    		break;
-    	case REQUEST_VIEW:
+		case REQUEST_VIEW:
     		if (resultCode == RESULT_OK) {	// resultCode 가 항상 0 으로 넘어옴. 해결책 못 찾음. 일단 SetView 가 실행되면 다시 로딩하자.
     	        arrayItems.clear();
         		adapter.notifyDataSetChanged();
