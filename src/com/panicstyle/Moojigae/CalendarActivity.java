@@ -67,6 +67,7 @@ public class CalendarActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main2);
         webView = (WebView) findViewById(R.id.webView);
+        webView.setWebViewClient(new WebViewClient()); // 응룡프로그램에서 직접 url 처리
 
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView) this.findViewById(R.id.adView);
