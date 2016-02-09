@@ -4,21 +4,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        ads:adUnitId="ca-app-pub-9032980304073628/8033860795"
-        ads:adSize="BANNER"
-        />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:id="@+id/scrollView" >
 
         <LinearLayout
             android:orientation="vertical"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -36,6 +31,8 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -110,4 +107,13 @@
             android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        ads:adUnitId="ca-app-pub-9032980304073628/8033860795"
+        ads:adSize="BANNER"
+        />
 </LinearLayout>

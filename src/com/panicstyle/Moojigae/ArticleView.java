@@ -313,6 +313,19 @@ public class ArticleView  extends Activity implements Runnable {
         } else {
             m_strTitle = "";
         }
+        m_strTitle = m_strTitle.replaceAll("\n", "");
+        m_strTitle = m_strTitle.replaceAll("\r", "");
+        m_strTitle = m_strTitle.replaceAll("<br>", "\n");
+        m_strTitle = m_strTitle.replaceAll("<br/>", "\n");
+        m_strTitle = m_strTitle.replaceAll("<br />", "\n");
+        m_strTitle = m_strTitle.replaceAll("</div>", "\n");
+        m_strTitle = m_strTitle.replaceAll("(<)(.|\\n)*?(>)", "");
+        m_strTitle = m_strTitle.replaceAll("&nbsp;", " ");
+        m_strTitle = m_strTitle.replaceAll("&lt;", "<");
+        m_strTitle = m_strTitle.replaceAll("&gt;", ">");
+        m_strTitle = m_strTitle.replaceAll("&amp;", "&");
+        m_strTitle = m_strTitle.replaceAll("&quot;", "\"");
+        m_strTitle = m_strTitle.replaceAll("&apos;", "'");
 
         int match1, match2;
         String strTitle;
