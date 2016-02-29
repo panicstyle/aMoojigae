@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:context="com.panicstyle.gongdong.ArticleWriteActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="제목"
+        android:id="@+id/editTitle" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="내용"
+            android:inputType="textMultiLine"
+            android:id="@+id/editContent" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true" >
+
+        <ImageView android:id="@+id/attach0"
+            android:onClick="clickImage"
+            android:layout_marginLeft="10dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+        </ImageView>
+
+        <ImageView android:id="@+id/attach1"
+            android:onClick="clickImage"
+            android:layout_marginLeft="10dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+        </ImageView>
+
+        <ImageView android:id="@+id/attach2"
+            android:onClick="clickImage"
+            android:layout_marginLeft="10dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+        </ImageView>
+
+        <ImageView android:id="@+id/attach3"
+            android:onClick="clickImage"
+            android:layout_marginLeft="10dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+        </ImageView>
+
+        <ImageView android:id="@+id/attach4"
+            android:onClick="clickImage"
+            android:layout_marginLeft="10dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text=""/>
+
+        <ImageView android:id="@+id/iconadd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera_enhance_black_36dp"
+            android:baselineAlignBottom="false"
+            android:onClick="clickAddImage"
+            android:layout_gravity="center|right">
+        </ImageView>
+    </LinearLayout>
+
+</LinearLayout>

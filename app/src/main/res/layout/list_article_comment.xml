@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:padding="10dip">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_weight="90"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+	    
+				<TextView android:id="@+id/name"
+					android:layout_width="0dip"
+					android:layout_height="fill_parent"
+					android:gravity = "left|center_vertical"
+					android:textSize = "15sp"
+					android:drawSelectorOnTop="false"
+					android:layout_weight="50"
+					android:textStyle="bold"
+					android:textColor="#111111" >
+				</TextView>
+
+				<TextView
+					android:id="@+id/date"
+					android:layout_width="0dip"
+					android:layout_height="fill_parent"
+					android:paddingRight="1dip"
+					android:drawSelectorOnTop="false"
+					android:gravity="right|center_vertical"
+					android:textColor="#111111"
+					android:layout_weight="50"
+					android:textSize="15sp" >
+				</TextView>
+	
+			</LinearLayout>
+
+			<TextView android:id="@+id/subject"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5dip"
+				android:layout_marginBottom="5dip"
+				android:gravity = "left|center_vertical"
+				android:drawSelectorOnTop="false"
+				android:textSize = "15sp"
+				android:textColor="#000000">
+			</TextView>
+
+			<TextView android:id="@+id/commentno"
+				android:layout_width="0dip"
+				android:layout_height="0dip">
+			</TextView>
+
+		</LinearLayout>
+
+		<ImageButton android:id="@+id/iconmore"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/ic_menu_black_24dp"
+			android:baselineAlignBottom="false"
+			android:onClick="clickComment"
+			android:background="@android:color/transparent"
+			android:layout_gravity="bottom|right">
+		</ImageButton>
+
+	</LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_alignParentBottom="true"
+		android:background="#666666"
+		android:layout_marginTop="5dip" />
+
+</LinearLayout>

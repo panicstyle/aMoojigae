@@ -1,3 +1,0 @@
-ant release
-
-./sign.sh

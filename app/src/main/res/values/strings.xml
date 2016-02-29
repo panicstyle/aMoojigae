@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">무지개교육마을</string>
+    <string name="action_settings">로그인설정</string>
+    <string name="action_info">앱정보</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_id">아이디</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="action_sign_in">로그인</string>
+    <string name="action_sign_in_short">로그인</string>
+
+    <string name="select_photo">어디에서 사진을 가져올까요?</string>
+
+    <string name="menu_info">정보</string>
+    <string name="menu_setting">설정</string>
+    <string name="menu_add">새글</string>
+    <string name="menu_more">더보기</string>
+    <string name="menu_modify">수정</string>
+    <string name="menu_delete">삭제</string>
+    <string name="menu_cancel">취소</string>
+    <string name="menu_save">저장</string>
+    <string name="menu_addimage">사진추가</string>
+
+    <string name="customize">Customize</string>
+    <string name="show_dialog">Show Dialog</string>
+    <string name="undo">Undo</string>
+
+</resources>

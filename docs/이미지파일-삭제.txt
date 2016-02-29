@@ -1,0 +1,28 @@
+GET http://cafe.gongdong.or.kr/cafe.php?sort=45&sub_sort=&page=&startpage=&keyfield=&key_bs=&p1=menbal&p2=&p3=&number=1250743&mode=del_image&image_num=1 HTTP/1.1
+Host: cafe.gongdong.or.kr
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36
+Referer: http://cafe.gongdong.or.kr/cafe.php?sort=45&sub_sort=&page=&startpage=&keyfield=&key_bs=&p1=menbal&p2=&p3=&mode=preedit&number=1250743
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: ko,en-US;q=0.8,en;q=0.6
+Cookie: _ga=GA1.3.1287417885.1439949796; PHPSESSID=u15aujo3804bnu8ko6lh1ih1q5; __utmt=1; xe_logged=true; __utma=109767130.1287417885.1439949796.1455960294.1456201308.18; __utmb=109767130.6.10.1456201308; __utmc=109767130; __utmz=109767130.1439949809.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+HTTP/1.1 200 OK
+Date: Tue, 23 Feb 2016 04:23:47 GMT
+Server: Apache/2.4.6 (Win64) PHP/5.5.3
+X-Powered-By: PHP/5.5.3
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Set-Cookie: mobile=false; path=/cafe.php/
+Set-Cookie: user-agent=e3ae366e66d1c39ce6cf9f9706edbba9; path=/cafe.php/
+Set-Cookie: xe_logged=true; path=/
+Content-Length: 152
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: text/html
+
+<meta http-equiv="refresh" content="0;url=/cafe.php?sort=45&sub_sort=&page=&startpage=&keyfield=&key_bs=&p1=menbal&p2=&p3=&mode=preedit&number=1250743">
+

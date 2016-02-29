@@ -1,0 +1,832 @@
+GET http://cafe.gongdong.or.kr/cafe.php?p1=menbal&getYear=2016&getMonth=1&formx=&fieldx=&sort=cal43&mode= HTTP/1.1
+Host: cafe.gongdong.or.kr
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36
+Referer: http://cafe.gongdong.or.kr/cafe.php?p1=menbal&getYear=2016&getMonth=2&formx=&fieldx=&sort=cal43&mode=
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: ko,en-US;q=0.8,en;q=0.6
+Cookie: _ga=GA1.3.1287417885.1439949796; PHPSESSID=141d5ubu7u40d3dkoo14gsb4e5; __utmt=1; xe_logged=true; __utma=109767130.1287417885.1439949796.1456559076.1456724294.22; __utmb=109767130.8.10.1456724294; __utmc=109767130; __utmz=109767130.1439949809.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+HTTP/1.1 200 OK
+Date: Mon, 29 Feb 2016 05:39:40 GMT
+Server: Apache/2.4.6 (Win64) PHP/5.5.3
+X-Powered-By: PHP/5.5.3
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Set-Cookie: mobile=false; path=/cafe.php/
+Set-Cookie: user-agent=e3ae366e66d1c39ce6cf9f9706edbba9; path=/cafe.php/
+Set-Cookie: xe_logged=true; path=/
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: text/html
+
+2161
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html>
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title>과천 맨발 어린이집 | 공동육아와 공동체교육</title>
+
+	<link href="css/default/cafe_base.css" rel="stylesheet" type="text/css">
+	<link href="css/default/cafe_cafe.css" rel="stylesheet" type="text/css">
+
+	<style>
+	
+
+		#content {
+			margin: 0px 0px 0px 10px;
+		    padding: 0px; 	
+			min-height: 100%;
+			width: 765px;
+			/*width: 635px;*/
+		 
+		}
+		
+		
+		#whereis {
+		 	margin: 0px 0px 10px 0px;
+		    padding: 16px 0px 16px 10px;
+			width: 751px; 
+			border: 2px solid #bbb;
+			background: #FFFFFF;
+			text-align: left;
+			
+			font-size: 1.2em;
+			font-weight:bold;
+		} 
+
+	
+	</style>
+
+ 
+<hr />
+
+
+ 
+
+	<style>
+		
+		#cafe_main_head {
+			
+			background: #FFCC00;
+			/*background: url("") repeat-x 0px 0px;
+			//border: 1px solid #000000;*/
+			
+		}
+		
+				
+		#cafe_title a, #cafe_url a{
+			color: #227700;
+		} 
+
+		#cafe_main_menu { 			
+			background: #FFFFFF;
+		}
+		
+		#cafe_main_menu_text, #cafe_main_menu_text a, #cafe_main_menu_text2, #cafe_main_menu_text2 a  {
+			color: #444444;
+		}
+
+		
+		#cafe_sub_menu_box {
+			border: 4px solid #FFFFFF;
+		} 
+				
+		
+		#design_main_text { 
+			border: 1px solid #FFFFFF; 
+		} 
+
+
+					
+			#cafe_main_head {
+				background: url("/cafe_images/head_images/menbal_head_image.png") repeat-x 0px 0px; 			}
+			
+					
+		
+		#whereis { 
+			border: 1px solid #FFFFFF; 
+		} 		
+		
+
+	</style>
+	
+	
+
+	 
+	
+	<script language="JavaScript" src="js/default/member_ui.js"></script> 
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-15901951-4']);
+  _gaq.push(['_setDomainName', '.gongdong.or.kr']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div id="wrapper">
+
+
+
+
+
+
+<hr />
+
+<script>
+function memoPopup()
+{
+	window.open('http://old.gongdong.or.kr/message.html','memo','toolbar=no,location=no,directories=no, status=no,menubar=no,resizable=yes,scrolling=auto,width=644,height=450,top=100,left=100');
+}
+</script>
+
+<script type="text/javascript" charset="utf-8">
+	document.onkeydown=checkKey; 
+	function checkKey(){
+ 	 // ESC Key 누를 때 
+	 if(window.event.keyCode == 27){
+		if (navigator.userAgent.indexOf("MSIE")!=-1) { 
+			window.top.music.location='/space.html';
+		}else{
+			window.top.music.location='/space.html';
+		}
+	  return;
+	 }
+	}
+</script>
+
+<div id="header">
+
+ 
+
+<div style="position:relative;" >
+
+	<script>
+				// 오른쪽 배너창
+				function moveLayerTo()
+				{
+					var yOffset;
+					var startYFromPreview = parseInt(document.getElementById("previewLayer").style.top);
+					var moveYTo = document.body.scrollTop + 188; // 처음 y좌표
+					var intervalTime = 3;
+
+					if(Math.abs(startYFromPreview - moveYTo) > 5)
+					{
+						yOffset = Math.ceil(Math.abs( moveYTo - startYFromPreview ) / 10);
+						if(moveYTo < startYFromPreview)
+							yOffset = -yOffset;
+						document.getElementById("previewLayer").style.top = parseInt(document.getElementById("previewLayer").style.top) + yOffset;
+					}
+					else
+					{
+						document.getElementById("previewLayer").style.top = moveYTo;
+					}
+
+					setTimeout("moveLayerTo()", intervalTime);
+					return false;
+				}
+
+
+				function moveLayer()
+				{
+					document.getElementById("previewLayer").style.top = 60;
+					moveLayerTo();
+					return false;
+				}
+
+				function init()
+				{	
+					moveLayer();
+					return false;
+				}
+				</script>
+
+
+		<!-- 퀵배너 위치 -->
+		<!--<SCRIPT LANGUAGE="JavaScript" src="http://old.gongdong.or.kr/js/flash.js"></script>
+		<div id='previewLayer' style='position:absolute; top:*px; left:965px; display:block;width:83px;height:278px;overflow:hidden;'><div style="position:absolute;left:-3px;"><script>flash('images/swf/quick.swf','90','375')</script></div></div>-->	    <!-- 퀵배너 위치 끝-->
+
+	<script>setTimeout('init()',0)</script>
+</div>
+
+
+  	<h1 class="hide"><a href="http://menbal.gongdong.or.kr">과천 맨발 어린이집</a></h1>
+	<ul id="quick-go">
+	</ul>
+	
+	<h2 class="hide" >상단</h2>  
+	<hr />
+
+	<h3 class="hide">글로벌 메뉴</h3>
+	<div id="global_top">
+	
+		<div id="logo_small"><a href="http://www.gongdong.or.kr" target="_top">메인 첫화면</a></div>		
+		<!--<div id="logo_small"><a href="http://old.gongdong.or.kr/" target="_top">메인 첫화면</a></div>-->
+		<div id="global_menu"><a href="http://www.gongdong.or.kr/cafe" target="_top">커뮤니티</a>		 
+		<!--<div id="global_menu"><a href="http://cafe.gongdong.or.kr/" target="_top">커뮤니티</a>	-->
+			 
+			 		 
+			 <span id="global_menu_section">|</span> <a href="javascript:memoPopup();" >쪽지함</a>			 <span id="global_menu_section">|</span> <!--<a href="http://old.gongdong.or.kr/index.php?code=mypage" target="_top">--><a href="http://www.gongdong.or.kr/index.php?mid=member_info&act=dispMemberInfo">정보수정</a>
+			 
+			  <span id="global_menu_section">|</span> <a href="http://old.gongdong.or.kr/index.php?code=mycal" target="_top">마이캘린더</a>
+			  
+			 					</div>
+ 
+		<div id="link_my_cafe_box">	
+		<select name="link_my_cafe" id="link_my_cafe"  onChange="if (this.value) {top.location.href=this.value}">
+			<option value=""  >나의 커뮤니티 바로가기 >>>>>>>>>>>>> </option>
+	
+<!--<option value="http://sitem.gongdong.or.kr"  >--><option value="http://cafe.gongdong.or.kr/sitem"  > 공동육아 온라인 (관리자용)							
+														
+							</option><!--<option value="http://menbal.gongdong.or.kr" style="background:#ECEC89;" >--><option value="http://cafe.gongdong.or.kr/menbal" style="background:#ECEC89;" >과천 맨발 어린이집							
+														
+							</option><!--<option value="http://openkids.gongdong.or.kr" style="background:#ECEC89;" >--><option value="http://cafe.gongdong.or.kr/openkids" style="background:#ECEC89;" >과천 열리는 어린이집							
+														
+							</option><!--<option value="http://tuntun.gongdong.or.kr"  >--><option value="http://cafe.gongdong.or.kr/tuntun"  >과천 우리튼튼 어린이집							
+														
+							</option>		
+		</select>
+
+		<a href="http://www.gongdong.or.kr/index.php?act=dispMemberLogout" target="_top">로그아웃</a>		<!--<a href="http://old.gongdong.or.kr/index.php?code=login&mode=logout" target="_top">로그아웃</a>-->
+		</div> 
+	</div>
+	<hr />
+ 
+	<div id="cafe_main_head">
+	
+		<div id="cafe_title">
+			<a href="/cafe.php?p1=menbal">과천 맨발 어린이집</a>
+		</div>
+ 		<div id="cafe_url">
+			<a href="/cafe.php?p1=menbal">menbal.gongdong.or.kr</a>
+		</div>
+	
+	</div>
+
+	<div id="cafe_main_menu">
+
+		<div id="cafe_main_menu_text">
+			<a href="/cafe.php?p1=menbal">홈</a>
+ 
+									&nbsp;<span id="global_menu_section">|</span>&nbsp;  <a href="/cafe.php?p1=menbal&sort=pag3342">맨발어린이집 소개</a> 
+												&nbsp;<span id="global_menu_section">|</span>&nbsp;  <a href="/cafe.php?p1=menbal&sort=pag3343">맨발 사용설명서</a> 
+												&nbsp;<span id="global_menu_section">|</span>&nbsp;  <a href="/cafe.php?p1=menbal&sort=pag3344">맨발이 궁금해요</a> 
+												&nbsp;<span id="global_menu_section">|</span>&nbsp;  <a href="/cafe.php?p1=menbal&sort=pag3345">맨발약속</a> 
+									
+		</div> 
+	
+		<div id="cafe_main_menu_text2">
+					
+			개설:2002-02-26 
+			
+			<span id="cafe_main_menu_text2_section">|</span> 회원수:173			
+			<span id="cafe_main_menu_text2_section">|</span> 커뮤니티지기:<a href="javascript:ui('ritah','3','ritah');" >달구름</a>
+			
+			<!--
+			
+			<span id="cafe_main_menu_text2_section">|</span> 새글:5			
+			-->
+		</div> 	
+	
+	</div>
+	  
+</div>
+
+
+
+
+
+
+<div id="middle"><hr />
+
+<div id="main-left">
+	<h2 class="hide" >왼쪽</h2>
+ 	<hr  />
+ 	<hr />
+ 
+ 
+<script>
+
+function clickshow(num)	{  
+	
+		var block_id = "block"+num;
+		
+		var block_id_img = "block_img"+num;
+
+		menu=eval("document.getElementById(block_id).style");
+
+ 
+		if (menu.display=="block") {
+			menu.display="none";
+			document.getElementById(block_id_img).src="/media/images/css/
+2041
+default/pull_down.gif"; 
+		} else {
+			menu.display="block"; 
+			document.getElementById(block_id_img).src="/media/images/css/default/pull_down2.gif";
+		} 
+ 
+}
+
+
+function clickshow_show(num)	{  
+	
+		var block_id = "block"+num;
+		
+		var block_id_img = "block_img"+num;
+
+		menu=eval("document.getElementById(block_id).style");
+ 
+ 
+			menu.display="block"; 
+			document.getElementById(block_id_img).src="/media/images/css/default/pull_down2.gif";
+ 
+}
+
+</script> 
+ 
+ 
+ 
+	<div id="cafe_sub_menu_box">
+	
+		<div id="cafe_sub_menu_box2">
+		
+		 		
+
+ 			
+		
+		
+		
+		<h3 class=hide>메뉴</h3>
+		
+			<ul id="cafe_sub_memu">
+				
+ 				
+							
+			
+			
+			
+			
+
+
+										<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=45" >가입 문의</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=36" >열린게시판</a></li>
+														<li id="cafe_sub_menu_line"></li>
+														<li id="cafe_sub_menu_title"  ><a href="javascript:clickshow(4145);"  >맨발 생활</a> <img src="/media/images/css/default/pull_down2.gif" id="block_img4145"></li>
+							
+							<span style="display:block" id="block4145">
+							
+							
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=35" >공지사항</a><IMG SRC="images/new_s.gif" WIDTH="8" HEIGHT="7" ALIGN=ABSMIDDLE hspace=3></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=cal43" ><strong>일정</strong></a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=14" >교사회</a><IMG SRC="images/new_s.gif" WIDTH="8" HEIGHT="7" ALIGN=ABSMIDDLE hspace=3></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=25" >아마일지</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=44" >식단</a></li>
+							
+</span>
+							<li id="cafe_sub_menu_line"></li>
+														<li id="cafe_sub_menu_title"  ><a href="javascript:clickshow(4152);"  >맨발 이야기</a> <img src="/media/images/css/default/pull_down2.gif" id="block_img4152"></li>
+							
+							<span style="display:block" id="block4152">
+							
+							
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=24" >자유게시판</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=26" >마주이야기</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=37" >사진첩</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=30" >FC 어깨튼튼</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=27" >신입가족 소개</a></li>
+							
+</span>
+							<li id="cafe_sub_menu_line"></li>
+														<li id="cafe_sub_menu_title"  ><a href="javascript:clickshow(4172);"  >맨발 운영</a> <img src="/media/images/css/default/pull_down2.gif" id="block_img4172"></li>
+							
+							<span style="display:block" id="block4172">
+							
+							
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=38" >방모임(소모임)</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=16" >소위모둠방</a><IMG SRC="images/new_s.gif" WIDTH="8" HEIGHT="7" ALIGN=ABSMIDDLE hspace=3></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=39" >회의안건 결과</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=40" >이사회 논의방</a><IMG SRC="images/new_s.gif" WIDTH="8" HEIGHT="7" ALIGN=ABSMIDDLE hspace=3></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=50" >사회적협동조합</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=53" >교사방</a></li>
+							
+</span>
+							<li id="cafe_sub_menu_line"></li>
+														<li id="cafe_sub_menu_title"  ><a href="javascript:clickshow(4100);"  >맨발 마당</a> <img src="/media/images/css/default/pull_down2.gif" id="block_img4100"></li>
+							
+							<span style="display:block" id="block4100">
+							
+							
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=34" >장터</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=51" >나눔터</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=52" >이벤트</a></li>
+							
+</span>
+							<li id="cafe_sub_menu_line"></li>
+														<li id="cafe_sub_menu_title"  ><a href="javascript:clickshow(4260);"  >자료실</a> <img src="/media/images/css/default/pull_down2.gif" id="block_img4260"></li>
+							
+							<span style="display:block" id="block4260">
+							
+							
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=22" >정관(규정집)</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=21" >주소록</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=46" >영구터전 기념백서</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=31" >양식함</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=48" >행정</a></li>
+														<li id="cafe_sub_menu_board"><a href="cafe.php?p1=menbal&sort=17" >영수증신고</a></li>
+							
+</span>
+			</ul>
+			
+			
+		</div>
+				
+	</div>   	
+	
+	
+	
+	
+	
+	
+	
+  		<hr />
+	<div align=center>
+		<div id="member_signup"><a href="cafe.php?p1=menbal&sort=orgsignup">가입하기</a></div> 
+ 	</div>
+	
+	<hr  />
+	<div align=center>
+		<div id="counter">
+			<h3 class="hide">카운터</h3>
+				<div id="counter_today">Today : 39</div>
+				<div id="counter_total">Total : 49,286</div>
+		</div>
+	</div>
+</div> 
+
+<div id="content">
+
+	<div id="whereis"><a href="/cafe.php?sort=cal43&sub_sort=&page=&startpage=&keyfield=&key_bs=&p1=menbal&p2=&p3=&mode=list">일정</a></div>
+	
+	<div id="board_html_head"></div>
+
+	<div id="board-content">
+
+ 	 	
+ 	
+ 	
+
+<html>
+
+<head>
+<title>2016 01 29</title>
+<style>
+ A:link, A:active, A:visited { font-size: 9pt;text-decoration: none;}
+ A:hover {text-decoration: underline; color:red;}td {font-size:9pt}
+
+	body{overflow:scroll;overflow-x:hidden}
+	.popper{
+		position : absolute;
+		visibility : hidden;
+		}
+
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+</head>
+
+
+
+ 
+
+
+
+<script language="JavaScript">
+<!--
+function namosw_goto_byselect(sel, targetstr)
+{
+  var index = sel.selectedIndex;
+  if (sel.options[index].value != '') {
+     if (targetstr == 'blank') {
+       window.open(sel.options[index].value, 'win1');
+     } else {
+       var frameobj;
+       if ((frameobj = eval(targetstr)) != null)
+       frameobj.location = sel.options[index].value;
+     }
+  }
+}
+
+//-->
+</script>
+
+<body bgcolor="#FFFFFF" text="black" link="black" vlink="black" alink="red" leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" >
+
+
+
+<!---- 풍선 도움말 시작 -->
+ <div id="helpbox" style="border-width:0px; border-style:none; width:0px; height:0px; position:absolute; left:0px; top:0px; z-index:1;" ></div>
+  <script src='/js/default/popmsg.js'></script>
+ <!-- 풍선 도움말 끝 -->
+
+
+<table border="0" cellpadding="2" cellspacing="1" align="center" width="100%"   >
+    <tr>
+        <td bgcolor="#D0d0d0" colspan="7">
+			<table border="0" cellpadding="2" cellspacing="1" align="center" width="100%" bordercolordark="white" bordercolorlight="black">
+				<tr>
+					<td>
+					
+						<p align="left"> 
+						
+												
+						<INPUT style="FONT-SIZE: 12px" type=button value="나의 캘린더에 추가하기"  onclick="javascript:self.location.href='/cafe.php?p1=menbal&sort=cal43&mode=add_mycal';">
+
+						
+
+ 
+
+				 </p>
+					</td>
+
+
+
+
+
+					<td>
+			            <p align="right">
+			
+							<B><span style="font-size:9pt;"><font color="#555555">2016년 </font>
+							
+							<font color="#000000"><span style="font-size:12pt;">01월 </span></font>
+			
+							<font color="#555555">
+							
+														29일														
+							</span>
+							
+							&nbsp;  </b>&nbsp;&nbsp;&nbsp;</font></p>
+					</td>
+				</tr>
+			</table>
+        </td>
+    </tr>
+
+
+2152
+
+    <tr>
+        <td bgcolor="#ffffff" colspan="7">
+            <p align="center"><span style="font-size:10pt;"><B><input type=button value="◀" style="font-size:10px;"  onclick="self.location='/cafe.php?p1=menbal&getYear=2015&getMonth=01&formx=&fieldx=&sort=cal43&mode='"> 
+            2016년 <input type=button value="▶" style="font-size:10px;" onclick="self.location='/cafe.php?p1=menbal&getYear=2017&getMonth=01&formx=&fieldx=&sort=cal43&mode='">&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			<input type=button value="◀" style="font-size:10px;"  onclick="self.location='/cafe.php?p1=menbal&getYear=2015&getMonth=12&formx=&fieldx=&sort=cal43&mode='"> 
+            01월 <input type=button value="▶" style="font-size:10px;" onclick="self.location='/cafe.php?p1=menbal&getYear=2016&getMonth=2&formx=&fieldx=&sort=cal43&mode='">&nbsp;</span>
+            
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            
+            
+            <input type="button" name="" value="일정입력" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-02-29&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');" > 
+            
+            </p>
+        </td>
+    </tr>
+
+
+
+
+    <tr>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b><font color=red>일</font></b><BR><span style="font-size:7pt;"><font face="Tahoma" color="red">SUNDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b>월</b><BR><span style="font-size:7pt;"><font face="Tahoma">MONDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b>화</b><BR><span style="font-size:7pt;"><font face="Tahoma">TUESDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b>수</b><BR><span style="font-size:7pt;"><font face="Tahoma">WEDNESDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b>목</b><BR><span style="font-size:7pt;"><font face="Tahoma">THURSDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b>금</b><BR><span style="font-size:7pt;"><font face="Tahoma">FRIDAY</p>
+        </td>
+        <td bgcolor="#e2e2e2" width="14%">
+            <p align="center"><b><font color=blue>토</font></b><BR><span style="font-size:7pt;"><font face="Tahoma" color=blue>SATURDAY</p>
+        </td>
+    </tr>
+
+<td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-01&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>1</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239206','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-01 ∼ 2016-01-01</font><BR><font color=blue></font></span><BR>','#FFFFFF','신정','#f0f0f0')">●신정</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-02&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=blue>2</font></a></b></p></td>
+	
+		<tr>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a  style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-03&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=red>3</font></a></b></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-04&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>4</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=225076','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-04 ∼ </font><BR><font color=blue></font></span><BR>','#FFFFFF','교육회의','#f0f0f0')">●교육회의</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239781','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-04 ∼ 2016-01-04</font><BR><font color=blue></font></span><BR>','#FFFFFF','생일잔치;김지안','#f0f0f0')">●생일잔치;김지안</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239782','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-04 ∼ 2016-01-04</font><BR><font color=blue></font></span><BR>','#FFFFFF','지역대표자임원회의(햇빛)','#f0f0f0')">●지역대표자임원회의(햇빛)</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-05&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>5</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239783','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-05 ∼ 2016-01-05</font><BR><font color=blue></font></span><BR>','#FFFFFF','안전교육;안돼요!하지마세요!','#f0f0f0')">●안전교육;안돼요!하지마세요!</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239784','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-05 ∼ 2016-01-05</font><BR><font color=blue></font></span><BR>','#FFFFFF','지역대표자회의(햇빛)','#f0f0f0')">●지역대표자회의(햇빛)</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-06&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>6</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239785','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-06 ∼ 2016-01-06</font><BR><font color=blue></font></span><BR>','#FFFFFF','전래놀이','#f0f0f0')">●전래놀이</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239790','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-06 ∼ 2016-01-06</font><BR><font color=blue></font></span><BR>','#FFFFFF','남서울과천대표회의(햇빛)','#f0f0f0')">●남서울과천대표회의(햇빛)</span></a>
+286a
+</p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-07&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>7</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239789','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-07 ∼ 2016-01-07</font><BR><font color=blue></font></span><BR>','#FFFFFF','당실,끼리연극나들이(돌아온박첨지)','#f0f0f0')">●당실,끼리연극나들이(돌아온박첨지)</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239791','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-07 ∼ 2016-01-07</font><BR><font color=blue></font></span><BR>','#FFFFFF','햇빛휴가','#f0f0f0')">●햇빛휴가</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-08&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>8</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239205','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-08 ∼ 2016-01-08</font><BR><font color=blue></font></span><BR>','#FFFFFF','하반기교육평가일','#f0f0f0')">●하반기교육평가일</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-09&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=blue>9</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239356','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-09 ∼ 2016-01-09</font><BR><font color=blue></font></span><BR>','#FFFFFF','터전대여(벙글이)','#f0f0f0')">●터전대여(벙글이)</span></a></p></td>
+	
+		<tr>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a  style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-10&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=red>10</font></a></b></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-11&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>11</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=225077','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-11 ∼ </font><BR><font color=blue></font></span><BR>','#FFFFFF','교육회의','#f0f0f0')">●교육회의</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239792','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-11 ∼ 2016-01-11</font><BR><font color=blue></font></span><BR>','#FFFFFF','나이잔치','#f0f0f0')">●나이잔치</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-12&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>12</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239793','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-12 ∼ 2016-01-12</font><BR><font color=blue></font></span><BR>','#FFFFFF','당실,끼리붕붕도서관방문','#f0f0f0')">●당실,끼리붕붕도서관방문</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-13&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>13</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239786','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-13 ∼ 2016-01-13</font><BR><font color=blue></font></span><BR>','#FFFFFF','전래놀이','#f0f0f0')">●전래놀이</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239794','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-13 ∼ 2016-01-13</font><BR><font color=blue></font></span><BR>','#FFFFFF','7살낮잠활동','#f0f0f0')">●7살낮잠활동</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239798','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-13 ∼ 2016-01-13</font><BR><font color=blue></font></span><BR>','#FFFFFF','아기나리연차','#f0f0f0')">●아기나리연차</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-14&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>14</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239795','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-14 ∼ 2016-01-14</font><BR><font color=blue></font></span><BR>','#FFFFFF','안전교육;몸에해로운약물이들어있는음료수가있어요','#f0f0f0')">●안전교육;몸에해로운약물이들어있는음료수가있어요</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239799','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-14 ∼ 2016-01-14</font><BR><font color=blue></font></span><BR>','#FFFFFF','아기나리,코코아휴가','#f0f0f0')">●아기나리,코코아휴가</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-15&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>15</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239796','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-15 ∼ 2016-01-15</font><BR><font color=blue></font></span><BR>','#FFFFFF','긴산행','#f0f0f0')">●긴산행</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239797','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-15 ∼ 2016-01-15</font><BR><font color=blue></font></span><BR>','#FFFFFF','생일잔치;최제용','#f0f0f0')">●생일잔치;최제용</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239800','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-15 ∼ 2016-01-15</font><BR><font color=blue></font></span><BR>','#FFFFFF','아기나리연차/미나리휴가','#f0f0f0')">●아기나리연차/미나리휴가</span></a>
+23a2
+</p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-16&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=blue>16</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239355','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-16 ∼ 2016-01-16</font><BR><font color=blue></font></span><BR>','#FFFFFF','정기총회','#f0f0f0')">●정기총회</span></a></p></td>
+	
+		<tr>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a  style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-17&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=red>17</font></a></b></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-18&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>18</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=225078','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-18 ∼ </font><BR><font color=blue></font></span><BR>','#FFFFFF','교육회의','#f0f0f0')">●교육회의</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-19&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>19</font></a></b></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-20&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>20</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239787','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-20 ∼ 2016-01-20</font><BR><font color=blue></font></span><BR>','#FFFFFF','전래놀이','#f0f0f0')">●전래놀이</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239801','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-20 ∼ 2016-01-20</font><BR><font color=blue></font></span><BR>','#FFFFFF','7살낮잠활동','#f0f0f0')">●7살낮잠활동</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-21&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>21</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239802','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-21 ∼ 2016-01-21</font><BR><font color=blue></font></span><BR>','#FFFFFF','안전교육;안전하게대피해요','#f0f0f0')">●안전교육;안전하게대피해요</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239803','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-21 ∼ 2016-01-21</font><BR><font color=blue></font></span><BR>','#FFFFFF','긴회의-아마;정수민,조이준','#f0f0f0')">●긴회의-아마;정수민,조이준</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-22&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>22</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239203','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-22 ∼ 2016-01-22</font><BR><font color=blue></font></span><BR>','#FFFFFF','겨울교사대회','#f0f0f0')">●겨울교사대회</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=240239','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-22 ∼ 2016-01-22</font><BR><font color=blue></font></span><BR>','#FFFFFF','터전대여;의정부꿈틀꿈틀 교사회','#f0f0f0')">●터전대여;의정부꿈틀꿈틀 교사회</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-23&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=blue>23</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239204','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-23 ∼ 2016-01-23</font><BR><font color=blue></font></span><BR>','#FFFFFF','겨울교사대회','#f0f0f0')">●겨울교사대회</span></a></p></td>
+	
+		<tr>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a  style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-24&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=red>24</font></a></b></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-25&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>25</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=225079','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-25 ∼ </font><BR><font color=blue></font></span><BR>','#FFFFFF','교육회의','#f0f0f0')">●교육회의</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239804','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-25 ∼ 2016-01-25</font><BR><font color=blue></font></span><BR>','#FFFFFF','발육검사','#f0f0f0')">●발육검사</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239805','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-25 ∼ 2016-01-25</font><BR><font color=blue></font></span><BR>','#FFFFFF','안전교육;교통표지판을알아요','#f0f0f0')">●안전교육;교통표지판을알아요</span></a>
+1db6
+</p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-26&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>26</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239806','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-26 ∼ 2016-01-26</font><BR><font color=blue></font></span><BR>','#FFFFFF','소방대피훈련','#f0f0f0')">●소방대피훈련</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239807','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-26 ∼ 2016-01-26</font><BR><font color=blue></font></span><BR>','#FFFFFF','생일잔치;이래언','#f0f0f0')">●생일잔치;이래언</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-27&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>27</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239200','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-27 ∼ 2016-01-27</font><BR><font color=blue></font></span><BR>','#FFFFFF','졸업들살이<용인자연휴양림>-도시락','#f0f0f0')">●졸업들살이<용인자연휴양림>-도시락</span></a> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239788','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-27 ∼ 2016-01-27</font><BR><font color=blue></font></span><BR>','#FFFFFF','전래놀이','#f0f0f0')">●전래놀이</span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-28&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>28</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239201','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-28 ∼ 2016-01-28</font><BR><font color=blue></font></span><BR>','#FFFFFF','졸업들살이<용인자연휴양림>','#f0f0f0')">●졸업들살이<용인자연휴양림></span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-29&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=black>29</font></a></b> <BR><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=view&p2=blank&number=239202','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><span style="font-size:8pt;" onmouseout=kill() onmouseover="pop('<span style=font-size:8pt><font face=Tahoma color=red>2016-01-29 ∼ 2016-01-29</font><BR><font color=blue></font></span><BR>','#FFFFFF','졸업들살이<용인자연휴양림>','#f0f0f0')">●졸업들살이<용인자연휴양림></span></a></p></td>
+	
+		
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-30&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=blue>30</font></a></b></p></td>
+	
+		<tr>
+			<td bgcolor=#f5f5f5 valign=top height=70><p align=left><B><a  style="cursor:hand" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&mode=preup&date=2016-01-31&p2=blank','gw_calendar_edit','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"><font color=red>31</font></a></b></p></td>
+	
+		<td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td><td bgcolor=#f5f5f5>&nbsp;</td>
+</table>
+
+
+<p align=center>
+
+	
+
+	<INPUT style="FONT-SIZE: 12px" type=button value="나의 캘린더에 추가하기"  onclick="javascript:self.location.href='/cafe.php?p1=menbal&sort=cal43&mode=add_mycal';">
+
+	&nbsp; &nbsp; 
+
+
+	<input type="button" value="인쇄" onclick="javascript:window.open('/cafe.php?p1=menbal&sort=cal43&p2=print','_blank','width=700, height=600, scrollbars=yes, resizable=yes, toolbar=0');"  >
+
+
+
+</p>
+
+
+
+
+<p align=right><a href="#1" onclick="javascript:window.open('edit_db_calendar_config.php?code=menbal&id=4190','','width=725,height=500,scrollbars=yes,status=no,toolbar=no,directories=no,resizable=yes,menubar=no,left=150,top=30');"  ><font color="#aaaaaa">환경설정</font></a></p>
+	 
+	
+		
+ 
+ 
+ 	</div>
+ </div>
+ <!-- content 끝 -->
+
+</div><hr />
+
+<div id="footer">
+	<h2 class="hide" >하단</h2>
+	
+	<div id="footer-menu">
+		<h3 class="hide">하단메뉴</h3>
+		<div id="footer-menu-list" style="padding:8px;background:#FFFFFF;"> 
+		
+			<a href="/cafe.php?p1=menbal" >홈</a>
+			
+			&nbsp;&nbsp;|&nbsp;&nbsp; <a href="/cafe.php?p1=menbal&sort=orgsignup" >커뮤니티 회원가입</a>
+			 
+			&nbsp;&nbsp;|&nbsp;&nbsp; <a href="/cafe.php?p1=menbal&sort=orgsignup&mode=withdraw" >커뮤니티 회원탈퇴</a>
+			
+			&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://old.gongdong.or.kr/index.php?code=private" target="_blank" >개인정보보호정책</a>
+
+			&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://old.gongdong.or.kr/cafe_manual/manual_home.html" target="_blank" >커뮤니티 관리매뉴얼</a>
+		
+					
+		
+		
+		</div>
+	</div>
+	<hr />
+	<hr />
+<!--
+	<div id="foot-address">
+		<h3 class="hide">연락처</h3>
+
+		<dl>
+			<dt>우편번호:</dt>
+			<dd></dd>
+			<dt>주소:</dt>
+			<dd>주소쓰는곳</dd> 
+			<dt>전화:</dt>
+			<dd>전화번호 쓰는곳</dd>
+			<dt>팩스:</dt>
+			<dd>펙스번호 쓰는곳</dd>  
+			<dt>이메일:</dt>
+			<dd>대표이메일@</dd>
+		</dl>
+		<p>COPYRIGHT 공동육아와 공동체교육. ALL RIGHT RESEARVED.</p>
+		<p>본 홈페이지에서는 이메일 주소가 자동수집되는 것을 거부하며, 이를 위반시 정보통신망법에 의하여 처벌됨을 유념하시기 바랍니다.</p>
+ 
+	</div>	
+ -->
+</div>
+<iframe src="http://old.gongdong.or.kr/memo.php" width=0 height=0 marginwidth=0 hspace=0 vspace=0 frameborder=0 scrolling=no></iframe>	 
+ 
+
+</div>
+<!-- wrapper 끝 -->
+
+</body>
+
+
+
+</html>
+ 
+ 	
+0
+
