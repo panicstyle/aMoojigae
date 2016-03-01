@@ -190,11 +190,8 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
             boardLink = "SMain.do";
         }
 
-        String url = "http://www.moojigae.or.kr/" + boardLink;
-        HttpRequest httpRequest = new HttpRequest();
-
+        String url = GlobalConst.m_strServer + "/" + boardLink;
         String result = m_httpRequest.requestPost(url, "", url, "euc-kr");
-
         String newString = Utils.getMatcherFirstString("(function getNewIcon\\(menu\\))(.|\\n)*?(return rntVal;)", result);
 
         String[] maul = new String[]{

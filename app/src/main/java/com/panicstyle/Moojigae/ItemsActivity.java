@@ -40,8 +40,6 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 	private String m_strErrorMsg;
 	protected String m_itemsTitle;
 	protected String m_itemsLink;
-	protected String m_CommID;
-	protected String m_BoardID;
 	private HttpRequest m_httpRequest;
     private List<HashMap<String, Object>> m_arrayItems;
     private int m_nPage;
@@ -180,7 +178,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					intent.putExtra("USERID", (String) item.get("id"));
 					intent.putExtra("LINK", (String) item.get("link"));
 					intent.putExtra("HIT", (String) item.get("hit"));
-					intent.putExtra("BOARDID", (String) m_itemsLink);
+					intent.putExtra("BOARDID", m_itemsLink);
 					startActivityForResult(intent, REQUEST_VIEW);
 				}
 			}
@@ -273,14 +271,11 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
 		m_itemsTitle = extras.getString("ITEMS_TITLE");
 		m_itemsLink = extras.getString("ITEMS_LINK");
-
-		m_CommID = Utils.getMatcherFirstString("(?<=p1=)(.|\\n)*?(?=&)", m_itemsLink);
-		m_BoardID = Utils.getMatcherFirstString("(?<=sort=)(.|\\n)*?(?=$)", m_itemsLink);
 	}
 
     protected boolean getData() {
 		String Page = Integer.toString(m_nPage);
-		String url = "http://www.moojigae.or.kr/board-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
+		String url = GlobalConst.m_strServer + "/board-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
 
 		String result = m_httpRequest.requestPost(url, "", url, "euc-kr");
 
@@ -367,8 +362,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
         Intent intent = new Intent(this, ArticleWriteActivity.class);
 		int nMode = 0;	// 0 is New article
 		intent.putExtra("MODE", nMode);
-	    intent.putExtra("COMMID", m_CommID);
-	    intent.putExtra("BOARDID", m_BoardID);
+	    intent.putExtra("BOARDID", m_itemsLink);
 	    intent.putExtra("BOARDNO",  "");
 		intent.putExtra("TITLE", "");
 		intent.putExtra("CONTENT", "");

@@ -58,6 +58,8 @@ public class Utils {
 //        strDest=strDest.replaceAll("(<div>)(.|\\n)*?(</div>)","\n(.|\n)*?");
         strDest=strDest.replaceAll("(<b>\\[)\\d+(\\]</b>)", "");
         strDest=strDest.replaceAll("(<!--)(.|\\n)*?(-->)", "");
+        strDest=strDest.replaceAll("(<style)(.|\\n)*?(/style>)", "");
+        strDest=strDest.replaceAll("(<script)(.|\\n)*?(/script>)", "");
         strDest=strDest.replaceAll("(<)(.|\\n)*?(>)","");
 
         strDest=strDest.trim();

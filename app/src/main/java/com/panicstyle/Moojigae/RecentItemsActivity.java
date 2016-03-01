@@ -246,14 +246,15 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     protected boolean getData() {
         String url = "";
         if (m_itemsLink.equalsIgnoreCase("maul")) {
-            url = "http://www.moojigae.or.kr/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvTopic10Year,mvTopicGoBackHome,mvEduBasicRight,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvDonghowheMoojiageFC,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvEduResearch,mvBuilding,mvBuildingComm,mvDonationGongi,mvDonationQnA,toHomePageAdmin,mvUpgrade";
+            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=mvTopic,mvTopic10Year,mvTopicGoBackHome,mvEduBasicRight,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvDonghowheMoojiageFC,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduSpring,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvEduResearch,mvBuilding,mvBuildingComm,mvDonationGongi,mvDonationQnA,toHomePageAdmin,mvUpgrade";
         } else if (m_itemsLink.equalsIgnoreCase("school1")) {
-            url = "http://www.moojigae.or.kr/Mboard-recent.do?part=index&rid=50&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjSchoolFood,mjPhoto,mjData";
+            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjSchoolFood,mjPhoto,mjData";
         } else {
-            url = "http://www.moojigae.or.kr/Mboard-recent.do?part=index&rid=50&pid=msGongi,msFreeBoard,msOverRainbow,msFreeComment,msTeacher,msSenior,msStudent,ms5Class,msStudentAssociation,msParent,msRepresentative,msMinutes,msPhoto,msData";
+            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=msGongi,msFreeBoard,msOverRainbow,msFreeComment,msTeacher,msSenior,msStudent,ms5Class,msStudentAssociation,msParent,msRepresentative,msMinutes,msPhoto,msData";
         }
+        String referer = GlobalConst.m_strServer + "/board-list.do";
 
-        String result = m_httpRequest.requestPost(url, "", "http://121.134.211.159/board-list.do", "euc-kr");
+        String result = m_httpRequest.requestPost(url, "", referer, "euc-kr");
 
         HashMap<String, Object> item;
 

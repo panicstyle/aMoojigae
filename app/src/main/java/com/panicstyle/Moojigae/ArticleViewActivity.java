@@ -43,6 +43,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private int m_nThreadMode = 0;
     private boolean m_bDeleteStatus;
     private String m_strErrorMsg;
+    private String m_strUserID;
 
     static final int REQUEST_WRITE = 1;
     static final int REQUEST_MODIFY = 2;
@@ -86,21 +87,26 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
+        m_strUserID = app.m_strUserID;
 
         intenter();
 
+        m_strBoardNo = Utils.getMatcherFirstString("(?<=boardNo=)(.|\\n)*?(?=&)", m_strLink);
+
         m_arrayItems = new ArrayList<>();
 
-        LoadData();
+        m_nThreadMode = 1;
+        LoadData("로딩중");
     }
 
-    public void LoadData() {
-        m_pd = ProgressDialog.show(this, "", "로딩중", true, false);
+    public void LoadData(String strMsg) {
+        m_pd = ProgressDialog.show(this, "", strMsg, true, false);
+
+        m_arrayItems.clear();
 
         Thread thread = new Thread(this);
         thread.start();
 
-        m_nThreadMode = 1;
     }
 
     public void run() {
@@ -124,11 +130,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         } else if (m_nThreadMode == 2) {      // Delete Article
             runDeleteArticle();
         } else if (m_nThreadMode == 3) {      // DeleteComment
-            if (m_nPNotice == 0) {
-                runDeleteComment();
-            } else {
-                runDeleteCommentPNotice();
-            }
+            runDeleteComment();
         }
         handler.sendEmptyMessage(0);
     }
@@ -161,7 +163,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                         }
                         finish();
                     } else {
-                        LoadData();
+                        m_nThreadMode = 1;
+                        LoadData("로딩중");
                     }
                 }
             }
@@ -279,7 +282,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     }
 
     protected boolean getData() {
-        String url = "http://121.134.211.159/" + m_strLink;
+        String url = GlobalConst.m_strServer + "/" + m_strLink;
         String result = m_httpRequest.requestGet(url, "", "euc-kr");
 
         if (result.indexOf("onclick=\"userLogin()") > 0) {
@@ -395,7 +398,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         strHeader += "<html><head>";
         strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
         strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
-        strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.content{border-top:1px solid gray}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
+        strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
         strHeader += "</head>";
         String strBottom = "</body></html>";
         String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
@@ -515,28 +518,77 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     }
     
     protected void DeleteArticle() {
-        m_pd = ProgressDialog.show(this, "", "삭제중", true, false);
-
-        Thread thread = new Thread(this);
-        thread.start();
-
         m_nThreadMode = 2;
+        LoadData("삭제중");
     }
 
     protected void runDeleteArticle() {
-		String url = "http://cafe.gongdong.or.kr/cafe.php?mode=del&sort=" + m_strBoardID + "&sub_sort=&p1=" + m_strCommID + "&p2=";
+        String url = GlobalConst.m_strServer + "/board-save.do";
+        String referer = GlobalConst.m_strServer + "/board-edit.do";
 
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("number", m_strBoardNo));
-        nameValuePairs.add(new BasicNameValuePair("passwd", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardId", m_strBoardID));
+        nameValuePairs.add(new BasicNameValuePair("page=", "1"));
+        nameValuePairs.add(new BasicNameValuePair("categoryId", "-1"));
+        nameValuePairs.add(new BasicNameValuePair("time", "1334217622773"));
+        nameValuePairs.add(new BasicNameValuePair("returnBoardNo", m_strBoardNo));
+        nameValuePairs.add(new BasicNameValuePair("boardNo", m_strBoardNo));
+        nameValuePairs.add(new BasicNameValuePair("command", "DELETE"));
+        nameValuePairs.add(new BasicNameValuePair("totalPage", "0"));
+        nameValuePairs.add(new BasicNameValuePair("totalRecords", "0"));
+        nameValuePairs.add(new BasicNameValuePair("serialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("htmlImage", "%2Fout"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("memoWriteable", "true"));
+        nameValuePairs.add(new BasicNameValuePair("list_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("replyList_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("defaultBoardSkin", "default"));
+        nameValuePairs.add(new BasicNameValuePair("boardWidth", "710"));
+        nameValuePairs.add(new BasicNameValuePair("multiView_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleCategory_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("category_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleIcon_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titlePoint_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleMemo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleNew_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleThumbnail_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNick_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleTag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("anonymity_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleRead_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("boardModel_cd", "A"));
+        nameValuePairs.add(new BasicNameValuePair("titleDate_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("tag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("readOver_color", "%23336699"));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("userPw", ""));
+        nameValuePairs.add(new BasicNameValuePair("userNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("memoContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("memoSeq", ""));
+        nameValuePairs.add(new BasicNameValuePair("pollSeq", ""));
+        nameValuePairs.add(new BasicNameValuePair("returnURI", ""));
+        nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
+        nameValuePairs.add(new BasicNameValuePair("starPoint", ""));
+        nameValuePairs.add(new BasicNameValuePair("provenance", "board-read.do"));
+        nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
+        nameValuePairs.add(new BasicNameValuePair("pageScale", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchType", ""));
+        nameValuePairs.add(new BasicNameValuePair("tag", "1"));
+        nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
+        nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
 
-		String result = m_httpRequest.requestPost(url, nameValuePairs, url, "utf-8");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
 
         m_bDeleteStatus = true;
-        if (result.contains("<meta http-equiv=\"refresh\" content=\"0;url=/cafe.php?sort=")) {
-            String strErrorMsg = Utils.getMatcherFirstString("(?<=window.alert\\(\\\")(.|\\n)*?(?=\\\")", result);
+        if (!result.contains("parent.checkLogin()")) {
+            String strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bDeleteStatus = false;
-			m_strErrorMsg = "글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
+            m_strErrorMsg = "글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
         }
     }
 
@@ -557,12 +609,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:        // 댓글삭제
-                        ModifyComment();
-                        return true;
-                    case 1:        // 댓글삭제
                         DeleteCommentConfirm();
                         return true;
-                    case 2:         // 댓글답변
+                    case 1:         // 댓글답변
                         ReplayComment();
                         return true;
                 }
@@ -570,11 +619,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-        menu.add(0, 0, 0, "수정");
-        menu.add(0, 1, 0, "삭제");
-        if (m_nPNotice == 0) {
-            menu.add(0, 2, 0, "답변");
-        }
+        menu.add(0, 0, 0, "삭제");
+        menu.add(0, 1, 0, "답변");
         popup.show();
     }
 
@@ -586,23 +632,10 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         intent.putExtra("BOARDID", m_strBoardID);
         intent.putExtra("BOARDNO", m_strBoardNo);
         intent.putExtra("COMMENTNO", m_strCommentNo);
-        intent.putExtra("COMMENT",  "");
+        intent.putExtra("COMMENT", "");
         startActivityForResult(intent, REQUEST_COMMENT_WRITE);
     }
 
-
-    protected void ModifyComment() {
-        Intent intent = new Intent(this, CommentWriteActivity.class);
-        int nMode = 1;
-        intent.putExtra("MODE", nMode);
-        intent.putExtra("ISPNOTICE", m_nPNotice);
-        intent.putExtra("COMMID", m_strCommID);
-        intent.putExtra("BOARDID", m_strBoardID);
-        intent.putExtra("BOARDNO",  m_strBoardNo);
-        intent.putExtra("COMMENTNO",  m_strCommentNo);
-        intent.putExtra("COMMENT",  m_strComment);
-        startActivityForResult(intent, REQUEST_COMMENT_MODIFY);
-    }
 
     protected void DeleteCommentConfirm() {
 		AlertDialog.Builder ab = null;
@@ -619,52 +652,74 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     }
     
     protected void DeleteComment() {
-        m_pd = ProgressDialog.show(this, "", "삭제중", true, false);
-
-        Thread thread = new Thread(this);
-        thread.start();
-
         m_nThreadMode = 3;
+        LoadData("삭제중");
     }
 
     protected void runDeleteComment() {
-		HttpRequest httpRequest = new HttpRequest();
-		
-		String url = "http://cafe.gongdong.or.kr/cafe.php?mode=del_reply&sort=" + m_strBoardID + "&sub_sort=&p1=" + m_strCommID + "&p2=";
+        String url = GlobalConst.m_strServer + "/memo-save.do";
+        String referer = GlobalConst.m_strServer + "/board-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&page=1&categoryId=-1";
 
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("number", m_strCommentNo));
+        nameValuePairs.add(new BasicNameValuePair("boardId", m_strBoardID));
+        nameValuePairs.add(new BasicNameValuePair("page", "1"));
+        nameValuePairs.add(new BasicNameValuePair("categoryId", "-1"));
+        nameValuePairs.add(new BasicNameValuePair("time", "1374840174050"));
+        nameValuePairs.add(new BasicNameValuePair("returnBoardNo", m_strBoardNo));
+        nameValuePairs.add(new BasicNameValuePair("boardNo", m_strBoardNo));
+        nameValuePairs.add(new BasicNameValuePair("command", "MEMO_DELETE"));
+        nameValuePairs.add(new BasicNameValuePair("totalPage", "0"));
+        nameValuePairs.add(new BasicNameValuePair("totalRecords", "0"));
+        nameValuePairs.add(new BasicNameValuePair("serialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("htmlImage", "%%2Fout"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("memoWriteable", "true"));
+        nameValuePairs.add(new BasicNameValuePair("list_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("replyList_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("defaultBoardSkin", "default"));
+        nameValuePairs.add(new BasicNameValuePair("boardWidth", "710"));
+        nameValuePairs.add(new BasicNameValuePair("multiView_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleCategory_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("category_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleIcon_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titlePoint_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleMemo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleNew_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleThumbnail_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNick_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleTag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("anonymity_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleRead_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("boardModel_cd", "A"));
+        nameValuePairs.add(new BasicNameValuePair("titleDate_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("tag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("readOver_color", "%%23336699"));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("userPw", ""));
+        nameValuePairs.add(new BasicNameValuePair("userNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("memoContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("memoSeq", m_strCommentNo));
+        nameValuePairs.add(new BasicNameValuePair("pollSeq", ""));
+        nameValuePairs.add(new BasicNameValuePair("returnURI", ""));
+        nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
+        nameValuePairs.add(new BasicNameValuePair("starPoint", ""));
+        nameValuePairs.add(new BasicNameValuePair("provenance", "board-read.do"));
+        nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
+        nameValuePairs.add(new BasicNameValuePair("pageScale", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchType", ""));
+        nameValuePairs.add(new BasicNameValuePair("tag", "-1"));
+        nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
 
-		String result  = m_httpRequest.requestPost(url, nameValuePairs, url, "utf-8");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
 
         m_bDeleteStatus = true;
-        if (result.contains("<meta http-equiv=\"refresh\" content=\"0;url=/cafe.php?sort=")) {
-            String strErrorMsg = Utils.getMatcherFirstString("(?<=window.alert\\(\\\")(.|\\n)*?(?=\\\")", result);
-            m_bDeleteStatus = false;
-			m_strErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
-        }
-    }
-
-    protected void runDeleteCommentPNotice() {
-        String url = "http://www.gongdong.or.kr/index.php";
-        String strPostParam = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
-                "<methodCall>\n" +
-                "<params>\n" +
-                "<_filter><![CDATA[delete_comment]]></_filter>\n" +
-                "<error_return_url><![CDATA[/index.php?mid=notice&document_srl=" + m_strBoardNo + "&act=dispBoardDeleteComment&comment_srl=" + m_strCommentNo + "]]></error_return_url>\n" +
-                "<act><![CDATA[procBoardDeleteComment]]></act>\n" +
-                "<mid><![CDATA[notice]]></mid>\n" +
-                "<document_srl><![CDATA[" + m_strBoardNo + "]]></document_srl>\n" +
-                "<comment_srl><![CDATA[" + m_strCommentNo + "]]></comment_srl>\n" +
-                "<module><![CDATA[board]]></module>\n" +
-                "</params>\n" +
-                "</methodCall>";
-        String strReferer = "http://www.gongdong.or.kr/index.php?mid=notice&document_srl=" + m_strBoardNo + "&act=dispBoardDeleteComment&comment_srl=" + m_strCommentNo;
-        String result  = m_httpRequest.requestPost(url, strPostParam, strReferer, "utf-8");
-
-        m_bDeleteStatus = true;
-        if (result.contains("<error>0</error>")) {
-            String strErrorMsg = Utils.getMatcherFirstString("(?<=<message>)(.|\\n)*?(?=</message>)", result);
+        if (result.contains("function redirect")) {
+            String strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bDeleteStatus = false;
             m_strErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
         }
@@ -678,11 +733,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             case REQUEST_COMMENT_WRITE:
             case REQUEST_COMMENT_MODIFY:
                 if (resultCode == RESULT_OK) {
-
-                    m_pd = ProgressDialog.show(this, "", "로딩중입니다. 잠시만 기다리십시오...", true, false);
-
-                    Thread thread = new Thread(this);
-                    thread.start();
+                    m_nThreadMode = 1;
+                    LoadData("로딩중");
                 }
                 break;
             case REQUEST_WRITE:

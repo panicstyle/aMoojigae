@@ -14,7 +14,8 @@ import java.net.CookiePolicy;
 
 public class MoojigaeApplication extends Application {
 
-    HttpRequest m_httpRequest;
+    public static HttpRequest m_httpRequest;
+    public static String m_strUserID;
 
     @Override
     public void onCreate() {

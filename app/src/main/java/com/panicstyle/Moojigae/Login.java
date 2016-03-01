@@ -19,16 +19,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Login {
-	private String m_userID;
-	private String m_userPW;
+	protected String m_userID;
+	protected String m_userPW;
 
 	public String m_strErrorMsg = "";
 
 	public int LoginTo(Context context, HttpRequest httpRequest) {
 
-		String url = "http://www.moojigae.or.kr/login-process.do";
-		String referer = "http://www.moojigae.or.kr/MLogin.do";
-		String logoutURL = "http://www.moojigae.or.kr/logout.do";
+		String url = GlobalConst.m_strServer + "/login-process.do";
+		String referer = GlobalConst.m_strServer + "/MLogin.do";
+		String logoutURL = GlobalConst.m_strServer + "/logout.do";
 
 		SetInfo setInfo = new SetInfo();
 

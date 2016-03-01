@@ -26,16 +26,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ArticleWriteActivity extends AppCompatActivity implements Runnable {
     private HttpRequest m_httpRequest;
@@ -44,7 +51,6 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     private String m_Title;
     private String m_Content;
     private String m_BoardID;
-    private String m_CommID;
     private String m_BoardNo;
     private boolean m_bSaveStatus;
     private String m_ErrorMsg;
@@ -53,6 +59,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     private int m_nSelected = 0;
     private int m_nAttached = 0;
     private static final int SELECT_PHOTO = 0;
+    private String m_strUserID;
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
+        m_strUserID = app.m_strUserID;
 
         m_arrayAttached = new boolean[5];
         m_arrayUri = new Uri[5];
@@ -86,7 +94,6 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     	Bundle extras = getIntent().getExtras();
     	// 가져온 값을 set해주는 부분
         m_nMode = extras.getInt("MODE");
-        m_CommID = extras.getString("COMMID");
         m_BoardID = extras.getString("BOARDID");
         m_BoardNo = extras.getString("BOARDNO");
         m_Title = extras.getString("TITLE");
@@ -123,11 +130,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     }
 
     public void run() {
-        if (m_nMode == 0) {
-            PostData();
-        } else {
-            PostModifyData();
-        }
+        PostData();
     	handler.sendEmptyMessage(0);
     }
 
@@ -155,30 +158,29 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
 
     protected boolean PostData() {
 
-        String url = "http://cafe.gongdong.or.kr/cafe.php?mode=up&p2=&p1=" + m_CommID + "&sort=" + m_BoardID;
-
-        return PostDataCore(url);
+        if (m_nAttached > 0) {
+            PostDataWithAttach();
+        }
+        return PostDataSaveDo();
     }
 
-    protected boolean PostModifyData() {
-        String url = "http://cafe.gongdong.or.kr/cafe.php?mode=edit&p2=&p1=" + m_CommID + "&sort=" + m_BoardID;
-
-        return PostDataCore(url);
-    }
-
-    protected boolean PostDataCore(String url) {
+    protected boolean PostDataWithAttach() {
         m_bSaveStatus = false;
+        String url = GlobalConst.m_strServer + "/uploadManager";
+        String referer = GlobalConst.m_strServer + "/board-edit.do";
 
         String boundary = "-------------" + System.currentTimeMillis();
         ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 //        ByteArrayBody bab = new ByteArrayBody(imageBytes, "pic.png");
 //        StringBody sbOwner = new StringBody(StaticData.loggedUserId, ContentType.TEXT_PLAIN);
-        StringBody sbNumber = new StringBody(m_BoardNo, contentType);
-        StringBody sbUseTag = new StringBody("n", contentType);
-        StringBody sbSubject = new StringBody(m_Title, contentType);
+        StringBody sbUserEmail = new StringBody("", contentType);
+        StringBody sbUserHomepage = new StringBody("", contentType);
+        StringBody sbBoardTitle = new StringBody("", contentType);
+        StringBody sbWhatMode = new StringBody("on", contentType);
+        StringBody sbEditContent = new StringBody("", contentType);
+        StringBody sbTagsName = new StringBody("", contentType);
         StringBody sbSample = new StringBody("", contentType);
-        StringBody sbSub_Sort = new StringBody("0", contentType);
-        StringBody sbContent = new StringBody(m_Content, contentType);
+
         HttpEntity entity;
         try {
             Charset chars = Charset.forName("UTF-8");
@@ -187,12 +189,12 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             builder.setCharset(chars);
             builder.setBoundary(boundary);
-            builder.addPart("number", sbNumber);
-            builder.addPart("usetag", sbUseTag);
-            builder.addPart("subject", sbSubject);
-            builder.addPart("sample", sbSample);
-            builder.addPart("sub_sort", sbSub_Sort);
-            builder.addPart("content", sbContent);
+            builder.addPart("userEmail", sbUserEmail);
+            builder.addPart("userHomepage", sbUserHomepage);
+            builder.addPart("boardTitle", sbBoardTitle);
+            builder.addPart("whatmode_uEdit", sbWhatMode);
+            builder.addPart("editContent", sbEditContent);
+            builder.addPart("tagsName", sbTagsName);
             for (int i = 0; i < 5; i++) {
                 if (m_arrayAttached[i]) {
                     InputStream imageStream = getContentResolver().openInputStream(m_arrayUri[i]);
@@ -208,18 +210,98 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                 }
             }
             entity = builder.build();
-            String result = m_httpRequest.requestPostWithAttach(url, entity, "", "utf-8", boundary);
-
-            if (result.contains("<meta http-equiv=\"refresh\" content=\"0;url=/cafe.php?sort=")) {
-                m_ErrorMsg = Utils.getMatcherFirstString("(?<=window.alert\\(\\\")(.|\\n)*?(?=\\\")", result);
-                return false;
-            }
-
+            String result = m_httpRequest.requestPostWithAttach(url, entity, referer, "euc-kr", boundary);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        m_bSaveStatus = true;
+        return true;
+    }
 
+    protected boolean PostDataSaveDo() {
+        String url = GlobalConst.m_strServer + "/board-save.do";
+        String referer = GlobalConst.m_strServer + "/board-edit.do";
+
+        m_Content = m_Content.replaceFirst("\n", "<div>");
+        m_Content = m_Content.replaceAll("\n", "</div><div>");
+        m_Content = m_Content + "</div>";
+
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("boardId", m_BoardID));
+        nameValuePairs.add(new BasicNameValuePair("page", "1"));
+        nameValuePairs.add(new BasicNameValuePair("categoryId", "-1"));
+        nameValuePairs.add(new BasicNameValuePair("boardNo", m_BoardNo));
+        if (m_nMode == 0) {
+            if (m_BoardNo.length() > 0) {
+                nameValuePairs.add(new BasicNameValuePair("command", "REPLY"));
+            } else {
+                nameValuePairs.add(new BasicNameValuePair("command", "WRITE"));
+            }
+        } else {
+            nameValuePairs.add(new BasicNameValuePair("command", "MODIFY"));
+        }
+        nameValuePairs.add(new BasicNameValuePair("htmlImage", "%%2Fout"));
+        nameValuePairs.add(new BasicNameValuePair("file_cnt", "5"));
+        nameValuePairs.add(new BasicNameValuePair("tag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("boardWidth", "710"));
+        nameValuePairs.add(new BasicNameValuePair("defaultBoardSkin", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardBackGround_color", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardBackGround_picture", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("totalSize", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("fileTotalSize", ""));
+        nameValuePairs.add(new BasicNameValuePair("simpleFileTotalSize", "0+Bytes"));
+        nameValuePairs.add(new BasicNameValuePair("serialFileName", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialFileMask", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialFileSize", ""));
+        nameValuePairs.add(new BasicNameValuePair("userPoint", "2530"));
+        nameValuePairs.add(new BasicNameValuePair("userEmail", ""));
+        nameValuePairs.add(new BasicNameValuePair("userHomepage", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardPollFrom_time", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardPollTo_time", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardContent", m_Content));
+        nameValuePairs.add(new BasicNameValuePair("boardTitle", m_Title));
+        nameValuePairs.add(new BasicNameValuePair("boardSecret_fg", "N"));
+        nameValuePairs.add(new BasicNameValuePair("boardEdit_fg", "M"));
+        nameValuePairs.add(new BasicNameValuePair("userNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("userPw", ""));
+        nameValuePairs.add(new BasicNameValuePair("fileName", ""));
+        nameValuePairs.add(new BasicNameValuePair("fileMask", ""));
+        nameValuePairs.add(new BasicNameValuePair("fileSize", ""));
+        nameValuePairs.add(new BasicNameValuePair("pollContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardPoint", "0"));
+        nameValuePairs.add(new BasicNameValuePair("boardTop_fg", ""));
+        nameValuePairs.add(new BasicNameValuePair("totalsize", "0"));
+        nameValuePairs.add(new BasicNameValuePair("tag", "0"));
+        nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
+        nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
+
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+
+        if (!result.contains("parent.checkLogin()")) {
+            m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
+            m_bSaveStatus = false;
+            return false;
+        }
+/*
+        url = GlobalConst.m_strServer + "/jsp/Ajax/Login.jsp";
+        referer = GlobalConst.m_strServer + "/board-save.do";
+
+        nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("TASK", "LOGIN_HTML"));
+        nameValuePairs.add(new BasicNameValuePair("_", ""));
+
+        result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+
+        if (!result.contains("parent.setMainBodyLogin")) {
+            m_bSaveStatus = false;
+            return false;
+        }
+*/
+        m_bSaveStatus = true;
         return true;
     }
 

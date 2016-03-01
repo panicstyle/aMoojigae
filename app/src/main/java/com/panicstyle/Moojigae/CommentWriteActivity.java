@@ -15,9 +15,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommentWriteActivity extends AppCompatActivity implements Runnable {
     private HttpRequest m_httpRequest;
@@ -99,19 +103,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
     }
 
     public void run() {
-        if (m_nMode == 0) {
-            if (m_nPNotice == 0) {
-                PostData();
-            } else {
-                PostDataPNotice();
-            }
-        } else {
-            if (m_nPNotice == 0) {
-                PostModifyData();
-            } else {
-                PostModifyDataPNotice();
-            }
-        }
+        PostData();
     	handler.sendEmptyMessage(0);
     }
 
@@ -135,103 +127,89 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
     		}
     		finish();
     	}
-    };        
-    	
+    };
+
     protected boolean PostData() {
-		String url = "http://cafe.gongdong.or.kr/cafe.php?mode=up_add&sub_sort=&p2=&p1=" + m_CommID + "&sort=" + m_BoardID;
-        String strParam = "number=" + m_BoardNo + "&content=" + m_Content;
+        String url = GlobalConst.m_strServer + "/memo-save.do";
+        String referer;
+
+        if (m_CommentNo.length() <= 0) {
+            referer = GlobalConst.m_strServer + "/board-read.do";
+        } else {
+            referer = GlobalConst.m_strServer + "/board-read.do?boardId=" + m_BoardID + "&boardNo=" + m_BoardNo + "&command=READ&page=1&categoryId=-1";
+        }
+
+        m_Content = m_Content.replaceFirst("\n", "<div>");
+        m_Content = m_Content.replaceAll("\n", "</div><div>");
+        m_Content = m_Content + "</div>";
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("number", m_BoardNo));
-        if (m_CommentNo.length() > 0) {
-            nameValuePairs.add(new BasicNameValuePair("number_re", m_CommentNo));
+        nameValuePairs.add(new BasicNameValuePair("boardId", m_BoardID));
+        nameValuePairs.add(new BasicNameValuePair("page", "1"));
+        nameValuePairs.add(new BasicNameValuePair("categoryId", "-1"));
+        nameValuePairs.add(new BasicNameValuePair("time", ""));
+        nameValuePairs.add(new BasicNameValuePair("returnBoardNo", m_BoardNo));
+        nameValuePairs.add(new BasicNameValuePair("boardNo", m_BoardNo));
+        if (m_CommentNo.length() <= 0) {
+            nameValuePairs.add(new BasicNameValuePair("command", "MEMO_WRITE"));
+        } else {
+            nameValuePairs.add(new BasicNameValuePair("command", "MEMO_REPLY"));
         }
-        nameValuePairs.add(new BasicNameValuePair("content", m_Content));
-		String result = m_httpRequest.requestPost(url, nameValuePairs, url, "utf-8");
+        nameValuePairs.add(new BasicNameValuePair("totalPage", "0"));
+        nameValuePairs.add(new BasicNameValuePair("totalRecords", "0"));
+        nameValuePairs.add(new BasicNameValuePair("serialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("serialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("htmlImage", "%%2Fout"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("memoWriteable", "true"));
+        nameValuePairs.add(new BasicNameValuePair("list_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("replyList_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("defaultBoardSkin", "default"));
+        nameValuePairs.add(new BasicNameValuePair("boardWidth", "690"));
+        nameValuePairs.add(new BasicNameValuePair("multiView_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleCategory_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("category_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleIcon_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titlePoint_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleMemo_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleNew_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleThumbnail_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleNick_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("titleTag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("anonymity_yn", "N"));
+        nameValuePairs.add(new BasicNameValuePair("titleRead_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("boardModel_cd", "A"));
+        nameValuePairs.add(new BasicNameValuePair("titleDate_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("tag_yn", "Y"));
+        nameValuePairs.add(new BasicNameValuePair("thumbnailSize", "50"));
+        nameValuePairs.add(new BasicNameValuePair("readOver_color", "%%23336699"));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("boardSerialBadContent", ""));
+        nameValuePairs.add(new BasicNameValuePair("userPw", ""));
+        nameValuePairs.add(new BasicNameValuePair("userNick", ""));
+        nameValuePairs.add(new BasicNameValuePair("memoContent", m_Content));
+        nameValuePairs.add(new BasicNameValuePair("memoSeq", m_CommentNo));
+        nameValuePairs.add(new BasicNameValuePair("pollSeq", ""));
+        nameValuePairs.add(new BasicNameValuePair("returnURI", ""));
+        nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
+        nameValuePairs.add(new BasicNameValuePair("starPoint", ""));
+        nameValuePairs.add(new BasicNameValuePair("provenance", "board-read.do"));
+        nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
+        nameValuePairs.add(new BasicNameValuePair("pageScale", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
+        nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
+        nameValuePairs.add(new BasicNameValuePair("tag", "1"));
 
-        if (result.contains("<meta http-equiv=\"refresh\" content=\"0;url=/cafe.php?sort=")) {
-            m_ErrorMsg = Utils.getMatcherFirstString("(?<=window.alert\\(\\\")(.|\\n)*?(?=\\\")", result);
-			m_bSaveStatus = false;
-			return false;
-        }
-        
-		m_bSaveStatus = true;
-    	return true;
-    }
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
 
-    protected boolean PostModifyData() {
-        String url = "http://cafe.gongdong.or.kr/cafe.php?mode=edit_reply&p2=&p1=" + m_CommID + "&sort=" + m_BoardID;
-        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("number", m_CommentNo));
-        nameValuePairs.add(new BasicNameValuePair("content", m_Content));
-        String result = m_httpRequest.requestPost(url, nameValuePairs, url, "utf-8");
-
-        if (result.indexOf("<meta http-equiv=\"refresh\" content=\"0;url=/cafe.php?sort=") < 0) {
-            m_ErrorMsg = Utils.getMatcherFirstString("(?<=window.alert\\(\\\")(.|\\n)*?(?=\\\")", result);
+        if (result.indexOf("function redirect") < 0) {
+            m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bSaveStatus = false;
             return false;
         }
 
         m_bSaveStatus = true;
-        return true;
-    }
-
-    protected boolean PostDataPNotice() {
-        String url = "http://www.gongdong.or.kr/index.php";
-        String strPostParam = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
-                "<methodCall>\n" +
-                "<params>\n" +
-                "<_filter><![CDATA[insert_comment]]></_filter>\n" +
-                "<error_return_url><![CDATA[/notice/" + m_BoardNo + "]]></error_return_url>\n" +
-                "<mid><![CDATA[notice]]></mid>\n" +
-                "<document_srl><![CDATA[" + m_BoardNo + "]]></document_srl>\n" +
-                "<comment_srl><![CDATA[0]]></comment_srl>\n" +
-                "<content><![CDATA[<p>" + m_Content + "</p>\n" +
-                "]]></content>\n" +
-                "<module><![CDATA[board]]></module>\n" +
-                "<act><![CDATA[procBoardInsertComment]]></act>\n" +
-                "</params>\n" +
-                "</methodCall>";
-
-        String strReferer = "http://www.gongdong.or.kr/notice/" + m_BoardNo;
-        String result = m_httpRequest.requestPost(url, strPostParam, strReferer, "utf-8");
-
-        if (result.contains("<error>0</error>")) {
-            m_ErrorMsg = Utils.getMatcherFirstString("(?<=<message>)(.|\\n)*?(?=</message>)", result);
-            m_bSaveStatus = false;
-            return false;
-        }
-
-        m_bSaveStatus = true;
-        return true;
-    }
-
-    protected boolean PostModifyDataPNotice() {
-        String url = "http://www.gongdong.or.kr/index.php";
-        String strPostParam = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
-                "<methodCall>\n" +
-                "<params>\n" +
-                "<_filter><![CDATA[insert_comment]]></_filter>\n" +
-                "<error_return_url><![CDATA[/index.php?mid=notice&document_srl=" + m_BoardNo + "&act=dispBoardModifyComment&comment_srl=" + m_CommentNo +"]]></error_return_url>\n" +
-                "<act><![CDATA[procBoardInsertComment]]></act>\n" +
-                "<mid><![CDATA[notice]]></mid>\n" +
-                "<document_srl><![CDATA[" + m_BoardNo + "]]></document_srl>\n" +
-                "<comment_srl><![CDATA[" + m_CommentNo + "]]></comment_srl>\n" +
-                "<content><![CDATA[<p>" + m_Content + "</p>\n" +
-                "]]></content>\n" +
-                "<parent_srl><![CDATA[0]]></parent_srl>\n" +
-                "<module><![CDATA[board]]></module>\n" +
-                "</params>\n" +
-                "</methodCall>";
-        String strReferer = "http://www.gongdong.or.kr/index.php?mid=notice&document_srl=" + m_BoardNo + "&act=dispBoardModifyComment&comment_srl=" + m_CommentNo;
-        String result = m_httpRequest.requestPost(url, strPostParam, strReferer, "utf-8");
-
-        if (result.contains("<error>0</error>")) {
-            m_ErrorMsg = Utils.getMatcherFirstString("(?<=<message>)(.|\\n)*?(?=</message>)", result);
-            m_bSaveStatus = false;
-            return false;
-        }
-
-        m_bSaveStatus = true;
+        finish();
         return true;
     }
 

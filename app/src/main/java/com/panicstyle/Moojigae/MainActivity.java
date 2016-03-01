@@ -183,6 +183,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Login login = new Login();
         m_LoginStatus = login.LoginTo(context, m_httpRequest);
         m_strErrorMsg = login.m_strErrorMsg;
+        MoojigaeApplication app = (MoojigaeApplication)getApplication();
+        app.m_strUserID = login.m_userID;
+
 
         if (m_LoginStatus <= 0) {
             return false;
