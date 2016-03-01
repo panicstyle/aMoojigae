@@ -300,6 +300,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         strTitle = result.substring(match1, match2);
 
         m_strName = Utils.getMatcherFirstString("(?<=textDecoration='none'>)(.|\\n)*?(?=</font>)", strTitle);
+        m_strName = Utils.repalceHtmlSymbol(m_strName);
         m_strDate = Utils.getMatcherFirstString("\\d\\d\\d\\d-\\d\\d-\\d\\d.\\d\\d:\\d\\d:\\d\\d", strTitle);
         m_strHit = Utils.getMatcherFirstString("(?<=<font style=font-style:italic>)(.|\\n)*?(?=</font>)", strTitle);
 

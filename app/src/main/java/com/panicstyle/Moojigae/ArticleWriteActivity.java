@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,9 +160,10 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     protected boolean PostData() {
 
         if (m_nAttached > 0) {
-            PostDataWithAttach();
+            return PostDataWithAttach();
+        } else {
+            return PostDataSaveDo(null, null, null);
         }
-        return PostDataSaveDo();
     }
 
     protected boolean PostDataWithAttach() {
@@ -170,20 +172,25 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         String referer = GlobalConst.m_strServer + "/board-edit.do";
 
         String boundary = "-------------" + System.currentTimeMillis();
-        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
+        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.DEFAULT_PROTOCOL_CHARSET);
 //        ByteArrayBody bab = new ByteArrayBody(imageBytes, "pic.png");
 //        StringBody sbOwner = new StringBody(StaticData.loggedUserId, ContentType.TEXT_PLAIN);
-        StringBody sbUserEmail = new StringBody("", contentType);
+        StringBody sbUserEmail = new StringBody("panicstyle@gmail.com", contentType);
         StringBody sbUserHomepage = new StringBody("", contentType);
-        StringBody sbBoardTitle = new StringBody("", contentType);
+        StringBody sbBoardTitle = new StringBody(m_Title, contentType);
         StringBody sbWhatMode = new StringBody("on", contentType);
         StringBody sbEditContent = new StringBody("", contentType);
         StringBody sbTagsName = new StringBody("", contentType);
+        StringBody sbSubId = new StringBody("sub01", contentType);
+        StringBody sbMode = new StringBody("attach", contentType);
         StringBody sbSample = new StringBody("", contentType);
 
         HttpEntity entity;
+        String strFileNameArray[] = new String[m_nAttached];
+        String strFileMaskArray[] = new String[m_nAttached];
+        String strFileSizeArray[] = new String[m_nAttached];
         try {
-            Charset chars = Charset.forName("UTF-8");
+            Charset chars = Charset.forName("EUC-KR");
             MultipartEntityBuilder builder;
             builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -205,19 +212,51 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     }
                     InputStreamBody inputStreamBody = new InputStreamBody(imageStream, fileName);
 
-                    builder.addPart("imgfile[]", inputStreamBody);
-                    builder.addPart("file_text[]", sbSample);
+                    String strFileName = "file" + (i + 1);
+                    builder.addPart(strFileName, inputStreamBody);
                 }
             }
+            builder.addPart("subId", sbSubId);
+            builder.addPart("mode", sbMode);
+
             entity = builder.build();
             String result = m_httpRequest.requestPostWithAttach(url, entity, referer, "euc-kr", boundary);
+            if (!result.contains("fileNameArray[0] =")) {
+                m_ErrorMsg = Utils.getMatcherFirstString("(?<=var message = ')(.|\\n)*?(?=';)", result);
+                return false;
+            }
+            m_ErrorMsg = "첨부파일 정보를 오류";
+            Matcher m = Utils.getMatcher("(?<=fileNameArray[.] = ')(.|\\n)*?(?=';)", result);
+            for (int i = 0; i < m_nAttached; i++) {
+                if (m.find()) {
+                    strFileNameArray[i] = m.group(0);
+                } else {
+                    return false;
+                }
+            }
+            m = Utils.getMatcher("(?<=fileMaskArray[.] = ')(.|\\n)*?(?=';)", result);
+            for (int i = 0; i < m_nAttached; i++) {
+                if (m.find()) {
+                    strFileMaskArray[i] = m.group(0);
+                } else {
+                    return false;
+                }
+            }
+            m = Utils.getMatcher("(?<=fileSizeArray[.] = )(.|\\n)*?(?=;)", result);
+            for (int i = 0; i < m_nAttached; i++) {
+                if (m.find()) {
+                    strFileSizeArray[i] = m.group(0);
+                } else {
+                    return false;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+        return PostDataSaveDo(strFileNameArray, strFileMaskArray, strFileSizeArray);
     }
 
-    protected boolean PostDataSaveDo() {
+    protected boolean PostDataSaveDo(String[] strFileNameArray, String[] strFileMaskArray, String[] strFileSizeArray) {
         String url = GlobalConst.m_strServer + "/board-save.do";
         String referer = GlobalConst.m_strServer + "/board-edit.do";
 
@@ -268,9 +307,27 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("boardEdit_fg", "M"));
         nameValuePairs.add(new BasicNameValuePair("userNick", ""));
         nameValuePairs.add(new BasicNameValuePair("userPw", ""));
-        nameValuePairs.add(new BasicNameValuePair("fileName", ""));
-        nameValuePairs.add(new BasicNameValuePair("fileMask", ""));
-        nameValuePairs.add(new BasicNameValuePair("fileSize", ""));
+        if (strFileNameArray == null) {
+            nameValuePairs.add(new BasicNameValuePair("fileName", ""));
+            nameValuePairs.add(new BasicNameValuePair("fileMask", ""));
+            nameValuePairs.add(new BasicNameValuePair("fileSize", ""));
+        } else {
+            String s = "";
+            for (int i = 0; i < m_nAttached; i++) {
+                s = s + strFileNameArray[i] + "%7C";
+            }
+            nameValuePairs.add(new BasicNameValuePair("fileName", s));
+            s = "";
+            for (int i = 0; i < m_nAttached; i++) {
+                s = s + strFileMaskArray[i] + "%7C";
+            }
+            nameValuePairs.add(new BasicNameValuePair("fileMask", s));
+            s = "";
+            for (int i = 0; i < m_nAttached; i++) {
+                s = s + strFileSizeArray[i] + "%7C";
+            }
+            nameValuePairs.add(new BasicNameValuePair("fileSize", s));
+        }
         nameValuePairs.add(new BasicNameValuePair("pollContent", ""));
         nameValuePairs.add(new BasicNameValuePair("boardPoint", "0"));
         nameValuePairs.add(new BasicNameValuePair("boardTop_fg", ""));
@@ -397,6 +454,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     }
 
     public void clickAddImage(View v) {
+/*
 		m_nSelected = -1;
 		if (m_nAttached < 5) {
 			for (int i = 0; i < 5; i++) {
@@ -422,6 +480,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
             });
             builder.show();
 		}
+*/
     }
 
     @Override

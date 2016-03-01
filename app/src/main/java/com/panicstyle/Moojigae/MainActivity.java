@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
             notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("1.일정이 보이지 않던 문제가 수정되었습니다.\n2.전체적인 디자인이 수정되었습니다.");
+            notice.setMessage("1.전체적인 디자인이 수정되었습니다.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
 
