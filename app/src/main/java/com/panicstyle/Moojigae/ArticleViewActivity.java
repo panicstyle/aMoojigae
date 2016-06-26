@@ -2,11 +2,14 @@ package com.panicstyle.Moojigae;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,6 +77,10 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private String m_strContent;
     private String m_strProfile;
     private String m_strHTML;
+
+    private String m_strUrl;
+
+    private HashMap<String, String> m_mapFileName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -217,6 +225,42 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             tvHit.setText(m_strHit);
 
             webContent = (WebView) findViewById(R.id.webView);
+
+            webContent.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading (WebView view, String url) {
+                    boolean shouldOverride = false;
+                    // We only want to handle requests for mp3 files, everything else the webview
+                    // can handle normally
+                    if (url.indexOf("downManager?") >= 0) {
+                        m_strUrl = url;
+                        AlertDialog.Builder notice = null;
+                        notice = new AlertDialog.Builder( ArticleViewActivity.this );
+//                        notice.setTitle( "" );
+                        notice.setMessage("첨부파일을 다운로드 하시겠습니까?");
+                        notice.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                String nKey = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", m_strUrl);
+                                String fileName = m_mapFileName.get(nKey);
+                                DownloadManager.Request request = new DownloadManager.Request(
+                                        Uri.parse(m_strUrl));
+                                request.allowScanningByMediaScanner();
+                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+// You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
+                                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                                dm.enqueue(request);
+                            }
+                        });
+                        notice.setNegativeButton(android.R.string.cancel, null);
+                        notice.show();
+
+                    }
+                    return shouldOverride;
+                }
+            });
+
             webContent.getSettings().setJavaScriptEnabled(true);
             webContent.setBackgroundColor(0);
             webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", "utf-8", "");
@@ -337,6 +381,17 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         if (match2 < 0) return false;
         String strAttach = result.substring(match1, match2);
         strAttach = "<div class='attach'>" + strAttach + "</div>";
+
+        // 첨부파일 목록 만들기. 다운로드할 때 저잫할 파일이름을 획득하기 위한 방법
+        Matcher mAttach = Utils.getMatcher("(<font class=smallgray>)(.|\\n)*?(</font>)", strAttach);
+        m_mapFileName = new HashMap<>();
+        while(mAttach.find()) {
+            String matchstr = mAttach.group(0);
+            String n = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", matchstr);
+            String f = Utils.getMatcherFirstString("(?<=_self\\'\\)>)(.|\\n)*?(?=</font>)", matchstr);
+
+            m_mapFileName.put(n, f);
+        }
 
         match1 = result.indexOf("<!-- 별점수 -->");
         if (match1 < 0) return false;
