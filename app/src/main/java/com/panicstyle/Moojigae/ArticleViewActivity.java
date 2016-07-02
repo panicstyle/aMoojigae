@@ -248,6 +248,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                                 request.allowScanningByMediaScanner();
                                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                                request.addRequestHeader("Cookie", m_httpRequest.m_Cookie);
+                                request.addRequestHeader("Referer", GlobalConst.m_strServer + "/" + m_strLink);
+                                request.addRequestHeader("Host", GlobalConst.m_strServerName);
 // You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
                                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                                 dm.enqueue(request);
@@ -380,7 +383,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         match2 = result.indexOf("<!-- 평가 -->", match1);
         if (match2 < 0) return false;
         String strAttach = result.substring(match1, match2);
-        strAttach = "<div class='attach'>" + strAttach + "</div>";
+        strAttach = "<div class='attach'><table>" + strAttach + "</table></div>";
 
         // 첨부파일 목록 만들기. 다운로드할 때 저잫할 파일이름을 획득하기 위한 방법
         Matcher mAttach = Utils.getMatcher("(<font class=smallgray>)(.|\\n)*?(</font>)", strAttach);
@@ -392,6 +395,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             m_mapFileName.put(n, f);
         }
+
+        // Attach 가 가로로 표시되는데 이 부분을 세로로 표시되게끔 수정
+        strAttach = strAttach.replaceAll("</font>\n", "</font>\n</td></tr><tr><td align=right class=cContent>");
 
         match1 = result.indexOf("<!-- 별점수 -->");
         if (match1 < 0) return false;

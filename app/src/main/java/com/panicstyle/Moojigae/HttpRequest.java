@@ -1,5 +1,6 @@
 package com.panicstyle.Moojigae;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class HttpRequest {
 	HttpClient httpClient;
 	HttpContext httpContext;
+	String m_Cookie;
 
 	public String requestPost(String url, String strParam, String referer, String encode) {
 		InputStream is = null;
@@ -36,6 +38,7 @@ public class HttpRequest {
 			if (referer.length() > 0) {
 				httppost.setHeader("referer", referer);
 			}
+
 			if (strParam != null) {
 				StringEntity strEntity = new StringEntity(strParam, encode);
 				httppost.setEntity(strEntity);
@@ -45,6 +48,17 @@ public class HttpRequest {
 			HttpEntity entityResponse = response.getEntity();
 			is = entityResponse.getContent();
 
+			Header[] h_cookies = response.getHeaders("Set-Cookie");
+			for (int i = 0; i < h_cookies.length; i++) {
+				Header h_cookie = h_cookies[i];
+				if (h_cookie != null) {
+					if (m_Cookie == null) {
+						m_Cookie = h_cookie.getValue();
+					} else {
+						m_Cookie += ";" +  h_cookie.getValue();
+					}
+				}
+			}
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, encode), 8);
@@ -74,6 +88,7 @@ public class HttpRequest {
 			if (referer.length() > 0) {
 				httppost.setHeader("referer", referer);
 			}
+
 			if (postData != null) {
 				UrlEncodedFormEntity entityRequest = new UrlEncodedFormEntity(postData, encode);
 				httppost.setEntity(entityRequest);
@@ -82,6 +97,18 @@ public class HttpRequest {
 			HttpResponse response = httpClient.execute(httppost, httpContext);
 			HttpEntity entityResponse = response.getEntity();
 			is = entityResponse.getContent();
+
+			Header[] h_cookies = response.getHeaders("Set-Cookie");
+			for (int i = 0; i < h_cookies.length; i++) {
+				Header h_cookie = h_cookies[i];
+				if (h_cookie != null) {
+					if (m_Cookie == null) {
+						m_Cookie = h_cookie.getValue();
+					} else {
+						m_Cookie += ";" +  h_cookie.getValue();
+					}
+				}
+			}
 
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -112,6 +139,7 @@ public class HttpRequest {
 			if (referer.length() > 0) {
 				httppost.setHeader("referer", referer);
 			}
+
 			if (entity != null) {
 				httppost.setEntity(entity);
 			}
@@ -120,6 +148,18 @@ public class HttpRequest {
 			HttpResponse response = httpClient.execute(httppost, httpContext);
 			HttpEntity entityResponse = response.getEntity();
 			is = entityResponse.getContent();
+
+			Header[] h_cookies = response.getHeaders("Set-Cookie");
+			for (int i = 0; i < h_cookies.length; i++) {
+				Header h_cookie = h_cookies[i];
+				if (h_cookie != null) {
+					if (m_Cookie == null) {
+						m_Cookie = h_cookie.getValue();
+					} else {
+						m_Cookie += ";" +  h_cookie.getValue();
+					}
+				}
+			}
 
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -153,6 +193,7 @@ public class HttpRequest {
 			if (referer.length() > 0) {
 				httpget.setHeader("referer", referer);
 			}
+
 //			UrlEncodedFormEntity entityRequest = new UrlEncodedFormEntity(postData, "UTF-8");
 //			httppost.setEntity(entityRequest);
 
@@ -174,6 +215,19 @@ public class HttpRequest {
 			/** convert response to string */
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, encode), 8);
+
+			Header[] h_cookies = response.getHeaders("Set-Cookie");
+			for (int i = 0; i < h_cookies.length; i++) {
+				Header h_cookie = h_cookies[i];
+				if (h_cookie != null) {
+					if (m_Cookie == null) {
+						m_Cookie = h_cookie.getValue();
+					} else {
+						m_Cookie += ";" +  h_cookie.getValue();
+					}
+				}
+			}
+
 /*
 			StringBuilder sb = new StringBuilder();
 			String line = null;
