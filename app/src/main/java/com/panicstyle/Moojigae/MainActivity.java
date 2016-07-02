@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
             notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("1.첨부파일을 다운로드 할 수 잇습니다. 안드로이드 최신버전에서 첨부파일 저장기능을 위한 권한요청이 나타날 수 있습니다.");
+            notice.setMessage("1.첨부파일을 다운로드 할 수 잇습니다.\n2.안드로이드 최신버전에서 첨부파일 저장기능을 위한 권한요청이 나타날 수 있습니다.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
 
