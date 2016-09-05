@@ -41,6 +41,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 	protected String m_itemsTitle;
 	protected String m_itemsLink;
 	private HttpRequest m_httpRequest;
+	private String m_strEncodingOption;
     private List<HashMap<String, Object>> m_arrayItems;
     private int m_nPage;
     static final int REQUEST_WRITE = 1;
@@ -190,6 +191,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
 		MoojigaeApplication app = (MoojigaeApplication)getApplication();
 		m_httpRequest = app.m_httpRequest;
+		m_strEncodingOption = app.m_strEncodingOption;
 
         intenter();
 
@@ -213,7 +215,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
     	if (!getData()) {
             // Login
 			Login login = new Login();
-			m_LoginStatus = login.LoginTo(ItemsActivity.this, m_httpRequest);
+			m_LoginStatus = login.LoginTo(ItemsActivity.this, m_httpRequest, m_strEncodingOption);
 			m_strErrorMsg = login.m_strErrorMsg;
 
     		if (m_LoginStatus > 0) {
@@ -277,7 +279,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 		String Page = Integer.toString(m_nPage);
 		String url = GlobalConst.m_strServer + "/board-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
 
-		String result = m_httpRequest.requestPost(url, "", url, "euc-kr");
+		String result = m_httpRequest.requestPost(url, "", url, m_strEncodingOption);
 
 		if (result.contains("onclick=\"userLogin()")) {
 			return false;

@@ -24,7 +24,7 @@ public class Login {
 
 	public String m_strErrorMsg = "";
 
-	public int LoginTo(Context context, HttpRequest httpRequest) {
+	public int LoginTo(Context context, HttpRequest httpRequest, String encodingOption) {
 
 		String url = GlobalConst.m_strServer + "/login-process.do";
 		String referer = GlobalConst.m_strServer + "/MLogin.do";
@@ -55,7 +55,7 @@ public class Login {
 		nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
 		nameValuePairs.add(new BasicNameValuePair("command", "LOGIN"));
 
-		String result = httpRequest.requestPost(url, nameValuePairs, referer, "utf-8");
+		String result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
 
 		if (result.contains("<script language=javascript>moveTop()</script>")) {
 			System.out.println("Login Success");

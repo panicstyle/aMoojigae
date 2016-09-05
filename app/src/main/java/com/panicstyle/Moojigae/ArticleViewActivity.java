@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
 public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 	/** Called when the activity is first created. */
     private HttpRequest m_httpRequest;
+    private String m_strEncodingOption;
     private ProgressDialog m_pd;
     private List<HashMap<String, Object>> m_arrayItems;
     private int m_nThreadMode = 0;
@@ -96,6 +97,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
         m_strUserID = app.m_strUserID;
+        m_strEncodingOption = app.m_strEncodingOption;
 
         intenter();
 
@@ -123,7 +125,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 // Login
                 Login login = new Login();
 
-                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_httpRequest);
+                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_httpRequest, m_strEncodingOption);
 
                 if (m_nLoginStatus > 0) {
                     if (getData()) {
@@ -266,7 +268,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             webContent.getSettings().setJavaScriptEnabled(true);
             webContent.setBackgroundColor(0);
-            webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", "utf-8", "");
+            webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", m_strEncodingOption, "");
 
             tvProfile = (TextView) findViewById(R.id.profile);
             tvProfile.setText(m_strProfile);
@@ -330,7 +332,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     protected boolean getData() {
         String url = GlobalConst.m_strServer + "/" + m_strLink;
-        String result = m_httpRequest.requestGet(url, "", "euc-kr");
+        String result = m_httpRequest.requestGet(url, "", m_strEncodingOption);
 
         if (result.indexOf("onclick=\"userLogin()") > 0) {
             return false;
@@ -644,7 +646,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
 
         m_bDeleteStatus = true;
         if (!result.contains("parent.checkLogin()")) {
@@ -777,7 +779,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("tag", "-1"));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
 
         m_bDeleteStatus = true;
         if (result.contains("function redirect")) {

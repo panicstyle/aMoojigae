@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private HttpRequest m_httpRequest;
 
+    private MoojigaeApplication m_app;
+    private String m_strEncodingOption;
+
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         List<HashMap<String, String>> arrayItems;
@@ -149,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         AdRequest adRequest = new AdRequest.Builder().build();
         AdView.loadAd(adRequest);
 
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        m_httpRequest = app.m_httpRequest;
+        MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
+        m_httpRequest = m_app.m_httpRequest;
 
 
         SetInfo setInfo = new SetInfo();
@@ -213,9 +216,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private boolean LoadData(Context context) {
 
+        // Encoding 정보를 읽어온다.
+        EncodingOption encodingOption = new EncodingOption();
+        m_app.m_strEncodingOption = encodingOption.getEncodingOption(context, m_httpRequest);
+        m_strEncodingOption = m_app.m_strEncodingOption;
+
         // Login
         Login login = new Login();
-        m_LoginStatus = login.LoginTo(context, m_httpRequest);
+        m_LoginStatus = login.LoginTo(context, m_httpRequest, m_strEncodingOption);
         m_strErrorMsg = login.m_strErrorMsg;
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         app.m_strUserID = login.m_userID;

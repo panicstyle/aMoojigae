@@ -31,6 +31,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
 	protected String m_boardTitle;
 	protected String m_boardCode;
     private HttpRequest m_httpRequest;
+    private String m_strEncodingOption;
     List<HashMap<String, Object>> m_arrayItems;
 
     private static class EfficientAdapter extends BaseAdapter {
@@ -134,6 +135,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
+        m_strEncodingOption = app.m_strEncodingOption;
         
         intenter();
 
@@ -191,7 +193,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         }
 
         String url = GlobalConst.m_strServer + "/" + boardLink;
-        String result = m_httpRequest.requestPost(url, "", url, "euc-kr");
+        String result = m_httpRequest.requestPost(url, "", url, m_strEncodingOption);
         String newString = Utils.getMatcherFirstString("(function getNewIcon\\(menu\\))(.|\\n)*?(return rntVal;)", result);
 
         String[] maul = new String[]{

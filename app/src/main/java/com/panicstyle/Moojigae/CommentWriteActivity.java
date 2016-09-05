@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 public class CommentWriteActivity extends AppCompatActivity implements Runnable {
     private HttpRequest m_httpRequest;
+    private String m_strEncodingOption;
     private ProgressDialog m_pd;
     private int m_nMode;
     private int m_nPNotice;
@@ -42,6 +43,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
+        m_strEncodingOption = app.m_strEncodingOption;
 
         intenter();
 
@@ -200,7 +202,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
         nameValuePairs.add(new BasicNameValuePair("tag", "1"));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
 
         if (result.indexOf("function redirect") < 0) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);

@@ -41,6 +41,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     protected String m_itemsTitle;
     protected String m_itemsLink;
     private HttpRequest m_httpRequest;
+    private String m_strEncodingOption;
     private List<HashMap<String, Object>> m_arrayItems;
     static final int REQUEST_WRITE = 1;
     static final int REQUEST_VIEW = 2;
@@ -165,6 +166,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
+        m_strEncodingOption = app.m_strEncodingOption;
 
         intenter();
 
@@ -187,7 +189,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         if (!getData()) {
             // Login
             Login login = new Login();
-            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_httpRequest);
+            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_httpRequest, m_strEncodingOption);
             m_strErrorMsg = login.m_strErrorMsg;
 
             if (m_LoginStatus > 0) {
@@ -254,7 +256,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         }
         String referer = GlobalConst.m_strServer + "/board-list.do";
 
-        String result = m_httpRequest.requestPost(url, "", referer, "euc-kr");
+        String result = m_httpRequest.requestPost(url, "", referer, m_strEncodingOption);
 
         HashMap<String, Object> item;
 

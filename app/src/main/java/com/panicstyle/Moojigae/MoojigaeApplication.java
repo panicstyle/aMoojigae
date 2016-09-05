@@ -15,6 +15,7 @@ import java.net.CookiePolicy;
 public class MoojigaeApplication extends Application {
 
     public static HttpRequest m_httpRequest;
+    public static String m_strEncodingOption;
     public static String m_strUserID;
 
     @Override

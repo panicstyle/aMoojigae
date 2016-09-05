@@ -47,6 +47,7 @@ import java.util.regex.Pattern;
 
 public class ArticleWriteActivity extends AppCompatActivity implements Runnable {
     private HttpRequest m_httpRequest;
+    private String m_strEncodingOption;
     private ProgressDialog m_pd;
     private int m_nMode;
     private String m_Title;
@@ -69,6 +70,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         MoojigaeApplication app = (MoojigaeApplication)getApplication();
         m_httpRequest = app.m_httpRequest;
         m_strUserID = app.m_strUserID;
+        m_strEncodingOption = app.m_strEncodingOption;
 
         m_arrayAttached = new boolean[5];
         m_arrayUri = new Uri[5];
@@ -336,7 +338,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
+        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
 
         if (!result.contains("parent.checkLogin()")) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
