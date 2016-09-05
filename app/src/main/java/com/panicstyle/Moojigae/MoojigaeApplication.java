@@ -17,6 +17,8 @@ public class MoojigaeApplication extends Application {
     public static HttpRequest m_httpRequest;
     public static String m_strEncodingOption;
     public static String m_strUserID;
+    public static String m_strGcmID;
+    public static int m_appVer;
 
     @Override
     public void onCreate() {
