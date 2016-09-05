@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "864781233958",
+    "firebase_url": "https://moojigae-push.firebaseio.com",
+    "project_id": "moojigae-push",
+    "storage_bucket": "moojigae-push.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864781233958:android:4ee9a07363b54b7d",
+        "android_client_info": {
+          "package_name": "com.panicstyle.Moojigae"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "864781233958-309m3bkv8kgldj43i9lh0qpc6sun2rjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAkEO_LzNaLM-yU_7xSD1yhaNi3iCW7Cg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
