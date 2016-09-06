@@ -188,8 +188,11 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (!getData()) {
             // Login
+            MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
+            m_strEncodingOption = m_app.m_strEncodingOption;
+
             Login login = new Login();
-            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_httpRequest, m_strEncodingOption);
+            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
             m_strErrorMsg = login.m_strErrorMsg;
 
             if (m_LoginStatus > 0) {

@@ -178,8 +178,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         isStoragePermissionGranted();
 
+        if (!setInfo.GetUserInfo(MainActivity.this)) {
+            m_app.m_strUserID = "";
+            m_app.m_strUserPW = "";
+            m_app.m_nPushYN = true;
+        } else {
+            m_app.m_strUserID = setInfo.m_userID;
+            m_app.m_strUserPW = setInfo.m_userPW;
+            m_app.m_nPushYN = setInfo.m_pushYN;
+        }
+        System.out.println("UserID = " +  m_app.m_strUserID);
+
 //        FirebaseMessaging.getInstance().subscribeToTopic("news");
-        FirebaseInstanceId.getInstance().getToken();
+        m_app.m_strRegId = FirebaseInstanceId.getInstance().getToken();
+        System.out.println("RegID = " + m_app.m_strRegId);
 
         m_pd = ProgressDialog.show(this, "", "로딩중", true, false);
 
@@ -232,16 +244,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         m_strEncodingOption = m_app.m_strEncodingOption;
 
         // Login
-        Login login = new Login();
-        m_LoginStatus = login.LoginTo(context, m_httpRequest, m_strEncodingOption);
-        m_strErrorMsg = login.m_strErrorMsg;
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        app.m_strUserID = login.m_userID;
 
+        Login login = new Login();
+        m_LoginStatus = login.LoginTo(context, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+        m_strErrorMsg = login.m_strErrorMsg;
 
         if (m_LoginStatus <= 0) {
             return false;
         }
+        login.PushRegister(context, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
 
         if (!getData()) {
             m_LoginStatus = 0;

@@ -28,7 +28,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
+        MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
+        m_app.m_strRegId = refreshedToken;
     }
     // [END refresh_token]
 

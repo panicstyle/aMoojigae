@@ -17,8 +17,9 @@ public class MoojigaeApplication extends Application {
     public static HttpRequest m_httpRequest;
     public static String m_strEncodingOption;
     public static String m_strUserID;
-    public static String m_strGcmID;
-    public static int m_appVer;
+    public static String m_strUserPW;
+    public static String m_strRegId;
+    public static boolean m_nPushYN;
 
     @Override
     public void onCreate() {

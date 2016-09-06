@@ -21,6 +21,8 @@ import java.io.StringReader;
 public class SetInfo {
     public String m_userID;
     public String m_userPW;
+    public String m_regId;
+    public boolean m_pushYN;
 
     public Boolean CheckVersionInfo(Context context) {
         String fileName = "info.json";
@@ -149,11 +151,16 @@ public class SetInfo {
             fileos.close();
             String s = new String(tmp, 0, tmp.length);
             JSONObject obj = new JSONObject(s);
-            m_userID = (String)obj.get("id");
-            m_userPW = (String)obj.get("pw");
+            m_userID = obj.getString("id");
+            m_userPW = obj.getString("pw");
 
+            if (obj.has("push_yn")) {
+                m_pushYN = obj.getBoolean("push_yn");
+            } else {
+                m_pushYN = true;
+            }
         } catch(FileNotFoundException e){
-            Log.e("FileNotFoundException", "can't create FileInputStream");
+            Log.e("FileNotFoundException", "can't find FileInputStream");
             System.out.println(e.getMessage());
             return false;
         } catch (Exception e) {
@@ -172,6 +179,7 @@ public class SetInfo {
         try {
             obj.put("id", m_userID);
             obj.put("pw", m_userPW);
+            obj.put("push_yn", m_pushYN);
             fileos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fileos.write(obj.toString().getBytes());
             fileos.flush();

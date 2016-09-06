@@ -123,9 +123,13 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         if (m_nThreadMode == 1) {         // LoadData
             if (!getData()) {
                 // Login
+
+                MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
+                m_strEncodingOption = m_app.m_strEncodingOption;
+
                 Login login = new Login();
 
-                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_httpRequest, m_strEncodingOption);
+                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
 
                 if (m_nLoginStatus > 0) {
                     if (getData()) {
