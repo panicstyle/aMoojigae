@@ -57,9 +57,42 @@ public class Login {
 		}
 	}
 
-	public int PushRegister(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId, boolean pushYN) {
+	public int PushRegister(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId) {
+
+		if (userID.isEmpty() || regId.isEmpty()) {
+			return 0;
+		}
 
 		String url = GlobalConst.m_strServer + "/push/PushRegister";
+
+		JSONObject obj = new JSONObject();
+
+		String strPushYN = "Y";
+
+		try {
+			obj.put("uuid", regId);
+			obj.put("type", "Android");
+			obj.put("userid", userID);
+			obj.put("push_yn", strPushYN);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		String strBody = obj.toString();
+
+		String result = httpRequest.requestPost(url, strBody, "", encodingOption);
+
+		System.out.println("PushRegister result = " + result);
+		return 1;
+	}
+
+	public int PushRegisterUpdate(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId, boolean pushYN) {
+
+		if (userID.isEmpty() || regId.isEmpty()) {
+			return 0;
+		}
+
+		String url = GlobalConst.m_strServer + "/push/PushRegisterUpdate";
 
 		JSONObject obj = new JSONObject();
 
@@ -84,6 +117,7 @@ public class Login {
 		String result = httpRequest.requestPost(url, strBody, "", encodingOption);
 
 		System.out.println("PushRegister result = " + result);
+
 		return 1;
 	}
 }

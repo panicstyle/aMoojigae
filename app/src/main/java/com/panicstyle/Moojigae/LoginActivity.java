@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 
 //		Toast.makeText(this, "저장합니다", Toast.LENGTH_SHORT).show();
 
-		login.PushRegister(this, httpRequest, strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
+		login.PushRegisterUpdate(this, httpRequest, strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
 	}
 
 	Button.OnClickListener mClickListener = new View.OnClickListener() {
