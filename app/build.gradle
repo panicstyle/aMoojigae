@@ -9,8 +9,8 @@ android {
         applicationId "com.panicstyle.Moojigae"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 36
-        versionName "3.3.1"
+        versionCode 37
+        versionName "3.3.2"
     }
     buildTypes {
         release {
