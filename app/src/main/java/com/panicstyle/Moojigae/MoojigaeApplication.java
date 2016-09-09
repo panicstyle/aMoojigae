@@ -1,5 +1,6 @@
 package com.panicstyle.Moojigae;
 
+import android.app.Activity;
 import android.app.Application;
 
 import org.apache.http.client.CookieStore;
@@ -20,6 +21,8 @@ public class MoojigaeApplication extends Application {
     public static String m_strUserPW;
     public static String m_strRegId;
     public static boolean m_nPushYN;
+
+    public static Activity curActivity;
 
     @Override
     public void onCreate() {

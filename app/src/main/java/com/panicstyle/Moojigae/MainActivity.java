@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
         m_httpRequest = m_app.m_httpRequest;
+        m_app.curActivity = this;
 
 
         SetInfo setInfo = new SetInfo();
