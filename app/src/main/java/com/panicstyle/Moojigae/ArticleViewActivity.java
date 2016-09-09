@@ -786,7 +786,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
 
         m_bDeleteStatus = true;
-        if (result.contains("function redirect")) {
+        if (!result.contains("function redirect")) {
             String strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bDeleteStatus = false;
             m_strErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;

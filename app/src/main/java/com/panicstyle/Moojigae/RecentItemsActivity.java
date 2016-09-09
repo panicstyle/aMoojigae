@@ -155,7 +155,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 intent.putExtra("USERID", (String) item.get("id"));
                 intent.putExtra("LINK", (String) item.get("link"));
                 intent.putExtra("HIT", (String) item.get("hit"));
-                intent.putExtra("BOARDID", m_itemsLink);
+                intent.putExtra("BOARDID", (String) item.get("boardId"));
                 startActivityForResult(intent, REQUEST_VIEW);
             }
         });
@@ -278,6 +278,10 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
             // link
             String strLink = Utils.getMatcherFirstString("(?<=setMainBody\\(\\\'contextTableMainBody\\\',\\\')(.|\\n)*?(?=\\\')", matchstr);
             item.put("link", strLink);
+
+            // boardid : 최신글보기 에서는 여러 board 가 섞여 있어서 link 에서 boardid 를 추출해서 넘겨주어야 함.
+            String strBoardId = Utils.getMatcherFirstString("(?<=boardId=)(.|\\n)*?(?=&)", strLink);
+            item.put("boardId", strBoardId);
 
             // subject
             String strSubject = Utils.getMatcherFirstString("(?<=target=_self class=\\\"list\\\">)(.|\\n)*?(?=</a>)", matchstr);
