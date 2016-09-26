@@ -135,19 +135,26 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         m_arrayItems = new ArrayList<HashMap<String, String>>();
 
         m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-              @Override
-              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  HashMap<String, String> item = new HashMap<String, String>();
-                  String title = null;
-                  String code = null;
-                  item = (HashMap<String, String>) m_arrayItems.get(position);
-                  title = (String) item.get("title");
-                  code = (String) item.get("code");
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HashMap<String, String> item = new HashMap<String, String>();
+                String title = null;
+                String code = null;
+                item = (HashMap<String, String>) m_arrayItems.get(position);
+                title = (String) item.get("title");
+                code = (String) item.get("code");
 
-                  Intent intent = new Intent(MainActivity.this, BoardActivity.class);
-                  intent.putExtra("BOARD_TITLE", title);
-                  intent.putExtra("BOARD_CODE", code);
-                  startActivity(intent);
+                if (code.contains("recent")) {
+                    Intent intent = new Intent(MainActivity.this, RecentItemsActivity.class);
+                    intent.putExtra("ITEMS_TITLE", title);
+                    intent.putExtra("ITEMS_LINK", "main");
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, BoardActivity.class);
+                    intent.putExtra("BOARD_TITLE", title);
+                    intent.putExtra("BOARD_CODE", code);
+                    startActivity(intent);
+                }
               }
           });
 
@@ -261,6 +268,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     protected boolean getData() {
 
         HashMap<String, String> item;
+
+        item = new HashMap<>();
+        item.put("code",  "recent");
+        item.put("title",  "최근글보기");
+        m_arrayItems.add( item );
 
         item = new HashMap<>();
         item.put("code",  "maul");
