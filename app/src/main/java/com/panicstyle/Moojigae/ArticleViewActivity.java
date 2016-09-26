@@ -41,14 +41,11 @@ import java.util.regex.Pattern;
 
 public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 	/** Called when the activity is first created. */
-    private HttpRequest m_httpRequest;
-    private String m_strEncodingOption;
     private ProgressDialog m_pd;
     private List<HashMap<String, Object>> m_arrayItems;
     private int m_nThreadMode = 0;
     private boolean m_bDeleteStatus;
     private String m_strErrorMsg;
-    private String m_strUserID;
 
     static final int REQUEST_WRITE = 1;
     static final int REQUEST_MODIFY = 2;
@@ -82,6 +79,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private String m_strUrl;
 
     private HashMap<String, String> m_mapFileName;
+    private MoojigaeApplication m_app;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,10 +92,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        m_httpRequest = app.m_httpRequest;
-        m_strUserID = app.m_strUserID;
-        m_strEncodingOption = app.m_strEncodingOption;
+        m_app = (MoojigaeApplication)getApplication();
 
         intenter();
 
@@ -121,15 +116,19 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     public void run() {
         if (m_nThreadMode == 1) {         // LoadData
+
+            // Encoding 정보를 읽어온다.
+            if (m_app.m_strEncodingOption == null) {
+                EncodingOption encodingOption = new EncodingOption();
+                m_app.m_strEncodingOption = encodingOption.getEncodingOption(ArticleViewActivity.this, m_app.m_httpRequest);
+            }
+
             if (!getData()) {
                 // Login
 
-                MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
-                m_strEncodingOption = m_app.m_strEncodingOption;
-
                 Login login = new Login();
 
-                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
 
                 if (m_nLoginStatus > 0) {
                     if (getData()) {
@@ -254,7 +253,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                                 request.allowScanningByMediaScanner();
                                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-                                request.addRequestHeader("Cookie", m_httpRequest.m_Cookie);
+                                request.addRequestHeader("Cookie", m_app.m_httpRequest.m_Cookie);
                                 request.addRequestHeader("Referer", GlobalConst.m_strServer + "/" + m_strLink);
                                 request.addRequestHeader("Host", GlobalConst.m_strServerName);
 // You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
@@ -272,7 +271,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             webContent.getSettings().setJavaScriptEnabled(true);
             webContent.setBackgroundColor(0);
-            webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", m_strEncodingOption, "");
+            webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", m_app.m_strEncodingOption, "");
 
             tvProfile = (TextView) findViewById(R.id.profile);
             tvProfile.setText(m_strProfile);
@@ -336,7 +335,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     protected boolean getData() {
         String url = GlobalConst.m_strServer + "/" + m_strLink;
-        String result = m_httpRequest.requestGet(url, "", m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestGet(url, "", m_app.m_strEncodingOption);
 
         if (result.indexOf("onclick=\"userLogin()") > 0) {
             return false;
@@ -648,9 +647,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("searchType", ""));
         nameValuePairs.add(new BasicNameValuePair("tag", "1"));
         nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
-        nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
+        nameValuePairs.add(new BasicNameValuePair("Uid", m_app.m_strUserID));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
         m_bDeleteStatus = true;
         if (!result.contains("parent.checkLogin()")) {
@@ -781,9 +780,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
         nameValuePairs.add(new BasicNameValuePair("searchType", ""));
         nameValuePairs.add(new BasicNameValuePair("tag", "-1"));
-        nameValuePairs.add(new BasicNameValuePair("Uid", m_strUserID));
+        nameValuePairs.add(new BasicNameValuePair("Uid", m_app.m_strUserID));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
         m_bDeleteStatus = true;
         if (!result.contains("function redirect")) {

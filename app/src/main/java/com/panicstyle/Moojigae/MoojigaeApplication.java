@@ -15,12 +15,12 @@ import java.net.CookiePolicy;
 
 public class MoojigaeApplication extends Application {
 
-    public static HttpRequest m_httpRequest;
-    public static String m_strEncodingOption;
-    public static String m_strUserID;
-    public static String m_strUserPW;
-    public static String m_strRegId;
-    public static boolean m_nPushYN;
+    public static HttpRequest m_httpRequest = null;
+    public static String m_strEncodingOption = null;
+    public static String m_strUserID = null;
+    public static String m_strUserPW = null;
+    public static String m_strRegId = null;
+    public static boolean m_nPushYN = false;
 
     public static Activity curActivity;
 

@@ -19,11 +19,15 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 	private SetInfo m_setInfo;
 	private ProgressDialog m_pd;
 	private int m_LoginStatus;
+	MoojigaeApplication m_app;
+
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setTitle("로그인설정...");
+
+		m_app = (MoojigaeApplication)getApplication();
 
 		m_setInfo = new SetInfo();
 		boolean isSuccess = false;
@@ -88,12 +92,8 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 		m_setInfo.m_userPW = textPW.getText().toString();
 		m_setInfo.m_pushYN = switchYN.isChecked();
 
-		MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
-		HttpRequest httpRequest = m_app.m_httpRequest;
-		String strEncodingOption = m_app.m_strEncodingOption;
-
 		Login login = new Login();
-		int loginStatus = login.LoginTo(this, httpRequest, strEncodingOption, m_setInfo.m_userID, m_setInfo.m_userPW);
+		int loginStatus = login.LoginTo(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_setInfo.m_userID, m_setInfo.m_userPW);
 		String strErrorMsg = login.m_strErrorMsg;
 
 		if (loginStatus <= 0) {
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 
 //		Toast.makeText(this, "저장합니다", Toast.LENGTH_SHORT).show();
 
-		login.PushRegisterUpdate(this, httpRequest, strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
+		login.PushRegisterUpdate(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
 	}
 
 	Button.OnClickListener mClickListener = new View.OnClickListener() {

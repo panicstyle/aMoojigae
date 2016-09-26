@@ -28,10 +28,10 @@ import java.util.regex.Pattern;
 public class BoardActivity extends AppCompatActivity implements Runnable {
     private ListView m_listView;
     private ProgressDialog m_pd;
+    private MoojigaeApplication m_app;
+
 	protected String m_boardTitle;
 	protected String m_boardCode;
-    private HttpRequest m_httpRequest;
-    private String m_strEncodingOption;
     List<HashMap<String, Object>> m_arrayItems;
 
     private static class EfficientAdapter extends BaseAdapter {
@@ -133,10 +133,8 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        m_httpRequest = app.m_httpRequest;
-        m_strEncodingOption = app.m_strEncodingOption;
-        
+        m_app = (MoojigaeApplication)getApplication();
+
         intenter();
 
         setTitle(m_boardTitle);
@@ -193,7 +191,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         }
 
         String url = GlobalConst.m_strServer + "/" + boardLink;
-        String result = m_httpRequest.requestPost(url, "", url, m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
         String newString = Utils.getMatcherFirstString("(function getNewIcon\\(menu\\))(.|\\n)*?(return rntVal;)", result);
 
         String[] maul = new String[]{

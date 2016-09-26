@@ -24,8 +24,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommentWriteActivity extends AppCompatActivity implements Runnable {
-    private HttpRequest m_httpRequest;
-    private String m_strEncodingOption;
     private ProgressDialog m_pd;
     private int m_nMode;
     private int m_nPNotice;
@@ -37,13 +35,13 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
     private String m_ErrorMsg;
     private String m_Content;
 
-	public void onCreate(Bundle savedInstanceState) {
+    private MoojigaeApplication m_app;
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_write);
 
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        m_httpRequest = app.m_httpRequest;
-        m_strEncodingOption = app.m_strEncodingOption;
+        m_app = (MoojigaeApplication)getApplication();
 
         intenter();
 
@@ -202,7 +200,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
         nameValuePairs.add(new BasicNameValuePair("tag", "1"));
 
-        String result = m_httpRequest.requestPost(url, nameValuePairs, referer, m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
         if (result.indexOf("function redirect") < 0) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);

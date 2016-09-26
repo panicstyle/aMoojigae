@@ -47,10 +47,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private List<HashMap<String, String>> m_arrayItems;
 
-    private HttpRequest m_httpRequest;
-
     private MoojigaeApplication m_app;
-    private String m_strEncodingOption;
 
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
@@ -159,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         AdRequest adRequest = new AdRequest.Builder().build();
         AdView.loadAd(adRequest);
 
-        MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
-        m_httpRequest = m_app.m_httpRequest;
+        m_app = (MoojigaeApplication)getApplication();
         m_app.curActivity = this;
 
 
@@ -240,20 +236,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private boolean LoadData(Context context) {
 
         // Encoding 정보를 읽어온다.
-        EncodingOption encodingOption = new EncodingOption();
-        m_app.m_strEncodingOption = encodingOption.getEncodingOption(context, m_httpRequest);
-        m_strEncodingOption = m_app.m_strEncodingOption;
+        if (m_app.m_strEncodingOption == null) {
+            EncodingOption encodingOption = new EncodingOption();
+            m_app.m_strEncodingOption = encodingOption.getEncodingOption(context, m_app.m_httpRequest);
+        }
 
         // Login
-
         Login login = new Login();
-        m_LoginStatus = login.LoginTo(context, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+        m_LoginStatus = login.LoginTo(context, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
         m_strErrorMsg = login.m_strErrorMsg;
 
         if (m_LoginStatus <= 0) {
             return false;
         }
-        login.PushRegister(context, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId);
+        login.PushRegister(context, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId);
 
         if (!getData()) {
             m_LoginStatus = 0;

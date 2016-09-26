@@ -38,10 +38,10 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     private AdView m_adView;
     private ProgressDialog m_pd;
     private String m_strErrorMsg;
+    private MoojigaeApplication m_app;
+
     protected String m_itemsTitle;
     protected String m_itemsLink;
-    private HttpRequest m_httpRequest;
-    private String m_strEncodingOption;
     private List<HashMap<String, Object>> m_arrayItems;
     static final int REQUEST_WRITE = 1;
     static final int REQUEST_VIEW = 2;
@@ -164,9 +164,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         AdRequest adRequest = new AdRequest.Builder().build();
         m_adView.loadAd(adRequest);
 
-        MoojigaeApplication app = (MoojigaeApplication)getApplication();
-        m_httpRequest = app.m_httpRequest;
-        m_strEncodingOption = app.m_strEncodingOption;
+        m_app = (MoojigaeApplication)getApplication();
 
         intenter();
 
@@ -188,11 +186,8 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (!getData()) {
             // Login
-            MoojigaeApplication m_app = (MoojigaeApplication)getApplication();
-            m_strEncodingOption = m_app.m_strEncodingOption;
-
             Login login = new Login();
-            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_httpRequest, m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
             m_strErrorMsg = login.m_strErrorMsg;
 
             if (m_LoginStatus > 0) {
@@ -259,7 +254,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         }
         String referer = GlobalConst.m_strServer + "/board-list.do";
 
-        String result = m_httpRequest.requestPost(url, "", referer, m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", referer, m_app.m_strEncodingOption);
 
         HashMap<String, Object> item;
 
