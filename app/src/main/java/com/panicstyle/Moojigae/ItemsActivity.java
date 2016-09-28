@@ -26,6 +26,9 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +116,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				String subject = (String) item.get("subject");
 				String comment = (String) item.get("comment");
 				int isNew = (Integer) item.get("isNew");
-				int isReply = (Integer) item.get("isReply");
+				int boardDep = (Integer) item.get("boardDep");
 				// Bind the data efficiently with the holder.
 				holder.date.setText(date);
 				holder.name.setText(name);
@@ -124,7 +127,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				} else {
 					holder.iconnew.setImageResource(0);
 				}
-				if (isReply == 1) {
+				if (boardDep > 1) {
 					holder.iconreply.setImageResource(R.drawable.i_re);
 				} else {
 					holder.iconreply.setImageResource(0);
@@ -177,7 +180,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					intent.putExtra("DATE", (String) item.get("date"));
 					intent.putExtra("USERNAME", (String) item.get("name"));
 					intent.putExtra("USERID", (String) item.get("id"));
-					intent.putExtra("LINK", (String) item.get("link"));
+					intent.putExtra("boardNo", (String) item.get("boardNo"));
 					intent.putExtra("HIT", (String) item.get("hit"));
 					intent.putExtra("BOARDID", m_itemsLink);
 					startActivityForResult(intent, REQUEST_VIEW);
@@ -275,7 +278,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
     protected boolean getData() {
 		String Page = Integer.toString(m_nPage);
-		String url = GlobalConst.m_strServer + "/board-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
+		String url = GlobalConst.m_strServer + "/board-api-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
 
 		String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
 
@@ -289,52 +292,59 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 		// 각 항목 찾기
 		HashMap<String, Object> item;
 
-		Matcher m = Utils.getMatcher("(<tr height=22 align=center class=fAContent>)(.|\\n)*?(<td colspan=8 height=1 background=./img/skin/default/footer_line.gif></td>)", result);
-		while (m.find()) { // Find each match in turn; String can't do this.
-			item = new HashMap<>();
-			String matchstr = m.group(0);
+		try {
+			JSONObject boardObject = new JSONObject(result);
+			JSONArray arrayItem = boardObject.getJSONArray("item");
+			for(int i = 0; i < arrayItem.length(); i++) {
+				JSONObject jsonItem = arrayItem.getJSONObject(i);
+				item = new HashMap<>();
 
-			// isNew
-			if (matchstr.contains("<img src=./img/skin/default/i_new.gif")) {
-				item.put("isNew", 1);
-			} else {
-				item.put("isNew", 0);
+				// boaardNo
+				String boardNo = jsonItem.getString("boardNo");
+				if (boardNo == null || boardNo.isEmpty()) {
+					continue;
+				}
+				item.put("boardNo", boardNo);
+
+				// 새글 여부
+				String isNew = jsonItem.getString("recentArticle");
+				// isNew
+				if (isNew.equals("Y")) {
+					item.put("isNew", 1);
+				} else {
+					item.put("isNew", 0);
+				}
+
+				// 업데이트 여부
+				String isUpdated = jsonItem.getString("updatedArticle");
+				if (isUpdated.equals("Y")) {
+					item.put("isUpdated", 1);
+				} else {
+					item.put("isUpdated", 0);
+				}
+
+				// 답변글 여부
+				item.put("boardDep", jsonItem.getInt("boardDep"));
+				// boaardId
+				item.put("boardId", jsonItem.getString("boardId"));
+				// subject
+				String boardTitle = jsonItem.getString("boardTitle");
+				boardTitle = Utils.repalceHtmlSymbol(boardTitle);
+				item.put("subject", boardTitle);
+				// writer
+				item.put("name", jsonItem.getString("userNick"));
+				// MemoCount
+				item.put("comment", String.valueOf(jsonItem.getInt("boardMemo_cnt")));
+				// date
+				item.put("date", jsonItem.getString("boardRegister_dt"));
+				// 조회수
+				item.put("hit", String.valueOf(jsonItem.getInt("boardRead_cnt")));
+
+				m_arrayItems.add(item);
 			}
-
-			// isReply  <img src=./img/skin/default/i_re.gif
-			if (matchstr.contains("<img src=./img/skin/default/i_re.gif")) {
-				item.put("isReply", 1);
-			} else {
-				item.put("isReply", 0);
+		} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			// link
-			String strLink = Utils.getMatcherFirstString("(?<=<a href=)(.|\\n)*?(?=[ ])", matchstr);
-			item.put("link", strLink);
-
-			// subject
-			String strSubject = Utils.getMatcherFirstString("(?<=class=\\\"list\\\">)(.|\\n)*?(?=</a>)", matchstr);
-			strSubject = Utils.repalceHtmlSymbol(strSubject);
-			item.put("subject", strSubject);
-
-			// writer
-			String strName = Utils.getMatcherFirstString("(?<=<td id=tBbsCol7 name=tBbsCol7 width=100 align=center>)(.|\\n)*?(?=</td>)", matchstr);
-			strName = Utils.repalceHtmlSymbol(strName);
-			item.put("name", strName);
-
-			// comment
-			String strComment = Utils.getMatcherFirstString("(?<=<font class=fAMemo>)(.|\\n)*?(?=</font>)", matchstr);
-			item.put("comment", strComment);
-
-			// date
-			String strDate = Utils.getMatcherFirstString("(?<=class=mdlgray>)\\d\\d\\d\\d-\\d\\d-\\d\\d(?=</td>)", matchstr);
-			strDate = Utils.repalceTag(strDate);
-			item.put("date", strDate);
-
-			item.put("hit", "");
-
-			m_arrayItems.add( item );
-		}
 
 		return true;
 	}

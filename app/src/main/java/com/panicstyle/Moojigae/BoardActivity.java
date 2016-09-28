@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -190,9 +192,19 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
             boardLink = "SMain.do";
         }
 
-        String url = GlobalConst.m_strServer + "/" + boardLink;
+        String url = GlobalConst.m_strServer + "/board-api-new.do";
         String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
-        String newString = Utils.getMatcherFirstString("(function getNewIcon\\(menu\\))(.|\\n)*?(return rntVal;)", result);
+
+        String newIconString = "";
+        String newMemoString = "";
+
+        try {
+            JSONObject newObject = new JSONObject(result);
+            newIconString = newObject.getString("newIconBoard");
+            newMemoString = newObject.getString("newMemoBoard");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String[] maul = new String[]{
                 "recent", "최근글보기",
@@ -305,10 +317,15 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         for (int i = 0; i < m_arrayItems.size(); i++) {
             item = m_arrayItems.get(i);
             String link = (String)item.get("link");
-            if (newString.indexOf(link) >= 0) {
+            if (newIconString.indexOf(link) >= 0) {
                 item.put("isNew", 1);
             } else {
                 item.put("isNew", 0);
+            }
+            if (newMemoString.indexOf(link) >= 0) {
+                item.put("newMemo", 1);
+            } else {
+                item.put("newMemo", 0);
             }
             m_arrayItems.set(i, item);
         }

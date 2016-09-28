@@ -32,6 +32,8 @@ import com.google.android.gms.ads.AdView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +72,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private String m_strID;
     private String m_strHit;
     private String m_strDate;
-    private String m_strLink;
+    private String m_boardNo;
 
     private String m_strContent;
     private String m_strProfile;
@@ -96,7 +98,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
         intenter();
 
-        m_strBoardNo = Utils.getMatcherFirstString("(?<=boardNo=)(.|\\n)*?(?=&)", m_strLink);
+        m_strBoardNo = m_boardNo;
 
         m_arrayItems = new ArrayList<>();
 
@@ -254,7 +256,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
                                 request.addRequestHeader("Cookie", m_app.m_httpRequest.m_Cookie);
-                                request.addRequestHeader("Referer", GlobalConst.m_strServer + "/" + m_strLink);
+                                request.addRequestHeader("Referer", GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1");
                                 request.addRequestHeader("Host", GlobalConst.m_strServerName);
 // You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
                                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -271,7 +273,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             webContent.getSettings().setJavaScriptEnabled(true);
             webContent.setBackgroundColor(0);
-            webContent.loadDataWithBaseURL("http://www.moojigae.or.kr", m_strHTML, "text/html", m_app.m_strEncodingOption, "");
+            webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", m_app.m_strEncodingOption, "");
 
             tvProfile = (TextView) findViewById(R.id.profile);
             tvProfile.setText(m_strProfile);
@@ -328,152 +330,107 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     	m_strName = extras.getString("USERNAME");
     	m_strID = extras.getString("USERID");
     	m_strDate = extras.getString("DATE");
-    	m_strLink = extras.getString("LINK");
+    	m_boardNo = extras.getString("boardNo");
         m_strHit = extras.getString("HIT");
         m_strBoardID = extras.getString("BOARDID");
     }
 
     protected boolean getData() {
-        String url = GlobalConst.m_strServer + "/" + m_strLink;
+        String url = GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1";
         String result = m_app.m_httpRequest.requestGet(url, "", m_app.m_strEncodingOption);
 
         if (result.indexOf("onclick=\"userLogin()") > 0) {
             return false;
         }
-        m_strSubject = Utils.getMatcherFirstString("(?<=<font class=fTitle><b>제목 : <font size=3>)(.|\\n)*?(?=</font>)", result);
 
-        int match1, match2;
-        String strTitle;
+        try {
+            JSONObject boardObject = new JSONObject(result);
 
-        match1 = result.indexOf("<td class=fSubTitle>");
-        if (match1 < 0) return false;
-        match2 = result.indexOf("<td class=lReadTop></td>", match1);
-        if (match2 < 0) return false;
-        strTitle = result.substring(match1, match2);
+            m_strSubject = boardObject.getString("boardTitle");
+            m_strSubject = Utils.repalceHtmlSymbol(m_strSubject);
 
-        m_strName = Utils.getMatcherFirstString("(?<=textDecoration='none'>)(.|\\n)*?(?=</font>)", strTitle);
-        m_strName = Utils.repalceHtmlSymbol(m_strName);
-        m_strDate = Utils.getMatcherFirstString("\\d\\d\\d\\d-\\d\\d-\\d\\d.\\d\\d:\\d\\d:\\d\\d", strTitle);
-        m_strHit = Utils.getMatcherFirstString("(?<=<font style=font-style:italic>)(.|\\n)*?(?=</font>)", strTitle);
+            m_strName =  boardObject.getString("userNick");
+            m_strDate = boardObject.getString("boardRegister_dt");
+            m_strHit = String.valueOf(boardObject.getInt("boardRead_cnt"));
 
-        match1 = result.indexOf("<!-- 내용 -->");
-        if (match1 < 0) return false;
-        match2 = result.indexOf("<!-- 투표 -->", match1);
-        if (match2 < 0) return false;
-        m_strContent = result.substring(match1, match2);
+            m_strContent = boardObject.getString("boardContent");
+            m_strContent = "<div class='content'>" + m_strContent + "</div>";
 
-//        mContent = mContent.replaceAll("<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=euc-kr\\\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">");
-        m_strContent = m_strContent.replaceAll("<td width=200 align=right class=fMemoSmallGray>", "<!--");
-        m_strContent = m_strContent.replaceAll("<td width=10></td>", "-->");
-        m_strContent = m_strContent.replaceAll("<!-- 메모에 대한 답변 -->", "<!--");
-        m_strContent = m_strContent.replaceAll("<!-- <font class=fMemoSmallGray>", "--><!--");
-        m_strContent = m_strContent.replaceAll("<nobr class=bbscut id=subjectTtl name=subjectTtl>", "");
-        m_strContent = m_strContent.replaceAll("</nobr>", "");
-        m_strContent = "<div class='content'>" + m_strContent + "</div>";
-
-        Matcher m = Utils.getMatcher("(<IMG style=)(.|\\n)*?(>)", m_strContent);
-        while (m.find()) { // Find each match in turn; String can't do this.
-            String matchstr = m.group(0);
-
-            Matcher m2 = Utils.getMatcher("(?<=src=\\\")(.|\\n)*?(?=\\\")", matchstr);
-            if (m2.find()) { // Find each match in turn; String can't do this.
-                String imgSrc = m2.group(0);
-                String img = "<img onload=\"resizeImage2(this)\" onclick=\"image_open('" + imgSrc + "', this);\" style=\"CURSOR:hand;\" src=\"" + imgSrc + "\" >";
-                m_strContent = m_strContent.replaceFirst("(<IMG style=)(.|\\n)*?(>)", img);
-            }
-        }
-
-        match1 = result.indexOf("<!-- 업로드 파일 정보  수정본 Edit By Yang --> ");
-        if (match1 < 0) return false;
-        match2 = result.indexOf("<!-- 평가 -->", match1);
-        if (match2 < 0) return false;
-        String strAttach = result.substring(match1, match2);
-        strAttach = "<div class='attach'><table>" + strAttach + "</table></div>";
-
-        // 첨부파일 목록 만들기. 다운로드할 때 저잫할 파일이름을 획득하기 위한 방법
-        Matcher mAttach = Utils.getMatcher("(<font class=smallgray>)(.|\\n)*?(</font>)", strAttach);
-        m_mapFileName = new HashMap<>();
-        while(mAttach.find()) {
-            String matchstr = mAttach.group(0);
-            String n = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", matchstr);
-            String f = Utils.getMatcherFirstString("(?<=_self\\'\\)>)(.|\\n)*?(?=</font>)", matchstr);
-
-            m_mapFileName.put(n, f);
-        }
-
-        // Attach 가 가로로 표시되는데 이 부분을 세로로 표시되게끔 수정
-        strAttach = strAttach.replaceAll("</font>\n", "</font>\n</td></tr><tr><td align=right class=cContent>");
-
-        match1 = result.indexOf("<!-- 별점수 -->");
-        if (match1 < 0) return false;
-        match2 = result.indexOf("<!-- 관련글 -->", match1);
-        if (match2 < 0) return false;
-        String strProfile_str = result.substring(match1, match2);
-
-        m_strProfile = Utils.getMatcherFirstString("(?<=<td class=cContent>)(.|\\n)*?(?=</td>)", strProfile_str);
-        m_strProfile = m_strProfile.replaceAll("<br><br>", "\n");
-        m_strProfile = m_strProfile.replaceAll("<br>", "\n");
-        m_strProfile = m_strProfile.replaceAll("(<)(.|\\n)*?(>)", "");
-        m_strProfile = m_strProfile.replaceAll("&nbsp;", " ");
-
-        match1 = result.indexOf("<!-- 메모글 반복 -->");
-        if (match1 < 0) return false;
-        match2 = result.indexOf("<!-- 메모 입력 -->", match1);
-        if (match2 < 0) return false;
-        String mComment_str = result.substring(match1, match2);
-
-        String[] items = mComment_str.split("<tr onMouseOver=this.style.backgroundColor='#F0F8FF'; onMouseOut=this.style.backgroundColor=''; class=bMemo>");
-        int i = 0;
-        // 각 항목 찾기
-        HashMap<String, Object> item;
-        for (i = 1; i < items.length; i++) { // Find each match in turn; String can't do this.
-            String matchstr = items[i];
-            item = new HashMap<>();
-
-            // Comment ID
-            String strCommentNo = Utils.getMatcherFirstString("(?<=<span id=memoReply_\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d_)(.|\\n)*?(?=>)", matchstr);
-            item.put("commentno", strCommentNo);
-
-            // is Re
-            if (matchstr.contains("i_memo_reply.gif")) {
-                item.put("isReply", 1);
-            } else {
-                item.put("isReply", 0);
+            int i = 0;
+            JSONArray arrayImage = boardObject.getJSONArray("image");
+            for (i = 0; i < arrayImage.length(); i++) {
+                JSONObject image = arrayImage.getJSONObject(i);
+                m_strContent = m_strContent + image.getString("link");
             }
 
-            // Name
-            String strName = Utils.getMatcherFirstString("(<font onclick=\\\"viewCharacter)(.|\\n)*?(</font>)", matchstr);
-            strName = Utils.repalceTag(strName);
-            item.put("name", strName);
+            String strAttach = "";
+            JSONArray arrayAttach = boardObject.getJSONArray("attachment");
+            for (i = 0; i < arrayAttach.length(); i++) {
+                JSONObject attach = arrayAttach.getJSONObject(i);
+                strAttach = strAttach + attach.getString("link");
+            }
 
-            // Date
-            String strDate = Utils.getMatcherFirstString("(?<=<td width=200 align=right class=fMemoSmallGray>)(.|\\n)*?(?=</td>)", matchstr);
-            strDate = strDate.replaceAll("\n", "");
-            strDate = strDate.replaceAll("\r", "");
-            strDate = strDate.trim();
-            item.put("date", strDate);
+/*
+            // 첨부파일 목록 만들기. 다운로드할 때 저잫할 파일이름을 획득하기 위한 방법
+            Matcher mAttach = Utils.getMatcher("(<font class=smallgray>)(.|\\n)*?(</font>)", strAttach);
+            m_mapFileName = new HashMap<>();
+            while (mAttach.find()) {
+                String matchstr = mAttach.group(0);
+                String n = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", matchstr);
+                String f = Utils.getMatcherFirstString("(?<=_self\\'\\)>)(.|\\n)*?(?=</font>)", matchstr);
 
-            // comment
-            String strComment = Utils.getMatcherFirstString("(<span id=memoReply_)(.|\\n)*?(<!-- 메모에 대한 답변 -->\n)", matchstr);
-            strComment = Utils.repalceHtmlSymbol(strComment);
-            item.put("comment", strComment);
+                m_mapFileName.put(n, f);
+            }
+*/
+            m_strProfile = boardObject.getString("userComment");
+            m_strProfile = m_strProfile.replaceAll("<br><br>", "\n");
+            m_strProfile = m_strProfile.replaceAll("<br>", "\n");
+            m_strProfile = m_strProfile.replaceAll("(<)(.|\\n)*?(>)", "");
+            m_strProfile = m_strProfile.replaceAll("&nbsp;", " ");
 
-            m_arrayItems.add(item);
-        }
+            HashMap<String, Object> item;
+            JSONArray arrayMemo = boardObject.getJSONArray("memo");
+            for (i = 0; i < arrayAttach.length(); i++) {
+                JSONObject memo = arrayAttach.getJSONObject(i);
+                item = new HashMap<>();
 
-        String strHeader = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
-        strHeader += "<html><head>";
-        strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
-        strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
-        strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
-        strHeader += "</head>";
-        String strBottom = "</body></html>";
-        String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
+                // Comment ID
+                item.put("commentno", String.valueOf(memo.getInt("memoSeq")));
+
+                // is Re
+                item.put("isReply", memo.getInt("memoDep"));
+
+                // Name
+                item.put("name", memo.getString("userNick"));
+
+                // Date
+                item.put("date", memo.getString("memoRegister_dt"));
+
+                // comment
+                String strComment = memo.getString("memoContent");
+                strComment = Utils.repalceHtmlSymbol(strComment);
+                item.put("comment", strComment);
+
+                m_arrayItems.add(item);
+            }
+
+            String strHeader = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
+            strHeader += "<html><head>";
+            strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
+            strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
+            strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
+            strHeader += "</head>";
+            String strBottom = "</body></html>";
+            String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
 //        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
-        String strBody = "<body>";
+            String strBody = "<body>";
 
 //    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
-        m_strHTML = strHeader + strResize + strBody + m_strContent + strAttach + strBottom;
+            m_strHTML = strHeader + strResize + strBody + m_strContent + strAttach + strBottom;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return true;
     }
