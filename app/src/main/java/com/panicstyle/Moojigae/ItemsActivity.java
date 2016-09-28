@@ -301,9 +301,6 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
 				// boaardNo
 				String boardNo = jsonItem.getString("boardNo");
-				if (boardNo == null || boardNo.isEmpty()) {
-					continue;
-				}
 				item.put("boardNo", boardNo);
 
 				// 새글 여부

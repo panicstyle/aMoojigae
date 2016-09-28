@@ -26,6 +26,9 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -250,62 +253,72 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
 
         String url = "";
         if (m_itemsLink.equalsIgnoreCase("main")) {
-            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=" + strMaulBoards + strSchool1Boards + strSchoo12Boards;
+            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strMaulBoards + strSchool1Boards + strSchoo12Boards;
         } else if (m_itemsLink.equalsIgnoreCase("maul")) {
-                url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=" + strMaulBoards;
+                url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strMaulBoards;
         } else if (m_itemsLink.equalsIgnoreCase("school1")) {
-            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=" + strSchool1Boards;
+            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strSchool1Boards;
         } else {
-            url = GlobalConst.m_strServer + "/Mboard-recent.do?part=index&rid=50&pid=" + strSchoo12Boards;
+            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strSchoo12Boards;
         }
-        String referer = GlobalConst.m_strServer + "/board-list.do";
+        String referer = GlobalConst.m_strServer + "/board-api-list.do";
 
         String result = m_app.m_httpRequest.requestPost(url, "", referer, m_app.m_strEncodingOption);
 
         HashMap<String, Object> item;
 
-        Matcher m = Utils.getMatcher("(?<=<td width=\\\"2\\\")(.|\\n)*?(?=<th height=\\\"1\\\")", result);
-        while (m.find()) { // Find each match in turn; String can't do this.
-            item = new HashMap<>();
-            String matchstr = m.group(0);
+        try {
+            JSONObject boardObject = new JSONObject(result);
+            JSONArray arrayItem = boardObject.getJSONArray("item");
+            for(int i = 0; i < arrayItem.length(); i++) {
+                JSONObject jsonItem = arrayItem.getJSONObject(i);
+                item = new HashMap<>();
 
-            // isNew
-            if (matchstr.contains("/img/town/icon6.GIF")) {
-                item.put("isNew", 1);
-            } else {
-                item.put("isNew", 0);
+                // 새글 여부
+                String isNew = jsonItem.getString("recentArticle");
+                // isNew
+                if (isNew.equals("Y")) {
+                    item.put("isNew", 1);
+                } else {
+                    item.put("isNew", 0);
+                }
+
+                // 업데이트 여부
+                String isUpdated = jsonItem.getString("updatedArticle");
+                if (isUpdated.equals("Y")) {
+                    item.put("isUpdated", 1);
+                } else {
+                    item.put("isUpdated", 0);
+                }
+
+                // boardid : 최신글보기 에서는 여러 board 가 섞여 있어서 link 에서 boardid 를 추출해서 넘겨주어야 함.
+                String strBoardId = jsonItem.getString("boardId");
+                item.put("boardId", strBoardId);
+
+                // subject
+                String strSubject = jsonItem.getString("boardTitle");
+                strSubject = Utils.repalceHtmlSymbol(strSubject);
+                item.put("subject", strSubject);
+
+                // writer
+                String strName = jsonItem.getString("userNick");
+                item.put("name", strName);
+
+                // comment
+                String strComment = String.valueOf(jsonItem.getInt("boardMemo_cnt"));
+                item.put("comment", strComment);
+
+                // date
+                String strDate = jsonItem.getString("boardRegister_dt");
+                item.put("date", strDate);
+
+                item.put("hit", String.valueOf(jsonItem.getInt("boardRead_cnt")));
+                item.put("isReply", 0);
+
+                m_arrayItems.add( item );
             }
-
-            // link
-            String strLink = Utils.getMatcherFirstString("(?<=setMainBody\\(\\\'contextTableMainBody\\\',\\\')(.|\\n)*?(?=\\\')", matchstr);
-            item.put("link", strLink);
-
-            // boardid : 최신글보기 에서는 여러 board 가 섞여 있어서 link 에서 boardid 를 추출해서 넘겨주어야 함.
-            String strBoardId = Utils.getMatcherFirstString("(?<=boardId=)(.|\\n)*?(?=&)", strLink);
-            item.put("boardId", strBoardId);
-
-            // subject
-            String strSubject = Utils.getMatcherFirstString("(?<=target=_self class=\\\"list\\\">)(.|\\n)*?(?=</a>)", matchstr);
-            strSubject = Utils.repalceHtmlSymbol(strSubject);
-            item.put("subject", strSubject);
-
-            // writer
-            String strName = Utils.getMatcherFirstString("(?<=<font style=font-family:Dotum;font-size:8pt;color:royalblue>\\[)(.|\\n)*?(?=\\]</font>)", matchstr);
-            item.put("name", strName);
-
-            // comment
-            String strComment = Utils.getMatcherFirstString("(?<=<span class=\\\"board-comment\\\">\\()(.|\\n)*?(?=\\)</spen>)", matchstr);
-            item.put("comment", strComment);
-
-            // date
-            String strDate = Utils.getMatcherFirstString("(?<=<span class=\\\"board-inlet\\\">)\\d\\d\\d\\d-\\d\\d-\\d\\d(?=</span>)", matchstr);
-            strDate = Utils.repalceTag(strDate);
-            item.put("date", strDate);
-
-            item.put("hit", "");
-            item.put("isReply", 0);
-
-            m_arrayItems.add( item );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return true;

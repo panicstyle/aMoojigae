@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
@@ -82,6 +83,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     private HashMap<String, String> m_mapFileName;
     private MoojigaeApplication m_app;
+
+    WebView webContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -213,7 +216,6 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             TextView tvName;
             TextView tvDate;
             TextView tvHit;
-            WebView webContent;
             TextView tvProfile;
             TextView tvCommentCnt;
             ScrollView scrollView;
@@ -233,44 +235,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             webContent = (WebView) findViewById(R.id.webView);
 
-            webContent.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading (WebView view, String url) {
-                    boolean shouldOverride = false;
-                    // We only want to handle requests for mp3 files, everything else the webview
-                    // can handle normally
-                    if (url.indexOf("downManager?") >= 0) {
-                        m_strUrl = url;
-                        AlertDialog.Builder notice = null;
-                        notice = new AlertDialog.Builder( ArticleViewActivity.this );
-//                        notice.setTitle( "" );
-                        notice.setMessage("첨부파일을 다운로드 하시겠습니까?");
-                        notice.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                String nKey = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", m_strUrl);
-                                String fileName = m_mapFileName.get(nKey);
-                                DownloadManager.Request request = new DownloadManager.Request(
-                                        Uri.parse(m_strUrl));
-                                request.allowScanningByMediaScanner();
-                                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-                                request.addRequestHeader("Cookie", m_app.m_httpRequest.m_Cookie);
-                                request.addRequestHeader("Referer", GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1");
-                                request.addRequestHeader("Host", GlobalConst.m_strServerName);
-// You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
-                                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                                dm.enqueue(request);
-                            }
-                        });
-                        notice.setNegativeButton(android.R.string.cancel, null);
-                        notice.show();
+            webContent.setWebViewClient(new myWebClient());
 
-                    }
-                    return shouldOverride;
-                }
-            });
-
+            webContent.addJavascriptInterface(this, "MyApp");
             webContent.getSettings().setJavaScriptEnabled(true);
             webContent.setBackgroundColor(0);
             webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", m_app.m_strEncodingOption, "");
@@ -322,6 +289,59 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 		}
     }
 
+    public class myWebClient extends WebViewClient {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            webContent.loadUrl("javascript:MyApp.resize(document.body.getBoundingClientRect().height)");
+            super.onPageFinished(view, url);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading (WebView view, String url) {
+            boolean shouldOverride = false;
+            // We only want to handle requests for mp3 files, everything else the webview
+            // can handle normally
+            if (url.indexOf("downManager?") >= 0) {
+                m_strUrl = url;
+                AlertDialog.Builder notice = null;
+                notice = new AlertDialog.Builder( ArticleViewActivity.this );
+//                        notice.setTitle( "" );
+                notice.setMessage("첨부파일을 다운로드 하시겠습니까?");
+                notice.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        String nKey = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", m_strUrl);
+                        String fileName = m_mapFileName.get(nKey);
+                        DownloadManager.Request request = new DownloadManager.Request(
+                                Uri.parse(m_strUrl));
+                        request.allowScanningByMediaScanner();
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                        request.addRequestHeader("Cookie", m_app.m_httpRequest.m_Cookie);
+                        request.addRequestHeader("Referer", GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1");
+                        request.addRequestHeader("Host", GlobalConst.m_strServerName);
+// You can change the name of the downloads, by changing "download" to everything you want, such as the mWebview title...
+                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        dm.enqueue(request);
+                    }
+                });
+                notice.setNegativeButton(android.R.string.cancel, null);
+                notice.show();
+
+            }
+            return shouldOverride;
+        }
+    }
+
+    @JavascriptInterface
+    public void resize(final float height) {
+        ArticleViewActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                webContent.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+            }
+        });
+    }
     public void intenter() {
 //    	Intent intent = getIntent();  // 값을 가져오는 인텐트 객체생성
     	Bundle extras = getIntent().getExtras();
@@ -365,23 +385,16 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             String strAttach = "";
             JSONArray arrayAttach = boardObject.getJSONArray("attachment");
+            m_mapFileName = new HashMap<>();
             for (i = 0; i < arrayAttach.length(); i++) {
                 JSONObject attach = arrayAttach.getJSONObject(i);
                 strAttach = strAttach + attach.getString("link");
-            }
 
-/*
-            // 첨부파일 목록 만들기. 다운로드할 때 저잫할 파일이름을 획득하기 위한 방법
-            Matcher mAttach = Utils.getMatcher("(<font class=smallgray>)(.|\\n)*?(</font>)", strAttach);
-            m_mapFileName = new HashMap<>();
-            while (mAttach.find()) {
-                String matchstr = mAttach.group(0);
-                String n = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", matchstr);
-                String f = Utils.getMatcherFirstString("(?<=_self\\'\\)>)(.|\\n)*?(?=</font>)", matchstr);
-
+                String n = String.valueOf(attach.getInt("fileSeq"));
+                String f = attach.getString("fileName");
                 m_mapFileName.put(n, f);
             }
-*/
+
             m_strProfile = boardObject.getString("userComment");
             m_strProfile = m_strProfile.replaceAll("<br><br>", "\n");
             m_strProfile = m_strProfile.replaceAll("<br>", "\n");
@@ -391,7 +404,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             HashMap<String, Object> item;
             JSONArray arrayMemo = boardObject.getJSONArray("memo");
             for (i = 0; i < arrayAttach.length(); i++) {
-                JSONObject memo = arrayAttach.getJSONObject(i);
+                JSONObject memo = arrayMemo.getJSONObject(i);
                 item = new HashMap<>();
 
                 // Comment ID
@@ -419,14 +432,15 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">";
             strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
             strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
-            strHeader += "</head>";
+            strHeader += "<script>function imageResize() { var boardWidth = 300; if (document.cashcow && document.cashcow.boardWidth) boardWidth = document.cashcow.boardWidth.value - 70; var obj = document.getElementsByName('unicornimage'); for (var i = 0; i < obj.length; i++) { if (obj[i].width > boardWidth) obj[i].width = boardWidth; } }</script>";
+            strHeader += "<script>window.onload=imageResize;</script></head>";
             String strBottom = "</body></html>";
-            String strResize = "<script>function resizeImage2(mm){var width = eval(mm.width);var height = eval(mm.height);if( width > 300 ){var p_height = 300 / width;var new_height = height * p_height;eval(mm.width = 300);eval(mm.height = new_height);}} function image_open(src, mm) { var width = eval(mm.width); window.open(src,'image');}</script>";
+
 //        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
             String strBody = "<body>";
 
 //    	htmlDoc = strHeader + strTitle + strResize + strBody + mContent + strAttach + strProfile + mComment + strBottom;
-            m_strHTML = strHeader + strResize + strBody + m_strContent + strAttach + strBottom;
+            m_strHTML = strHeader + strBody + m_strContent + strAttach + strBottom;
 
         } catch (Exception e) {
             e.printStackTrace();
