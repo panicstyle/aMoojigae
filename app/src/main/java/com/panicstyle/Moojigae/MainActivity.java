@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
             notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("1.새글이 등록되면 알림메시지가 전송됩니다.\n2.로그인설정에서 알림메시지 받기를 설정할 수 있습니다.");
+            notice.setMessage("1.전체 최신글보기 기능이 추가되었습니다.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
 

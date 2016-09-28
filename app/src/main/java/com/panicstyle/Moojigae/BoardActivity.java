@@ -217,7 +217,6 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                 "mvPoomASeeBized", " > 거래했어요",
                 "mvPoomASeeVacation", " > 방학중품나누기",
                 "-", "교육사업부",
-                "mvEdu", " > 교육사업부",
                 "mvEduLove", " > 교육사랑방",
                 "mvEduVillageSchool", " > 마을학교",
                 "mvEduDream", " > 또하나의꿈",
