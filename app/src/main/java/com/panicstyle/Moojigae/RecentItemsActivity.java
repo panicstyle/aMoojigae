@@ -156,7 +156,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 intent.putExtra("DATE", (String) item.get("date"));
                 intent.putExtra("USERNAME", (String) item.get("name"));
                 intent.putExtra("USERID", (String) item.get("id"));
-                intent.putExtra("LINK", (String) item.get("link"));
+                intent.putExtra("boardNo", (String) item.get("boardNo"));
                 intent.putExtra("HIT", (String) item.get("hit"));
                 intent.putExtra("BOARDID", (String) item.get("boardId"));
                 startActivityForResult(intent, REQUEST_VIEW);
@@ -291,27 +291,26 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                     item.put("isUpdated", 0);
                 }
 
-                // boardid : 최신글보기 에서는 여러 board 가 섞여 있어서 link 에서 boardid 를 추출해서 넘겨주어야 함.
+                // boardId.
                 String strBoardId = jsonItem.getString("boardId");
                 item.put("boardId", strBoardId);
-
+                // boardNo
+                String strBoardNo = jsonItem.getString("boardNo");
+                item.put("boardNo", strBoardNo);
                 // subject
                 String strSubject = jsonItem.getString("boardTitle");
                 strSubject = Utils.repalceHtmlSymbol(strSubject);
                 item.put("subject", strSubject);
-
                 // writer
                 String strName = jsonItem.getString("userNick");
                 item.put("name", strName);
-
                 // comment
                 String strComment = String.valueOf(jsonItem.getInt("boardMemo_cnt"));
                 item.put("comment", strComment);
-
                 // date
                 String strDate = jsonItem.getString("boardRegister_dt");
                 item.put("date", strDate);
-
+                // 조회수
                 item.put("hit", String.valueOf(jsonItem.getInt("boardRead_cnt")));
                 item.put("isReply", 0);
 

@@ -265,7 +265,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view;
 
-                if (isReply == 0) {
+                if (isReply == 1) {
                     view = inflater.inflate(R.layout.list_article_comment, null);
                 } else {
                     view = inflater.inflate(R.layout.list_article_recomment, null);
@@ -338,7 +338,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         ArticleViewActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webContent.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+                webContent.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels - 120, (int) (height * getResources().getDisplayMetrics().density)));
             }
         });
     }
@@ -385,14 +385,20 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             String strAttach = "";
             JSONArray arrayAttach = boardObject.getJSONArray("attachment");
+            if (arrayAttach.length() > 0) {
+                strAttach = "<table boader=1><tr><th>첨부파일</th></tr>";
+            }
             m_mapFileName = new HashMap<>();
             for (i = 0; i < arrayAttach.length(); i++) {
                 JSONObject attach = arrayAttach.getJSONObject(i);
-                strAttach = strAttach + attach.getString("link");
+                strAttach = strAttach + "<tr><td>" + attach.getString("link") + "</td></tr>";
 
                 String n = String.valueOf(attach.getInt("fileSeq"));
                 String f = attach.getString("fileName");
                 m_mapFileName.put(n, f);
+            }
+            if (arrayAttach.length() > 0) {
+                strAttach = strAttach + "</tr></table>";
             }
 
             m_strProfile = boardObject.getString("userComment");
@@ -403,7 +409,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             HashMap<String, Object> item;
             JSONArray arrayMemo = boardObject.getJSONArray("memo");
-            for (i = 0; i < arrayAttach.length(); i++) {
+            for (i = 0; i < arrayMemo.length(); i++) {
                 JSONObject memo = arrayMemo.getJSONObject(i);
                 item = new HashMap<>();
 
@@ -434,7 +440,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
             strHeader += "<script>function imageResize() { var boardWidth = 300; if (document.cashcow && document.cashcow.boardWidth) boardWidth = document.cashcow.boardWidth.value - 70; var obj = document.getElementsByName('unicornimage'); for (var i = 0; i < obj.length; i++) { if (obj[i].width > boardWidth) obj[i].width = boardWidth; } }</script>";
             strHeader += "<script>window.onload=imageResize;</script></head>";
-            String strBottom = "</body></html>";
+            String strBottom = "<br /><br /></body></html>";
 
 //        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";
             String strBody = "<body>";
