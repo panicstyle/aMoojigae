@@ -259,13 +259,13 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 String date = (String)item.get("date");
                 String name = (String)item.get("name");
                 String subject = (String)item.get("comment");
-                int isReply = (Integer)item.get("isReply");
+                String isReply = (String)item.get("isReply");
                 String commentNo = (String)item.get("commentno");
 
                 LayoutInflater inflater =  (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view;
 
-                if (isReply == 1) {
+                if (isReply.equals("1")) {
                     view = inflater.inflate(R.layout.list_article_comment, null);
                 } else {
                     view = inflater.inflate(R.layout.list_article_recomment, null);
@@ -371,7 +371,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             m_strName =  boardObject.getString("userNick");
             m_strDate = boardObject.getString("boardRegister_dt");
-            m_strHit = String.valueOf(boardObject.getInt("boardRead_cnt"));
+            m_strHit = boardObject.getString("boardRead_cnt");
 
             m_strContent = boardObject.getString("boardContent");
             m_strContent = "<div class='content'>" + m_strContent + "</div>";
@@ -393,7 +393,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 JSONObject attach = arrayAttach.getJSONObject(i);
                 strAttach = strAttach + "<tr><td>" + attach.getString("link") + "</td></tr>";
 
-                String n = String.valueOf(attach.getInt("fileSeq"));
+                String n = attach.getString("fileSeq");
                 String f = attach.getString("fileName");
                 m_mapFileName.put(n, f);
             }
@@ -414,10 +414,10 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 item = new HashMap<>();
 
                 // Comment ID
-                item.put("commentno", String.valueOf(memo.getInt("memoSeq")));
+                item.put("commentno", memo.getString("memoSeq"));
 
                 // is Re
-                item.put("isReply", memo.getInt("memoDep"));
+                item.put("isReply", memo.getString("memoDep"));
 
                 // Name
                 item.put("name", memo.getString("userNick"));

@@ -116,7 +116,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				String subject = (String) item.get("subject");
 				String comment = (String) item.get("comment");
 				int isNew = (Integer) item.get("isNew");
-				int boardDep = (Integer) item.get("boardDep");
+				String boardDep = (String)item.get("boardDep");
 				// Bind the data efficiently with the holder.
 				holder.date.setText(date);
 				holder.name.setText(name);
@@ -127,10 +127,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				} else {
 					holder.iconnew.setImageResource(0);
 				}
-				if (boardDep > 1) {
-					holder.iconreply.setImageResource(R.drawable.i_re);
-				} else {
+				if (boardDep.equals("1")) {
 					holder.iconreply.setImageResource(0);
+				} else {
+					holder.iconreply.setImageResource(R.drawable.i_re);
 				}
 				if (comment.length() > 0) {
 					holder.comment.setBackgroundResource(R.drawable.layout_circle);
@@ -299,6 +299,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				JSONObject jsonItem = arrayItem.getJSONObject(i);
 				item = new HashMap<>();
 
+				// boaardRow
+				String boardRow = jsonItem.getString("boardRow");
+				item.put("boardRow", boardRow);
+
 				// boaardNo
 				String boardNo = jsonItem.getString("boardNo");
 				item.put("boardNo", boardNo);
@@ -321,7 +325,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				}
 
 				// 답변글 여부
-				item.put("boardDep", jsonItem.getInt("boardDep"));
+				item.put("boardDep", jsonItem.getString("boardDep"));
 				// boaardId
 				item.put("boardId", jsonItem.getString("boardId"));
 				// subject
@@ -331,11 +335,11 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				// writer
 				item.put("name", jsonItem.getString("userNick"));
 				// MemoCount
-				item.put("comment", String.valueOf(jsonItem.getInt("boardMemo_cnt")));
+				item.put("comment", jsonItem.getString("boardMemo_cnt"));
 				// date
 				item.put("date", jsonItem.getString("boardRegister_dt"));
 				// 조회수
-				item.put("hit", String.valueOf(jsonItem.getInt("boardRead_cnt")));
+				item.put("hit", jsonItem.getString("boardRead_cnt"));
 
 				m_arrayItems.add(item);
 			}

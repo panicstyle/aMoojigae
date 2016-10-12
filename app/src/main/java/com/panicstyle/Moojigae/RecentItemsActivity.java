@@ -305,13 +305,13 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 String strName = jsonItem.getString("userNick");
                 item.put("name", strName);
                 // comment
-                String strComment = String.valueOf(jsonItem.getInt("boardMemo_cnt"));
+                String strComment = jsonItem.getString("boardMemo_cnt");
                 item.put("comment", strComment);
                 // date
                 String strDate = jsonItem.getString("boardRegister_dt");
                 item.put("date", strDate);
                 // 조회수
-                item.put("hit", String.valueOf(jsonItem.getInt("boardRead_cnt")));
+                item.put("hit", jsonItem.getString("boardRead_cnt"));
                 item.put("isReply", 0);
 
                 m_arrayItems.add( item );
