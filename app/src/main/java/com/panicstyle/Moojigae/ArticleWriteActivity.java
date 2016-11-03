@@ -223,8 +223,8 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                 m_ErrorMsg = Utils.getMatcherFirstString("(?<=var message = ')(.|\\n)*?(?=';)", result);
                 return false;
             }
-            m_ErrorMsg = "첨부파일 정보를 오류";
-            Matcher m = Utils.getMatcher("(?<=fileNameArray[.] = ')(.|\\n)*?(?=';)", result);
+            m_ErrorMsg = "첨부파일 정보를 찾을 수 없습니다.";
+            Matcher m = Utils.getMatcher("(?<=fileNameArray\\[.\\] = ')(.|\\n)*?(?=';)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileNameArray[i] = m.group(0);
@@ -232,7 +232,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     return false;
                 }
             }
-            m = Utils.getMatcher("(?<=fileMaskArray[.] = ')(.|\\n)*?(?=';)", result);
+            m = Utils.getMatcher("(?<=fileMaskArray\\[.\\] = ')(.|\\n)*?(?=';)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileMaskArray[i] = m.group(0);
@@ -240,7 +240,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     return false;
                 }
             }
-            m = Utils.getMatcher("(?<=fileSizeArray[.] = )(.|\\n)*?(?=;)", result);
+            m = Utils.getMatcher("(?<=fileSizeArray\\[.\\] = )(.|\\n)*?(?=;)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileSizeArray[i] = m.group(0);
@@ -312,17 +312,26 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         } else {
             String s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileNameArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileNameArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileName", s));
             s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileMaskArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileMaskArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileMask", s));
             s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileSizeArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileSizeArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileSize", s));
         }

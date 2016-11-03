@@ -143,10 +143,10 @@ public class HttpRequest {
 
 			if (entity != null) {
 				httppost.setEntity(entity);
-				contentLength = entity.getContentLength();
+//				contentLength = entity.getContentLength();
 			}
 			httppost.setHeader("Content-type", "multipart/form-data; boundary=" + boundary);
-			httppost.setHeader("Content-Length", String.valueOf(contentLength));
+//			httppost.setHeader("Content-Length", String.valueOf(contentLength));
 
 			HttpResponse response = httpClient.execute(httppost, httpContext);
 			HttpEntity entityResponse = response.getEntity();
