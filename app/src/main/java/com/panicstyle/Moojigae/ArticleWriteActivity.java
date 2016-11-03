@@ -170,10 +170,10 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         String referer = GlobalConst.m_strServer + "/board-edit.do";
 
         String boundary = "-------------" + System.currentTimeMillis();
-        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.DEFAULT_PROTOCOL_CHARSET);
+        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, m_app.m_strEncodingOption);
 //        ByteArrayBody bab = new ByteArrayBody(imageBytes, "pic.png");
 //        StringBody sbOwner = new StringBody(StaticData.loggedUserId, ContentType.TEXT_PLAIN);
-        StringBody sbUserEmail = new StringBody("panicstyle@gmail.com", contentType);
+        StringBody sbUserEmail = new StringBody("", contentType);
         StringBody sbUserHomepage = new StringBody("", contentType);
         StringBody sbBoardTitle = new StringBody(m_Title, contentType);
         StringBody sbWhatMode = new StringBody("on", contentType);
@@ -188,7 +188,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         String strFileMaskArray[] = new String[m_nAttached];
         String strFileSizeArray[] = new String[m_nAttached];
         try {
-            Charset chars = Charset.forName("EUC-KR");
+            Charset chars = Charset.forName(m_app.m_strEncodingOption);
             MultipartEntityBuilder builder;
             builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -211,20 +211,20 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     InputStreamBody inputStreamBody = new InputStreamBody(imageStream, fileName);
 
                     String strFileName = "file" + (i + 1);
-                    builder.addPart(strFileName, inputStreamBody);
+                    builder.addPart(fileName, inputStreamBody);
                 }
             }
             builder.addPart("subId", sbSubId);
             builder.addPart("mode", sbMode);
 
             entity = builder.build();
-            String result = m_app.m_httpRequest.requestPostWithAttach(url, entity, referer, "euc-kr", boundary);
+            String result = m_app.m_httpRequest.requestPostWithAttach(url, entity, referer, m_app.m_strEncodingOption, boundary);
             if (!result.contains("fileNameArray[0] =")) {
                 m_ErrorMsg = Utils.getMatcherFirstString("(?<=var message = ')(.|\\n)*?(?=';)", result);
                 return false;
             }
-            m_ErrorMsg = "첨부파일 정보를 오류";
-            Matcher m = Utils.getMatcher("(?<=fileNameArray[.] = ')(.|\\n)*?(?=';)", result);
+            m_ErrorMsg = "첨부파일 정보를 찾을 수 없습니다.";
+            Matcher m = Utils.getMatcher("(?<=fileNameArray\\[.\\] = ')(.|\\n)*?(?=';)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileNameArray[i] = m.group(0);
@@ -232,7 +232,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     return false;
                 }
             }
-            m = Utils.getMatcher("(?<=fileMaskArray[.] = ')(.|\\n)*?(?=';)", result);
+            m = Utils.getMatcher("(?<=fileMaskArray\\[.\\] = ')(.|\\n)*?(?=';)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileMaskArray[i] = m.group(0);
@@ -240,7 +240,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
                     return false;
                 }
             }
-            m = Utils.getMatcher("(?<=fileSizeArray[.] = )(.|\\n)*?(?=;)", result);
+            m = Utils.getMatcher("(?<=fileSizeArray\\[.\\] = )(.|\\n)*?(?=;)", result);
             for (int i = 0; i < m_nAttached; i++) {
                 if (m.find()) {
                     strFileSizeArray[i] = m.group(0);
@@ -312,17 +312,26 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         } else {
             String s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileNameArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileNameArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileName", s));
             s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileMaskArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileMaskArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileMask", s));
             s = "";
             for (int i = 0; i < m_nAttached; i++) {
-                s = s + strFileSizeArray[i] + "%7C";
+                if (i > 0) {
+                    s = s + "|";
+                }
+                s = s + strFileSizeArray[i];
             }
             nameValuePairs.add(new BasicNameValuePair("fileSize", s));
         }
@@ -452,7 +461,6 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     }
 
     public void clickAddImage(View v) {
-/*
 		m_nSelected = -1;
 		if (m_nAttached < 5) {
 			for (int i = 0; i < 5; i++) {
@@ -478,7 +486,6 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
             });
             builder.show();
 		}
-*/
     }
 
     @Override

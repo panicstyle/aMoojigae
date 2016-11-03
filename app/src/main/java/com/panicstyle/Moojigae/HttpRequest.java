@@ -134,6 +134,7 @@ public class HttpRequest {
 			HttpParams params = httpClient.getParams();
 			HttpConnectionParams.setConnectionTimeout(params, 30000);
 			HttpConnectionParams.setSoTimeout(params, 30000);
+			long contentLength = 0;
 
 			HttpPost httppost = new HttpPost(url);
 			if (referer.length() > 0) {
@@ -142,8 +143,10 @@ public class HttpRequest {
 
 			if (entity != null) {
 				httppost.setEntity(entity);
+//				contentLength = entity.getContentLength();
 			}
 			httppost.setHeader("Content-type", "multipart/form-data; boundary=" + boundary);
+//			httppost.setHeader("Content-Length", String.valueOf(contentLength));
 
 			HttpResponse response = httpClient.execute(httppost, httpContext);
 			HttpEntity entityResponse = response.getEntity();
