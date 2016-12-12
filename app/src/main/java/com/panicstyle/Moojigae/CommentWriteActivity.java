@@ -202,7 +202,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
 
         String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
-        if (result.indexOf("function redirect") < 0) {
+        if (result.contains("<b>시스템 메세지입니다</b>")) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bSaveStatus = false;
             return false;

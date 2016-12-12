@@ -639,7 +639,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
         m_bDeleteStatus = true;
-        if (!result.contains("parent.checkLogin()")) {
+        if (result.contains("<b>시스템 메세지입니다</b>")) {
             String strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bDeleteStatus = false;
             m_strErrorMsg = "글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;
@@ -772,7 +772,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
         m_bDeleteStatus = true;
-        if (!result.contains("function redirect")) {
+        if (result.contains("<b>시스템 메세지입니다</b>")) {
             String strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bDeleteStatus = false;
             m_strErrorMsg = "댓글 삭제중 오류가 발생했습니다. \n" + strErrorMsg;

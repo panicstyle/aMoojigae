@@ -45,15 +45,20 @@ public class Login {
 		nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
 		nameValuePairs.add(new BasicNameValuePair("command", "LOGIN"));
 
-		String result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
+		String result = httpRequest.requestPost(logoutURL, nameValuePairs, referer, encodingOption);
+
+		result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
 
 		if (result.contains("<script language=javascript>moveTop()</script>")) {
 			System.out.println("Login Success");
 			return 1;
 		} else {
-			String errMsg = "Login Fail";
-			System.out.println(errMsg);
-			return 0;
+			if (result.contains("<b>시스템 메세지입니다</b>")) {
+				m_strErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
+				return 0;
+			} else {
+				return 1;
+			}
 		}
 	}
 

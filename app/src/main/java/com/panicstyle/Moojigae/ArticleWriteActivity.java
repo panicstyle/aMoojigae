@@ -345,26 +345,12 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
 
         String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
 
-        if (!result.contains("parent.checkLogin()")) {
+        if (result.contains("<b>시스템 메세지입니다</b>")) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);
             m_bSaveStatus = false;
             return false;
         }
-/*
-        url = GlobalConst.m_strServer + "/jsp/Ajax/Login.jsp";
-        referer = GlobalConst.m_strServer + "/board-save.do";
 
-        nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("TASK", "LOGIN_HTML"));
-        nameValuePairs.add(new BasicNameValuePair("_", ""));
-
-        result = m_httpRequest.requestPost(url, nameValuePairs, referer, "euc-kr");
-
-        if (!result.contains("parent.setMainBodyLogin")) {
-            m_bSaveStatus = false;
-            return false;
-        }
-*/
         m_bSaveStatus = true;
         return true;
     }
