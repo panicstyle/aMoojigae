@@ -18,8 +18,9 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 	static final int SETUP_CODE = 1234;
 	private SetInfo m_setInfo;
 	private ProgressDialog m_pd;
-	private int m_LoginStatus;
+	private int m_loginStatus;
 	MoojigaeApplication m_app;
+	private String m_strErrorMsg;
 
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,13 +74,20 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 	};
 
 	public void displayData() {
-		if (m_LoginStatus == 1) {
+		if (m_loginStatus == 1) {
 			if (getParent() == null) {
 				setResult(Activity.RESULT_OK);
 			} else {
 				getParent().setResult(Activity.RESULT_OK);
 			}
 			finish();
+		} else {
+			AlertDialog.Builder ab = null;
+			ab = new AlertDialog.Builder( this );
+			ab.setMessage( "로그인을 실패했습니다.\n오류내용 : " + m_strErrorMsg + "\n아이디와 비밀번호를 다시 한번 확인하세요.");
+			ab.setPositiveButton(android.R.string.ok, null);
+			ab.setTitle("로그인 오류");
+			ab.show();
 		}
 	}
 
@@ -93,22 +101,16 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 		m_setInfo.m_pushYN = switchYN.isChecked();
 
 		Login login = new Login();
-		int loginStatus = login.LoginTo(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_setInfo.m_userID, m_setInfo.m_userPW);
-		String strErrorMsg = login.m_strErrorMsg;
 
-		if (loginStatus <= 0) {
-			AlertDialog.Builder ab = null;
-			ab = new AlertDialog.Builder( this );
-			ab.setMessage( "로그인을 실패했습니다.\n오류내용 : " + strErrorMsg + "\n아이디와 비밀번호를 다시 한번 확인하세요.");
-			ab.setPositiveButton(android.R.string.ok, null);
-			ab.setTitle("로그인 오류");
-			ab.show();
+		login.Logout(this, m_app.m_httpRequest, m_app.m_strEncodingOption);
 
+		m_loginStatus = login.LoginTo(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_setInfo.m_userID, m_setInfo.m_userPW);
+		m_strErrorMsg = login.m_strErrorMsg;
+
+		if (m_loginStatus <= 0) {
 			return ;
 		}
 		m_setInfo.SaveUserInfo(this);
-
-		m_LoginStatus = 1;
 
 		m_app.m_strUserID = m_setInfo.m_userID;
 		m_app.m_strUserPW = m_setInfo.m_userPW;

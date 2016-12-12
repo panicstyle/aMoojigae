@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
             notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("1.사진첨부기능이 추가되었습니다.");
+            notice.setMessage("1.로그인 및 글저장시 발행하던 오류가 수정되었습니다.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
 

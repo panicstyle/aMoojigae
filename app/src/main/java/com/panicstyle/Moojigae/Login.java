@@ -45,9 +45,7 @@ public class Login {
 		nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
 		nameValuePairs.add(new BasicNameValuePair("command", "LOGIN"));
 
-		String result = httpRequest.requestPost(logoutURL, nameValuePairs, referer, encodingOption);
-
-		result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
+		String result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
 
 		if (result.contains("<script language=javascript>moveTop()</script>")) {
 			System.out.println("Login Success");
@@ -60,6 +58,18 @@ public class Login {
 				return 1;
 			}
 		}
+	}
+
+	public int Logout(Context context, HttpRequest httpRequest, String encodingOption) {
+
+		String referer = GlobalConst.m_strServer + "/MLogin.do";
+		String logoutURL = GlobalConst.m_strServer + "/logout.do";
+
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+		String result = httpRequest.requestPost(logoutURL, nameValuePairs, referer, encodingOption);
+
+		return 1;
 	}
 
 	public int PushRegister(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId) {
