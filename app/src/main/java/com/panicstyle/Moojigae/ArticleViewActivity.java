@@ -384,7 +384,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             m_strHit = boardObject.getString("boardRead_cnt");
 
             m_strContent = boardObject.getString("boardContent");
-            m_strContent = "<div class='content'>" + m_strContent + "</div>";
+            m_strContent = "<div>" + m_strContent + "</div>";
+            m_strContent += "<div>-</div>";
 
             int i = 0;
             JSONArray arrayImage = boardObject.getJSONArray("image");
