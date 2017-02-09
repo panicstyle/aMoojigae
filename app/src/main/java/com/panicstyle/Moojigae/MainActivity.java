@@ -37,6 +37,9 @@ import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity implements Runnable {
     private ListView m_listView;
 
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private List<HashMap<String, String>> m_arrayItems;
 
     private MoojigaeApplication m_app;
+
+    private String m_strRecent = "";
 
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
@@ -147,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 if (code.contains("recent")) {
                     Intent intent = new Intent(MainActivity.this, RecentItemsActivity.class);
                     intent.putExtra("ITEMS_TITLE", title);
-                    intent.putExtra("ITEMS_LINK", "main");
+                    intent.putExtra("ITEMS_LINK", m_strRecent);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(MainActivity.this, BoardActivity.class);
@@ -288,6 +293,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         item.put("code",  "school2");
         item.put("title",  "중등무지개학교");
         m_arrayItems.add(item);
+
+        String url = GlobalConst.m_strServer + "/board-api-menu.do?comm=0";
+
+        String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
+
+        try {
+            JSONObject boardObject = new JSONObject(result);
+
+            // recent
+            m_strRecent = boardObject.getString("recent");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return true;
     }

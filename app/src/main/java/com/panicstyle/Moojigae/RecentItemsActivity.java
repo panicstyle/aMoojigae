@@ -247,20 +247,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     }
 
     protected boolean getData() {
-        String strMaulBoards = "mvFreeBoard,mvTopic,mvTopic10Year,mvTopicGoBackHome,mvEduBasicRight,mvGongi,mvGongDong,mvGongDongFacility,mvGongDongEvent,mvGongDongLocalcommunity,mvDonghowhe,mvDonghowheMoojigaeFC,mvPoomASee,mvPoomASeeWantBiz,mvPoomASeeBized,mvPoomASeeVacation,mvEdu,mvEduLove,mvEduVillageSchool,mvEduDream,mvEduSpring,mvEduManDoo,mvMarketBoard,mvHorizonIntroduction,mvHorizonLivingStory,mvSecretariatAddress,mvSecretariatOldData,mvMinutes,mvEduResearch,mvBuildingComm,mvDonationGongi,mvDonationQnA,toHomePageAdmin,mvUpgrade";
-        String strSchool1Boards = "mjGongi,mjFreeBoard,mjTeacher,mjTeachingData,mjJunior,mjParent,mjParentMinutes,mjAmaDiary,mjSchoolFood,mjPhoto,mjData";
-        String strSchoo12Boards = "msGongi,msFreeBoard,msOverRainbow,msFreeComment,msTeacher,msSenior,msStudent,ms5Class,msStudentAssociation,msParent,msRepresentative,msMinutes,msPhoto,msData";
-
-        String url = "";
-        if (m_itemsLink.equalsIgnoreCase("main")) {
-            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strMaulBoards + strSchool1Boards + strSchoo12Boards;
-        } else if (m_itemsLink.equalsIgnoreCase("maul")) {
-                url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strMaulBoards;
-        } else if (m_itemsLink.equalsIgnoreCase("school1")) {
-            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strSchool1Boards;
-        } else {
-            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + strSchoo12Boards;
-        }
+        String url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + m_itemsLink;
         String referer = GlobalConst.m_strServer + "/board-api-list.do";
 
         String result = m_app.m_httpRequest.requestPost(url, "", referer, m_app.m_strEncodingOption);

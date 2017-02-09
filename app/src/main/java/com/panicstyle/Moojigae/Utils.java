@@ -48,6 +48,13 @@ public class Utils {
         strDest=strDest.replaceAll("<br />","\n");
         strDest=strDest.replaceAll("<div><div><div>","<div>");
         strDest=strDest.replaceAll("<div>","\n");
+//        strDest=strDest.replaceAll("(<div>)(.|\\n)*?(</div>)","\n(.|\n)*?");
+        strDest=strDest.replaceAll("(<b>\\[)\\d+(\\]</b>)", "");
+        strDest=strDest.replaceAll("(<!--)(.|\\n)*?(-->)", "");
+        strDest=strDest.replaceAll("(<style)(.|\\n)*?(/style>)", "");
+        strDest=strDest.replaceAll("(<script)(.|\\n)*?(/script>)", "");
+        strDest=strDest.replaceAll("(<)(.|\\n)*?(>)","");
+
         strDest=strDest.replaceAll("&nbsp;"," ");
         strDest=strDest.replaceAll("&lt;","<");
         strDest=strDest.replaceAll("&gt;",">");
@@ -55,12 +62,6 @@ public class Utils {
         strDest=strDest.replaceAll("&quot;","\"");
         strDest=strDest.replaceAll("&apos;","'");
         strDest=strDest.replaceAll("&#4514;",":");
-//        strDest=strDest.replaceAll("(<div>)(.|\\n)*?(</div>)","\n(.|\n)*?");
-        strDest=strDest.replaceAll("(<b>\\[)\\d+(\\]</b>)", "");
-        strDest=strDest.replaceAll("(<!--)(.|\\n)*?(-->)", "");
-        strDest=strDest.replaceAll("(<style)(.|\\n)*?(/style>)", "");
-        strDest=strDest.replaceAll("(<script)(.|\\n)*?(/script>)", "");
-        strDest=strDest.replaceAll("(<)(.|\\n)*?(>)","");
 
         strDest=strDest.trim();
 
