@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.panicstyle.Moojigae"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 44
-        versionName "3.6.3"
+        versionCode 45
+        versionName "3.6.4"
     }
     buildTypes {
         release {

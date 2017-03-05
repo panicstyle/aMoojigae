@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,43 +95,41 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 						convertView = null;
 					}
 				}
+				HashMap<String, Object> item;;
+				item = arrayItems.get(position);
+				String boardDep = (String)item.get("boardDep");
 				if (convertView == null) {
-					convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+					if (boardDep.equals("1")) {
+						convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+					} else {
+						convertView = mInflater.inflate(R.layout.list_item_reitemsview, null);
+					}
 
 					holder = new ViewHolder();
-					holder.date = (TextView) convertView.findViewById(R.id.date);
 					holder.name = (TextView) convertView.findViewById(R.id.name);
 					holder.subject = (TextView) convertView.findViewById(R.id.subject);
 					holder.comment = (TextView) convertView.findViewById(R.id.comment);
 					holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
-					holder.iconreply = (ImageView) convertView.findViewById(R.id.iconreply);
 
 					convertView.setTag(holder);
 				} else {
 					holder = (ViewHolder) convertView.getTag();
 				}
-				HashMap<String, Object> item;;
-				item = arrayItems.get(position);
 				String date = (String) item.get("date");
 				String name = (String) item.get("name");
 				String subject = (String) item.get("subject");
 				String comment = (String) item.get("comment");
+				String hit = (String) item.get("hit");
 				int isNew = (Integer) item.get("isNew");
-				String boardDep = (String)item.get("boardDep");
 				// Bind the data efficiently with the holder.
-				holder.date.setText(date);
-				holder.name.setText(name);
+				name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
+				holder.name.setText(Html.fromHtml(name));
 				holder.subject.setText(subject);
 				holder.comment.setText(comment);
 				if (isNew == 1) {
-					holder.iconnew.setImageResource(R.drawable.icon_new);
+					holder.iconnew.setImageResource(R.drawable.circle);
 				} else {
 					holder.iconnew.setImageResource(0);
-				}
-				if (boardDep.equals("1")) {
-					holder.iconreply.setImageResource(0);
-				} else {
-					holder.iconreply.setImageResource(R.drawable.i_re);
 				}
 				if (comment.length() > 0) {
 					holder.comment.setBackgroundResource(R.drawable.layout_circle);
@@ -143,12 +142,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
         }
 
 		static class ViewHolder {
-			TextView date;
 			TextView name;
 			TextView subject;
 			TextView comment;
 			ImageView iconnew;
-			ImageView iconreply;
 		}
 
 		static class MoreHolder {
