@@ -175,14 +175,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         SetInfo setInfo = new SetInfo();
 
         if (!setInfo.CheckVersionInfo(MainActivity.this)) {
-/*
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
-            notice.setTitle( "버전 업데이트 알림" );
-            notice.setMessage("1.로그인 및 글저장시 발행하던 오류가 수정되었습니다.");
+            notice.setTitle( "알림" );
+            notice.setMessage("그동안 사진 확대가 안되어서 불편하셨죠. 사진을 클릭하면 확대해서 보실 수 있고 저장도 할 수 있어요.");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
-*/
             setInfo.SaveVersionInfo(MainActivity.this);
 
         }
@@ -278,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         item = new HashMap<>();
         item.put("code",  "recent");
-        item.put("title",  "최근글보기");
+        item.put("title",  "전체최근글보기");
         m_arrayItems.add( item );
 
         item = new HashMap<>();

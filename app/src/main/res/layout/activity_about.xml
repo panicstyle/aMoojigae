@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ibexlab.myapplication2.LoginActivity">
+    tools:context="com.panicstyle.Moojigae.AboutActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,6 +36,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
+            android:id="@+id/textDeveloper"
+            android:layout_marginTop="16dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="개발자 : 호랑이(과천맨발어린이집 졸업조합원)"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
             android:id="@+id/textEmail"
             android:layout_marginTop="16dip"
             android:layout_width="match_parent"
@@ -50,6 +58,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="문의 홈페이지 : http://www.panicstyle.net/?page_id=5"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:autoLink="web" />
+
+        <TextView
+            android:id="@+id/textSource"
+            android:layout_marginTop="16dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="소스 : https://github.com/panicstyle/aMoojigae"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:autoLink="web" />
 

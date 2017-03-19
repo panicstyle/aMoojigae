@@ -180,6 +180,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					intent.putExtra("boardNo", (String) item.get("boardNo"));
 					intent.putExtra("HIT", (String) item.get("hit"));
 					intent.putExtra("BOARDID", m_itemsLink);
+					intent.putExtra("boardName", m_itemsTitle);
 					startActivityForResult(intent, REQUEST_VIEW);
 				}
 			}

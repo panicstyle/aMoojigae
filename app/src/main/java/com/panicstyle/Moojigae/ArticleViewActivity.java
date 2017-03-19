@@ -33,12 +33,14 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +48,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ArticleViewActivity extends AppCompatActivity implements Runnable {
+    private String TAG = "ArticleViewActivity";
 	/** Called when the activity is first created. */
     private ProgressDialog m_pd;
     private List<HashMap<String, Object>> m_arrayItems;
@@ -64,6 +67,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private String m_strCommID;
     private String m_strBoardID;
     private String m_strBoardNo;
+    private String m_strBoardName;
     private String m_strCommentNo;
     private String m_strComment;
     protected int m_nLoginStatus;
@@ -93,7 +97,6 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_view);
-        setTitle("글보기");
 
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView) this.findViewById(R.id.adView);
@@ -103,6 +106,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         m_app = (MoojigaeApplication)getApplication();
 
         intenter();
+
+        setTitle(m_strBoardName);
 
         m_strBoardNo = m_boardNo;
 
@@ -311,7 +316,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             boolean shouldOverride = false;
             // We only want to handle requests for mp3 files, everything else the webview
             // can handle normally
-            if (url.indexOf("downManager?") >= 0) {
+
+            if (url.indexOf("moojigae.or.kr") >= 0 && url.indexOf("downManager?") >= 0) {
                 m_strUrl = url;
                 AlertDialog.Builder notice = null;
                 notice = new AlertDialog.Builder( ArticleViewActivity.this );
@@ -338,6 +344,14 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 notice.setNegativeButton(android.R.string.cancel, null);
                 notice.show();
 
+            } else {
+                if (url != null ) {
+                    view.getContext().startActivity(
+                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return false;
+                }
             }
             return shouldOverride;
         }
@@ -352,6 +366,27 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             }
         });
     }
+
+    @JavascriptInterface
+    public void invokeImg(final String img_src) {
+        Log.d(TAG, img_src);
+        try {
+            String nKey = Utils.getMatcherFirstString("(?<=&c=)(.|\\n)*?(?=&)", img_src);
+            String fileName = m_mapFileName.get(nKey);
+            if (fileName == null || fileName.equals("")) {
+                URL url = new URL(img_src);
+                fileName = FilenameUtils.getName(url.getPath());
+            }
+
+            Intent intent = new Intent(ArticleViewActivity.this, ImageActivity.class);
+            intent.putExtra("ITEMS_LINK", img_src);
+            intent.putExtra("FILENAME", fileName);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void intenter() {
 //    	Intent intent = getIntent();  // 값을 가져오는 인텐트 객체생성
     	Bundle extras = getIntent().getExtras();
@@ -363,13 +398,14 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     	m_boardNo = extras.getString("boardNo");
         m_strHit = extras.getString("HIT");
         m_strBoardID = extras.getString("BOARDID");
+        m_strBoardName = extras.getString("boardName");
     }
 
     protected boolean getData() {
         String url = GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1";
         String result = m_app.m_httpRequest.requestGet(url, "", m_app.m_strEncodingOption);
 
-        if (result.indexOf("onclick=\"userLogin()") > 0) {
+        if (result.indexOf("<title>시스템 메세지입니다</title>") > 0) {
             return false;
         }
 
@@ -391,8 +427,17 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             JSONArray arrayImage = boardObject.getJSONArray("image");
             for (i = 0; i < arrayImage.length(); i++) {
                 JSONObject image = arrayImage.getJSONObject(i);
-                m_strContent = m_strContent + "<div>" + image.getString("link") + "</div>";
+                String fileName = image.getString("fileName");
+                fileName = fileName.toLowerCase();
+                if (fileName.contains(".jpg")
+                        || fileName.contains(".jpeg")
+                        || fileName.contains(".png")
+                        || fileName.contains(".gif")
+                        ) {
+                    m_strContent = m_strContent + "<div>" + image.getString("link") + "</div>";
+                }
             }
+            m_strContent = m_strContent.replaceAll("<img ", "<img onclick=\"myapp_clickImg(this)\" width=300 ");
 
             String strAttach = "";
             JSONArray arrayAttach = boardObject.getJSONArray("attachment");
@@ -449,8 +494,11 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             strHeader += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
             strHeader += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi\">";
             strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
-            strHeader += "<script>function imageResize() { var boardWidth = 300; if (document.cashcow && document.cashcow.boardWidth) boardWidth = document.cashcow.boardWidth.value - 70; var obj = document.getElementsByName('unicornimage'); for (var i = 0; i < obj.length; i++) { if (obj[i].width > boardWidth) obj[i].width = boardWidth; } }</script>";
-            strHeader += "<script>window.onload=imageResize;</script></head>";
+            strHeader += "<style>body {font-family:\"고딕\";font-size:medium;}.title{text-margin:10px 0px;font-size:large}.name{color:gray;margin:10px 0px;font-size:small}.profile {text-align:center;color:white;background: lightgray; margin:10px0px;border-radius:5px;font-size:small}.reply{border-bottom:1px solid gray;margin:10px 0px}.reply_header {color:gray;;font-size:small}.reply_content {margin:10px 0px}.re_reply{border-bottom:1px solid gray;margin:10px 0px 0px 20px;background:lightgray}</style>";
+            strHeader += "<script>function myapp_clickImg(obj){MyApp.invokeImg(obj.src);}</script>";
+//            strHeader += "<script>function imageResize() { var boardWidth = 300; if (document.cashcow && document.cashcow.boardWidth) boardWidth = document.cashcow.boardWidth.value - 70; var obj = document.getElementsByName('unicornimage'); for (var i = 0; i < obj.length; i++) { if (obj[i].width > boardWidth) obj[i].width = boardWidth; } }</script>";
+//            strHeader += "<script>window.onload=imageResize;</script>";
+            strHeader += "</head>";
             String strBottom = "<br /><br /></body></html>";
 
 //        String cssStr = "<link href=\"./css/default.css\" rel=\"stylesheet\">";

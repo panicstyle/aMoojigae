@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BoardActivity extends AppCompatActivity implements Runnable {
+    Toolbar toolbar;
     private ListView m_listView;
     private ProgressDialog m_pd;
     private MoojigaeApplication m_app;
@@ -108,6 +110,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
         m_listView = (ListView) findViewById(R.id.listView);
         m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
