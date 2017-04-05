@@ -84,9 +84,10 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 }
             }
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+                convertView = mInflater.inflate(R.layout.list_recent_itemsview, null);
 
                 holder = new ViewHolder();
+                holder.boardName = (TextView) convertView.findViewById(R.id.boardName);
                 holder.name = (TextView) convertView.findViewById(R.id.name);
                 holder.subject = (TextView) convertView.findViewById(R.id.subject);
                 holder.comment = (TextView) convertView.findViewById(R.id.comment);
@@ -105,26 +106,29 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
             String hit = (String) item.get("hit");
             int isNew = (Integer) item.get("isNew");
             int isReply = (Integer) item.get("isReply");
+            String boardName = (String) item.get("boardName");
             // Bind the data efficiently with the holder.
             name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
             holder.name.setText(Html.fromHtml(name));
             holder.subject.setText(subject);
             holder.comment.setText(comment);
+            holder.boardName.setText(boardName);
             if (isNew == 1) {
                 holder.iconnew.setImageResource(R.drawable.circle);
             } else {
                 holder.iconnew.setImageResource(0);
             }
-            if (comment.length() > 0) {
-                holder.comment.setBackgroundResource(R.drawable.layout_circle);
-            } else {
+            if (comment.equals("0")) {
                 holder.comment.setBackgroundResource(0);
+            } else {
+                holder.comment.setBackgroundResource(R.drawable.layout_circle);
             }
 
             return convertView;
         }
 
         static class ViewHolder {
+            TextView boardName;
             TextView name;
             TextView subject;
             TextView comment;
@@ -152,6 +156,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 intent.putExtra("boardNo", (String) item.get("boardNo"));
                 intent.putExtra("HIT", (String) item.get("hit"));
                 intent.putExtra("BOARDID", (String) item.get("boardId"));
+                intent.putExtra("boardName", (String) item.get("boardName"));
                 startActivityForResult(intent, REQUEST_VIEW);
             }
         });
@@ -274,6 +279,9 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 // boardId.
                 String strBoardId = jsonItem.getString("boardId");
                 item.put("boardId", strBoardId);
+                // boardName
+                String strBoardName = jsonItem.getString("boardName");
+                item.put("boardName", strBoardName);
                 // boardNo
                 String strBoardNo = jsonItem.getString("boardNo");
                 item.put("boardNo", strBoardNo);

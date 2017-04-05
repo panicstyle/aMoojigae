@@ -131,10 +131,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				} else {
 					holder.iconnew.setImageResource(0);
 				}
-				if (comment.length() > 0) {
-					holder.comment.setBackgroundResource(R.drawable.layout_circle);
-				} else {
+				if (comment.equals("0")) {
 					holder.comment.setBackgroundResource(0);
+				} else {
+					holder.comment.setBackgroundResource(R.drawable.layout_circle);
 				}
 
 				return convertView;
