@@ -170,7 +170,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         String referer = GlobalConst.m_strServer + "/board-edit.do";
 
         String boundary = "-------------" + System.currentTimeMillis();
-        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, m_app.m_strEncodingOption);
+        ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE);
 //        ByteArrayBody bab = new ByteArrayBody(imageBytes, "pic.png");
 //        StringBody sbOwner = new StringBody(StaticData.loggedUserId, ContentType.TEXT_PLAIN);
         StringBody sbUserEmail = new StringBody("", contentType);
@@ -188,7 +188,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         String strFileMaskArray[] = new String[m_nAttached];
         String strFileSizeArray[] = new String[m_nAttached];
         try {
-            Charset chars = Charset.forName(m_app.m_strEncodingOption);
+            Charset chars = Charset.forName("utf-8");
             MultipartEntityBuilder builder;
             builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -218,7 +218,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
             builder.addPart("mode", sbMode);
 
             entity = builder.build();
-            String result = m_app.m_httpRequest.requestPostWithAttach(url, entity, referer, m_app.m_strEncodingOption, boundary);
+            String result = m_app.m_httpRequest.requestPostWithAttach(url, entity, referer, boundary);
             if (!result.contains("fileNameArray[0] =")) {
                 m_ErrorMsg = Utils.getMatcherFirstString("(?<=var message = ')(.|\\n)*?(?=';)", result);
                 return false;
@@ -343,7 +343,7 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_app.m_strUserID));
 
-        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer);
 
         if (result.contains("<b>시스템 메세지입니다</b>")) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);

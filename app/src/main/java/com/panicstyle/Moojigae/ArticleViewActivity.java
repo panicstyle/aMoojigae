@@ -130,18 +130,12 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (m_nThreadMode == 1) {         // LoadData
 
-            // Encoding 정보를 읽어온다.
-            if (m_app.m_strEncodingOption == null) {
-                EncodingOption encodingOption = new EncodingOption();
-                m_app.m_strEncodingOption = encodingOption.getEncodingOption(ArticleViewActivity.this, m_app.m_httpRequest);
-            }
-
             if (!getData()) {
                 // Login
 
                 Login login = new Login();
 
-                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+                m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
 
                 if (m_nLoginStatus > 0) {
                     if (getData()) {
@@ -255,7 +249,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
             }
 
-            webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", m_app.m_strEncodingOption, "");
+            webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", "utf-8", "");
 
             tvProfile = (TextView) findViewById(R.id.profile);
             tvProfile.setText(m_strProfile);
@@ -403,7 +397,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     protected boolean getData() {
         String url = GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1";
-        String result = m_app.m_httpRequest.requestGet(url, "", m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestGet(url, "");
 
         if (result.indexOf("<title>시스템 메세지입니다</title>") > 0) {
             return false;
@@ -685,7 +679,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("tagsName", ""));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_app.m_strUserID));
 
-        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer);
 
         m_bDeleteStatus = true;
         if (result.contains("<b>시스템 메세지입니다</b>")) {
@@ -818,7 +812,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         nameValuePairs.add(new BasicNameValuePair("tag", "-1"));
         nameValuePairs.add(new BasicNameValuePair("Uid", m_app.m_strUserID));
 
-        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer);
 
         m_bDeleteStatus = true;
         if (result.contains("<b>시스템 메세지입니다</b>")) {

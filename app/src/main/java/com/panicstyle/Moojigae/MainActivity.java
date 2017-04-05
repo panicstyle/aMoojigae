@@ -247,21 +247,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private boolean LoadData(Context context) {
 
-        // Encoding 정보를 읽어온다.
-        if (m_app.m_strEncodingOption == null) {
-            EncodingOption encodingOption = new EncodingOption();
-            m_app.m_strEncodingOption = encodingOption.getEncodingOption(context, m_app.m_httpRequest);
-        }
-
         // Login
         Login login = new Login();
-        m_LoginStatus = login.LoginTo(context, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+        m_LoginStatus = login.LoginTo(context, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
         m_strErrorMsg = login.m_strErrorMsg;
 
         if (m_LoginStatus <= 0) {
             return false;
         }
-        login.PushRegister(context, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId);
+        login.PushRegister(context, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strRegId);
 
         if (!getData()) {
             m_LoginStatus = 0;
@@ -296,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         String url = GlobalConst.m_strServer + "/board-api-menu.do?comm=0";
 
-        String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", url);
 
         try {
             JSONObject boardObject = new JSONObject(result);

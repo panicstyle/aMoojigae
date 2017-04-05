@@ -200,7 +200,7 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
         nameValuePairs.add(new BasicNameValuePair("searchOrKey", ""));
         nameValuePairs.add(new BasicNameValuePair("tag", "1"));
 
-        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, nameValuePairs, referer);
 
         if (result.contains("<b>시스템 메세지입니다</b>")) {
             m_ErrorMsg = Utils.getMatcherFirstString("(?<=<b>시스템 메세지입니다</b></font><br>)(.|\\n)*?(?=<br>)", result);

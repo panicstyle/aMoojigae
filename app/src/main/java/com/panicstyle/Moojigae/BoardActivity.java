@@ -202,7 +202,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         }
 
         String url = GlobalConst.m_strServer + boardLink;
-        String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", url);
 
         // 각 항목 찾기
         HashMap<String, Object> item;

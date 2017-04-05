@@ -183,7 +183,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         if (!getData()) {
             // Login
             Login login = new Login();
-            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
             m_strErrorMsg = login.m_strErrorMsg;
 
             if (m_LoginStatus > 0) {
@@ -243,7 +243,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         String url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + m_itemsLink;
         String referer = GlobalConst.m_strServer + "/board-api-list.do";
 
-        String result = m_app.m_httpRequest.requestPost(url, "", referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", referer);
 
         HashMap<String, Object> item;
 
