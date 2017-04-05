@@ -19,11 +19,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView android:id="@+id/icon"
-        android:gravity = "left|center_vertical"
-        android:layout_width="15dip"
-        android:layout_height="23dip"
-               android:layout_gravity="center">
+    <ImageView
+        android:id="@+id/iconnew"
+        android:layout_gravity="center"
+        android:layout_width="20dip"
+        android:layout_height="20dip" >
     </ImageView>
 <!--      
         android:layout_gravity="center_vertical"
