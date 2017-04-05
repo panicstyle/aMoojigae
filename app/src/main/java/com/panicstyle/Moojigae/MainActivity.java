@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         item = new HashMap<>();
         item.put("code",  "recent");
-        item.put("title",  "전체최근글보기");
+        item.put("title",  "전체최신글보기");
         m_arrayItems.add( item );
 
         item = new HashMap<>();
