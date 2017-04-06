@@ -187,6 +187,17 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (!getData()) {
             // Login
+            SetInfo setInfo = new SetInfo();
+            if (!setInfo.GetUserInfo(RecentItemsActivity.this)) {
+                m_app.m_strUserID = "";
+                m_app.m_strUserPW = "";
+                m_app.m_nPushYN = true;
+            } else {
+                m_app.m_strUserID = setInfo.m_userID;
+                m_app.m_strUserPW = setInfo.m_userPW;
+                m_app.m_nPushYN = setInfo.m_pushYN;
+            }
+
             Login login = new Login();
             m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
             m_strErrorMsg = login.m_strErrorMsg;

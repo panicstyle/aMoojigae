@@ -132,6 +132,16 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
             if (!getData()) {
                 // Login
+                SetInfo setInfo = new SetInfo();
+                if (!setInfo.GetUserInfo(ArticleViewActivity.this)) {
+                    m_app.m_strUserID = "";
+                    m_app.m_strUserPW = "";
+                    m_app.m_nPushYN = true;
+                } else {
+                    m_app.m_strUserID = setInfo.m_userID;
+                    m_app.m_strUserPW = setInfo.m_userPW;
+                    m_app.m_nPushYN = setInfo.m_pushYN;
+                }
 
                 Login login = new Login();
 
