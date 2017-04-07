@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             AlertDialog.Builder notice = null;
             notice = new AlertDialog.Builder( MainActivity.this );
             notice.setTitle( "알림" );
-            notice.setMessage("그동안 사진 확대가 안되어서 불편하셨죠. 사진을 클릭하면 확대해서 보실 수 있고 저장도 할 수 있어요.");
+            notice.setMessage("그동안 사진 확대가 안되어서 불편하셨죠. 사진을 클릭하면 확대해서 보실 수 있고 저장도 할 수 있어요.\n최신글보기에서 해당글의 게시판이름을 보여줍니다");
             notice.setPositiveButton(android.R.string.ok, null);
             notice.show();
             setInfo.SaveVersionInfo(MainActivity.this);
