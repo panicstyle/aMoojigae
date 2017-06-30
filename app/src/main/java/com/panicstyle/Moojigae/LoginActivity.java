@@ -102,9 +102,9 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 
 		Login login = new Login();
 
-		login.Logout(this, m_app.m_httpRequest, m_app.m_strEncodingOption);
+		login.Logout(this, m_app.m_httpRequest);
 
-		m_loginStatus = login.LoginTo(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_setInfo.m_userID, m_setInfo.m_userPW);
+		m_loginStatus = login.LoginTo(this, m_app.m_httpRequest, m_setInfo.m_userID, m_setInfo.m_userPW);
 		m_strErrorMsg = login.m_strErrorMsg;
 
 		if (m_loginStatus <= 0) {
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 
 //		Toast.makeText(this, "저장합니다", Toast.LENGTH_SHORT).show();
 
-		login.PushRegisterUpdate(this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
+		login.PushRegisterUpdate(this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strRegId, m_app.m_nPushYN);
 	}
 
 	Button.OnClickListener mClickListener = new View.OnClickListener() {

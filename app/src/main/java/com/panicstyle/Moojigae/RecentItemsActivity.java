@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,15 +84,14 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 }
             }
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+                convertView = mInflater.inflate(R.layout.list_recent_itemsview, null);
 
                 holder = new ViewHolder();
-                holder.date = (TextView) convertView.findViewById(R.id.date);
+                holder.boardName = (TextView) convertView.findViewById(R.id.boardName);
                 holder.name = (TextView) convertView.findViewById(R.id.name);
                 holder.subject = (TextView) convertView.findViewById(R.id.subject);
                 holder.comment = (TextView) convertView.findViewById(R.id.comment);
                 holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
-                holder.iconreply = (ImageView) convertView.findViewById(R.id.iconreply);
 
                 convertView.setTag(holder);
             } else {
@@ -103,39 +103,36 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
             String name = (String) item.get("name");
             String subject = (String) item.get("subject");
             String comment = (String) item.get("comment");
+            String hit = (String) item.get("hit");
             int isNew = (Integer) item.get("isNew");
             int isReply = (Integer) item.get("isReply");
+            String boardName = (String) item.get("boardName");
             // Bind the data efficiently with the holder.
-            holder.date.setText(date);
-            holder.name.setText(name);
+            name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
+            holder.name.setText(Html.fromHtml(name));
             holder.subject.setText(subject);
             holder.comment.setText(comment);
+            holder.boardName.setText(boardName);
             if (isNew == 1) {
-                holder.iconnew.setImageResource(R.drawable.icon_new);
+                holder.iconnew.setImageResource(R.drawable.circle);
             } else {
                 holder.iconnew.setImageResource(0);
             }
-            if (isReply == 1) {
-                holder.iconreply.setImageResource(R.drawable.i_re);
-            } else {
-                holder.iconreply.setImageResource(0);
-            }
-            if (comment.length() > 0) {
-                holder.comment.setBackgroundResource(R.drawable.layout_circle);
-            } else {
+            if (comment.equals("0")) {
                 holder.comment.setBackgroundResource(0);
+            } else {
+                holder.comment.setBackgroundResource(R.drawable.layout_circle);
             }
 
             return convertView;
         }
 
         static class ViewHolder {
-            TextView date;
+            TextView boardName;
             TextView name;
             TextView subject;
             TextView comment;
             ImageView iconnew;
-            ImageView iconreply;
         }
     }
 
@@ -159,6 +156,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 intent.putExtra("boardNo", (String) item.get("boardNo"));
                 intent.putExtra("HIT", (String) item.get("hit"));
                 intent.putExtra("BOARDID", (String) item.get("boardId"));
+                intent.putExtra("boardName", (String) item.get("boardName"));
                 startActivityForResult(intent, REQUEST_VIEW);
             }
         });
@@ -189,8 +187,19 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (!getData()) {
             // Login
+            SetInfo setInfo = new SetInfo();
+            if (!setInfo.GetUserInfo(RecentItemsActivity.this)) {
+                m_app.m_strUserID = "";
+                m_app.m_strUserPW = "";
+                m_app.m_nPushYN = true;
+            } else {
+                m_app.m_strUserID = setInfo.m_userID;
+                m_app.m_strUserPW = setInfo.m_userPW;
+                m_app.m_nPushYN = setInfo.m_pushYN;
+            }
+
             Login login = new Login();
-            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+            m_LoginStatus = login.LoginTo(RecentItemsActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
             m_strErrorMsg = login.m_strErrorMsg;
 
             if (m_LoginStatus > 0) {
@@ -250,7 +259,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         String url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + m_itemsLink;
         String referer = GlobalConst.m_strServer + "/board-api-list.do";
 
-        String result = m_app.m_httpRequest.requestPost(url, "", referer, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", referer);
 
         HashMap<String, Object> item;
 
@@ -281,6 +290,9 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 // boardId.
                 String strBoardId = jsonItem.getString("boardId");
                 item.put("boardId", strBoardId);
+                // boardName
+                String strBoardName = jsonItem.getString("boardName");
+                item.put("boardName", strBoardName);
                 // boardNo
                 String strBoardNo = jsonItem.getString("boardNo");
                 item.put("boardNo", strBoardNo);

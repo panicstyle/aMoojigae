@@ -36,13 +36,29 @@
 			android:layout_width="fill_parent"
 			android:layout_height="15dip">
 
+			<TextView android:id="@+id/boardName"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:gravity = "left|center_vertical"
+				android:textSize = "12sp"
+				android:drawSelectorOnTop="false"
+				android:textColor="#111111" >
+			</TextView>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="15dip">
+
 			<TextView android:id="@+id/name"
-					  android:layout_width="wrap_content"
-					  android:layout_height="fill_parent"
-					  android:gravity = "left|center_vertical"
-					  android:textSize = "12sp"
-					  android:drawSelectorOnTop="false"
-					  android:textColor="#111111" >
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:gravity = "left|center_vertical"
+				android:textSize = "12sp"
+				android:drawSelectorOnTop="false"
+				android:textColor="#111111" >
 			</TextView>
 
 		</LinearLayout>

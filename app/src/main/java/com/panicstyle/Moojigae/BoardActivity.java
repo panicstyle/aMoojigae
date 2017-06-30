@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BoardActivity extends AppCompatActivity implements Runnable {
+    Toolbar toolbar;
     private ListView m_listView;
     private ProgressDialog m_pd;
     private MoojigaeApplication m_app;
@@ -82,13 +84,13 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                 convertView = mInflater.inflate(R.layout.list_item_boardview, null);
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
-                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+                holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
                 convertView.setTag(holder);
                 holder.title.setText(title);
                 if (isNew == 1) {
-                    holder.icon.setImageResource(R.drawable.icon_new);
+                    holder.iconnew.setImageResource(R.drawable.circle);
                 } else {
-                    holder.icon.setImageResource(0);
+                    holder.iconnew.setImageResource(0);
                 }
             }
 
@@ -97,7 +99,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
 
         static class ViewHolder {
             TextView title;
-            ImageView icon;
+            ImageView iconnew;
         }
         static class GroupHolder {
             TextView title;
@@ -108,6 +110,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
         m_listView = (ListView) findViewById(R.id.listView);
         m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -199,7 +202,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         }
 
         String url = GlobalConst.m_strServer + boardLink;
-        String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
+        String result = m_app.m_httpRequest.requestPost(url, "", url);
 
         // 각 항목 찾기
         HashMap<String, Object> item;

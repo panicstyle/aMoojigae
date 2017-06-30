@@ -24,7 +24,7 @@ public class AboutActivity extends AppCompatActivity {
         	version = "Unknown";
         }
         
-        String versionInfo = "Version : " + version;
+        String versionInfo = "버전 : " + version;
 
         TextView t = (TextView)findViewById(R.id.textVersion); 
         t.setText(versionInfo);        

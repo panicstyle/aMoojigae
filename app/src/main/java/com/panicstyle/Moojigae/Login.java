@@ -27,7 +27,7 @@ public class Login {
 
 	public String m_strErrorMsg = "";
 
-	public int LoginTo(Context context, HttpRequest httpRequest, String encodingOption, String userID, String userPW) {
+	public int LoginTo(Context context, HttpRequest httpRequest, String userID, String userPW) {
 
 		String url = GlobalConst.m_strServer + "/login-process.do";
 		String referer = GlobalConst.m_strServer + "/MLogin.do";
@@ -45,7 +45,7 @@ public class Login {
 		nameValuePairs.add(new BasicNameValuePair("beforeCommand", ""));
 		nameValuePairs.add(new BasicNameValuePair("command", "LOGIN"));
 
-		String result = httpRequest.requestPost(url, nameValuePairs, referer, encodingOption);
+		String result = httpRequest.requestPost(url, nameValuePairs, referer);
 
 		if (result.contains("<script language=javascript>moveTop()</script>")) {
 			System.out.println("Login Success");
@@ -60,19 +60,19 @@ public class Login {
 		}
 	}
 
-	public int Logout(Context context, HttpRequest httpRequest, String encodingOption) {
+	public int Logout(Context context, HttpRequest httpRequest) {
 
 		String referer = GlobalConst.m_strServer + "/MLogin.do";
 		String logoutURL = GlobalConst.m_strServer + "/logout.do";
 
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
-		String result = httpRequest.requestPost(logoutURL, nameValuePairs, referer, encodingOption);
+		String result = httpRequest.requestPost(logoutURL, nameValuePairs, referer);
 
 		return 1;
 	}
 
-	public int PushRegister(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId) {
+	public int PushRegister(Context context, HttpRequest httpRequest, String userID, String regId) {
 
 		if (userID.isEmpty() || regId.isEmpty()) {
 			return 0;
@@ -95,13 +95,13 @@ public class Login {
 
 		String strBody = obj.toString();
 
-		String result = httpRequest.requestPost(url, strBody, "", encodingOption);
+		String result = httpRequest.requestPost(url, strBody, "");
 
 		System.out.println("PushRegister result = " + result);
 		return 1;
 	}
 
-	public int PushRegisterUpdate(Context context, HttpRequest httpRequest, String encodingOption, String userID, String regId, boolean pushYN) {
+	public int PushRegisterUpdate(Context context, HttpRequest httpRequest, String userID, String regId, boolean pushYN) {
 
 		if (userID.isEmpty() || regId.isEmpty()) {
 			return 0;
@@ -129,7 +129,7 @@ public class Login {
 
 		String strBody = obj.toString();
 
-		String result = httpRequest.requestPost(url, strBody, "", encodingOption);
+		String result = httpRequest.requestPost(url, strBody, "");
 
 		System.out.println("PushRegister result = " + result);
 

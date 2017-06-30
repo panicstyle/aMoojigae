@@ -3,6 +3,7 @@ package com.panicstyle.Moojigae;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -12,7 +13,7 @@ import com.google.android.gms.ads.AdView;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 
-public class CalendarActivity extends Activity {
+public class CalendarActivity extends AppCompatActivity {
     protected String itemsTitle;
     protected String itemsLink;
 

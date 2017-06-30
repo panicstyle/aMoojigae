@@ -22,6 +22,8 @@
     <string name="menu_save">저장</string>
     <string name="menu_addimage">사진추가</string>
 
+    <string name="menu_save_image">저장</string>
+
     <string name="customize">Customize</string>
     <string name="show_dialog">Show Dialog</string>
     <string name="undo">Undo</string>

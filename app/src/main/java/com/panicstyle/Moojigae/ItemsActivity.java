@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,48 +95,46 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 						convertView = null;
 					}
 				}
+				HashMap<String, Object> item;;
+				item = arrayItems.get(position);
+				String boardDep = (String)item.get("boardDep");
 				if (convertView == null) {
-					convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+					if (boardDep.equals("1")) {
+						convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+					} else {
+						convertView = mInflater.inflate(R.layout.list_item_reitemsview, null);
+					}
 
 					holder = new ViewHolder();
-					holder.date = (TextView) convertView.findViewById(R.id.date);
 					holder.name = (TextView) convertView.findViewById(R.id.name);
 					holder.subject = (TextView) convertView.findViewById(R.id.subject);
 					holder.comment = (TextView) convertView.findViewById(R.id.comment);
 					holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
-					holder.iconreply = (ImageView) convertView.findViewById(R.id.iconreply);
 
 					convertView.setTag(holder);
 				} else {
 					holder = (ViewHolder) convertView.getTag();
 				}
-				HashMap<String, Object> item;;
-				item = arrayItems.get(position);
 				String date = (String) item.get("date");
 				String name = (String) item.get("name");
 				String subject = (String) item.get("subject");
 				String comment = (String) item.get("comment");
+				String hit = (String) item.get("hit");
 				int isNew = (Integer) item.get("isNew");
-				String boardDep = (String)item.get("boardDep");
 				// Bind the data efficiently with the holder.
-				holder.date.setText(date);
-				holder.name.setText(name);
+				name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
+				holder.name.setText(Html.fromHtml(name));
 				holder.subject.setText(subject);
 				holder.comment.setText(comment);
 				if (isNew == 1) {
-					holder.iconnew.setImageResource(R.drawable.icon_new);
+					holder.iconnew.setImageResource(R.drawable.circle);
 				} else {
 					holder.iconnew.setImageResource(0);
 				}
-				if (boardDep.equals("1")) {
-					holder.iconreply.setImageResource(0);
-				} else {
-					holder.iconreply.setImageResource(R.drawable.i_re);
-				}
-				if (comment.length() > 0) {
-					holder.comment.setBackgroundResource(R.drawable.layout_circle);
-				} else {
+				if (comment.equals("0")) {
 					holder.comment.setBackgroundResource(0);
+				} else {
+					holder.comment.setBackgroundResource(R.drawable.layout_circle);
 				}
 
 				return convertView;
@@ -143,12 +142,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
         }
 
 		static class ViewHolder {
-			TextView date;
 			TextView name;
 			TextView subject;
 			TextView comment;
 			ImageView iconnew;
-			ImageView iconreply;
 		}
 
 		static class MoreHolder {
@@ -183,6 +180,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					intent.putExtra("boardNo", (String) item.get("boardNo"));
 					intent.putExtra("HIT", (String) item.get("hit"));
 					intent.putExtra("BOARDID", m_itemsLink);
+					intent.putExtra("boardName", m_itemsTitle);
 					startActivityForResult(intent, REQUEST_VIEW);
 				}
 			}
@@ -215,8 +213,19 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
     public void run() {
     	if (!getData()) {
             // Login
+			SetInfo setInfo = new SetInfo();
+			if (!setInfo.GetUserInfo(ItemsActivity.this)) {
+				m_app.m_strUserID = "";
+				m_app.m_strUserPW = "";
+				m_app.m_nPushYN = true;
+			} else {
+				m_app.m_strUserID = setInfo.m_userID;
+				m_app.m_strUserPW = setInfo.m_userPW;
+				m_app.m_nPushYN = setInfo.m_pushYN;
+			}
+
 			Login login = new Login();
-			m_LoginStatus = login.LoginTo(ItemsActivity.this, m_app.m_httpRequest, m_app.m_strEncodingOption, m_app.m_strUserID, m_app.m_strUserPW);
+			m_LoginStatus = login.LoginTo(ItemsActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
 			m_strErrorMsg = login.m_strErrorMsg;
 
     		if (m_LoginStatus > 0) {
@@ -280,7 +289,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 		String Page = Integer.toString(m_nPage);
 		String url = GlobalConst.m_strServer + "/board-api-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
 
-		String result = m_app.m_httpRequest.requestPost(url, "", url, m_app.m_strEncodingOption);
+		String result = m_app.m_httpRequest.requestPost(url, "", url);
 
 		if (result.contains("onclick=\"userLogin()")) {
 			return false;
