@@ -45,6 +45,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     private MoojigaeApplication m_app;
 
     protected String m_itemsTitle;
+    protected String m_itemsType;
     protected String m_itemsLink;
     private List<HashMap<String, Object>> m_arrayItems;
     static final int REQUEST_WRITE = 1;
@@ -252,11 +253,17 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         // 가져온 값을 set해주는 부분
 
         m_itemsTitle = extras.getString("ITEMS_TITLE");
+        m_itemsType = extras.getString("ITEMS_TYPE");
         m_itemsLink = extras.getString("ITEMS_LINK");
     }
 
     protected boolean getData() {
-        String url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + m_itemsLink;
+        String url = null;
+        if (m_itemsType.equals("list")) {
+            url = GlobalConst.m_strServer + "/board-api-recent.do?part=index&rid=50&pid=" + m_itemsLink;
+        } else {
+            url = GlobalConst.m_strServer + "/board-api-recent-memo.do?part=index&rid=50&pid=" + m_itemsLink;
+        }
         String referer = GlobalConst.m_strServer + "/board-api-list.do";
 
         String result = m_app.m_httpRequest.requestPost(url, "", referer);

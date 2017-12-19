@@ -143,21 +143,29 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> item = new HashMap<String, String>();
-                String title = null;
-                String code = null;
+                String strTitle = null;
+                String strType = null;
+                String strValue = null;
                 item = (HashMap<String, String>) m_arrayItems.get(position);
-                title = (String) item.get("title");
-                code = (String) item.get("code");
+                strTitle = (String) item.get("title");
+                strType = (String) item.get("type");
+                strValue = (String) item.get("value");
 
-                if (code.contains("recent")) {
+                if (strType.contains("recent")) {
                     Intent intent = new Intent(MainActivity.this, RecentItemsActivity.class);
-                    intent.putExtra("ITEMS_TITLE", title);
+                    intent.putExtra("ITEMS_TITLE", strTitle);
+                    intent.putExtra("ITEMS_TYPE", strValue);
                     intent.putExtra("ITEMS_LINK", m_strRecent);
+                    startActivity(intent);
+                } else if (strType.contains("link")) {
+                    Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                    intent.putExtra("ITEMS_TITLE", strTitle);
+                    intent.putExtra("ITEMS_LINK", strValue);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(MainActivity.this, BoardActivity.class);
-                    intent.putExtra("BOARD_TITLE", title);
-                    intent.putExtra("BOARD_CODE", code);
+                    intent.putExtra("BOARD_TITLE", strTitle);
+                    intent.putExtra("BOARD_CODE", strValue);
                     startActivity(intent);
                 }
               }
@@ -268,27 +276,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         HashMap<String, String> item;
 
-        item = new HashMap<>();
-        item.put("code",  "recent");
-        item.put("title",  "전체최신글보기");
-        m_arrayItems.add( item );
-
-        item = new HashMap<>();
-        item.put("code",  "maul");
-        item.put("title",  "무지개교육마을");
-        m_arrayItems.add( item );
-
-        item = new HashMap<String, String>();
-        item.put("code",  "school1");
-        item.put("title",  "초등무지개학교");
-        m_arrayItems.add( item );
-
-        item = new HashMap<String, String>();
-        item.put("code",  "school2");
-        item.put("title",  "중등무지개학교");
-        m_arrayItems.add(item);
-
-        String url = GlobalConst.m_strServer + "/board-api-menu.do?comm=0";
+        String url = GlobalConst.m_strServer + "/board-api-menu.do?comm=moo_menu";
 
         String result = m_app.m_httpRequest.requestPost(url, "", url);
 
@@ -297,6 +285,28 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
             // recent
             m_strRecent = boardObject.getString("recent");
+
+            JSONArray arrayItem = boardObject.getJSONArray("menu");
+            for(int i = 0; i < arrayItem.length(); i++) {
+                JSONObject jsonItem = arrayItem.getJSONObject(i);
+                item = new HashMap<>();
+
+                String strValue;
+
+                // title
+                strValue  = jsonItem.getString("title");
+                item.put("title", strValue);
+
+                // type
+                strValue  = jsonItem.getString("type");
+                item.put("type", strValue);
+
+                // value
+                strValue  = jsonItem.getString("value");
+                item.put("value", strValue);
+
+                m_arrayItems.add(item);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

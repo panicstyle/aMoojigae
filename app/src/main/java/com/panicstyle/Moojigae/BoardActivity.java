@@ -129,6 +129,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                 } else if (type.contains("recent")) {
                     Intent intent = new Intent(BoardActivity.this, RecentItemsActivity.class);
                     intent.putExtra("ITEMS_TITLE", title);
+                    intent.putExtra("ITEMS_TYPE", "list");
                     intent.putExtra("ITEMS_LINK", m_strRecent);
                     startActivity(intent);
                 } else {
@@ -189,17 +190,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
     }
 
     protected boolean getData() {
-        String boardLink = "/board-api-menu.do";
-        if (m_boardCode.equalsIgnoreCase("maul")) {
-            setTitle("무지개교육마을");
-            boardLink += "?comm=1";
-        } else if (m_boardCode.equalsIgnoreCase("school1")) {
-            setTitle("초등무지개학교");
-            boardLink += "?comm=2";
-        } else {
-            setTitle("중등무지개학교");
-            boardLink += "?comm=3";
-        }
+        String boardLink = "/board-api-menu.do?comm=" + m_boardCode;
 
         String url = GlobalConst.m_strServer + boardLink;
         String result = m_app.m_httpRequest.requestPost(url, "", url);

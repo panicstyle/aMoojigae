@@ -87,54 +87,131 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
 				return convertView;
             } else {
-				ViewHolder holder;
+				ViewHolder holder = null;
+				ViewHolderNotice holderNotice = null;
+				ViewHolderRe holderRe = null;
 
-				if (convertView != null) {
-					Object a = convertView.getTag();
-					if (!(a instanceof ViewHolder)) {
-						convertView = null;
-					}
-				}
 				HashMap<String, Object> item;;
 				item = arrayItems.get(position);
 				String boardDep = (String)item.get("boardDep");
-				if (convertView == null) {
-					if (boardDep.equals("1")) {
-						convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
-					} else {
-						convertView = mInflater.inflate(R.layout.list_item_reitemsview, null);
-					}
-
-					holder = new ViewHolder();
-					holder.name = (TextView) convertView.findViewById(R.id.name);
-					holder.subject = (TextView) convertView.findViewById(R.id.subject);
-					holder.comment = (TextView) convertView.findViewById(R.id.comment);
-					holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
-
-					convertView.setTag(holder);
-				} else {
-					holder = (ViewHolder) convertView.getTag();
-				}
+				String boardRow = (String)item.get("boardRow");
 				String date = (String) item.get("date");
 				String name = (String) item.get("name");
 				String subject = (String) item.get("subject");
 				String comment = (String) item.get("comment");
 				String hit = (String) item.get("hit");
 				int isNew = (Integer) item.get("isNew");
-				// Bind the data efficiently with the holder.
 				name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
-				holder.name.setText(Html.fromHtml(name));
-				holder.subject.setText(subject);
-				holder.comment.setText(comment);
-				if (isNew == 1) {
-					holder.iconnew.setImageResource(R.drawable.circle);
-				} else {
-					holder.iconnew.setImageResource(0);
+
+				if (convertView != null) {
+					Object a = convertView.getTag();
+
+					if (boardRow.equals("0")) {
+						if (!(a instanceof ViewHolderNotice)) {
+							convertView = null;
+						} else {
+							holderNotice = (ViewHolderNotice) convertView.getTag();
+						}
+					} else {
+						if (boardDep.equals("1")) {
+							if (!(a instanceof ViewHolder)) {
+								convertView = null;
+							} else {
+								holder = (ViewHolder) convertView.getTag();
+							}
+						} else {
+							if (!(a instanceof ViewHolderRe)) {
+								convertView = null;
+							} else {
+								holderRe = (ViewHolderRe) convertView.getTag();
+							}
+						}
+					}
 				}
-				if (comment.equals("0")) {
-					holder.comment.setBackgroundResource(0);
+
+				if (convertView == null) {
+					if (boardRow.equals("0")) {
+						convertView = mInflater.inflate(R.layout.list_item_itemsview_notice, null);
+
+						holderNotice = new ViewHolderNotice();
+						holderNotice.name = (TextView) convertView.findViewById(R.id.name);
+						holderNotice.subject = (TextView) convertView.findViewById(R.id.subject);
+						holderNotice.comment = (TextView) convertView.findViewById(R.id.comment);
+						holderNotice.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
+
+						convertView.setTag(holderNotice);
+					} else {
+						if (boardDep.equals("1")) {
+							convertView = mInflater.inflate(R.layout.list_item_itemsview, null);
+
+							holder = new ViewHolder();
+							holder.name = (TextView) convertView.findViewById(R.id.name);
+							holder.subject = (TextView) convertView.findViewById(R.id.subject);
+							holder.comment = (TextView) convertView.findViewById(R.id.comment);
+							holder.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
+
+							convertView.setTag(holder);
+						} else {
+							convertView = mInflater.inflate(R.layout.list_item_reitemsview, null);
+
+							holderRe = new ViewHolderRe();
+							holderRe.name = (TextView) convertView.findViewById(R.id.name);
+							holderRe.subject = (TextView) convertView.findViewById(R.id.subject);
+							holderRe.comment = (TextView) convertView.findViewById(R.id.comment);
+							holderRe.iconnew = (ImageView) convertView.findViewById(R.id.iconnew);
+
+							convertView.setTag(holderRe);
+						}
+					}
+				}
+
+				if (boardRow.equals("0")) {
+					// Bind the data efficiently with the holder.
+					holderNotice.name.setText(Html.fromHtml(name));
+					holderNotice.subject.setText(subject);
+					holderNotice.comment.setText(comment);
+					if (isNew == 1) {
+						holderNotice.iconnew.setImageResource(R.drawable.circle);
+					} else {
+						holderNotice.iconnew.setImageResource(0);
+					}
+					if (comment.equals("0")) {
+						holderNotice.comment.setBackgroundResource(0);
+					} else {
+						holderNotice.comment.setBackgroundResource(R.drawable.layout_circle);
+					}
 				} else {
-					holder.comment.setBackgroundResource(R.drawable.layout_circle);
+					if (boardDep.equals("1")) {
+						// Bind the data efficiently with the holder.
+						holder.name.setText(Html.fromHtml(name));
+						holder.subject.setText(subject);
+						holder.comment.setText(comment);
+						if (isNew == 1) {
+							holder.iconnew.setImageResource(R.drawable.circle);
+						} else {
+							holder.iconnew.setImageResource(0);
+						}
+						if (comment.equals("0")) {
+							holder.comment.setBackgroundResource(0);
+						} else {
+							holder.comment.setBackgroundResource(R.drawable.layout_circle);
+						}
+					} else {
+						// Bind the data efficiently with the holder.
+						holderRe.name.setText(Html.fromHtml(name));
+						holderRe.subject.setText(subject);
+						holderRe.comment.setText(comment);
+						if (isNew == 1) {
+							holderRe.iconnew.setImageResource(R.drawable.circle);
+						} else {
+							holderRe.iconnew.setImageResource(0);
+						}
+						if (comment.equals("0")) {
+							holderRe.comment.setBackgroundResource(0);
+						} else {
+							holderRe.comment.setBackgroundResource(R.drawable.layout_circle);
+						}
+					}
 				}
 
 				return convertView;
@@ -142,6 +219,20 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
         }
 
 		static class ViewHolder {
+			TextView name;
+			TextView subject;
+			TextView comment;
+			ImageView iconnew;
+		}
+
+		static class ViewHolderNotice {
+			TextView name;
+			TextView subject;
+			TextView comment;
+			ImageView iconnew;
+		}
+
+		static class ViewHolderRe {
 			TextView name;
 			TextView subject;
 			TextView comment;
