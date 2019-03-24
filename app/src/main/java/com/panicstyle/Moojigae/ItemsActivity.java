@@ -378,7 +378,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
     protected boolean getData() {
 		String Page = Integer.toString(m_nPage);
-		String url = GlobalConst.m_strServer + "/board-api-list.do?boardId=" + m_itemsLink + "&Page=" + Page;
+		String url = GlobalConst.m_strServer + "/board-api-list.do?boardId=" + m_itemsLink + "&page=" + Page;
 
 		String result = m_app.m_httpRequest.requestPost(url, "", url);
 
