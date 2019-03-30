@@ -113,6 +113,25 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
         m_arrayItems = new ArrayList<>();
 
+        webContent = (WebView) findViewById(R.id.webView);
+
+        webContent.setWebViewClient(new myWebClient());
+
+        webContent.addJavascriptInterface(this, "MyApp");
+        webContent.getSettings().setJavaScriptEnabled(true);
+        webContent.setBackgroundColor(0);
+
+        String htmlData = "<h3 align='center'>읽고 있는 중입니다....</h3>";
+        webContent.loadData(htmlData, "text/html", "utf-8");
+
+        // m_Cookie 를 각각 배열로 구분하여 처리
+        String[] cookies = m_app.m_httpRequest.m_Cookie.split(";");
+        for (int i = 0; i < cookies.length; i++) {
+            CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
+        }
+        webContent.clearView();
+        webContent.requestLayout();
+
         m_nThreadMode = 1;
         LoadData("로딩중");
     }
@@ -245,19 +264,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             tvHit = (TextView) findViewById(R.id.hit);
             tvHit.setText(m_strHit);
 
-            webContent = (WebView) findViewById(R.id.webView);
 
-            webContent.setWebViewClient(new myWebClient());
-
-            webContent.addJavascriptInterface(this, "MyApp");
-            webContent.getSettings().setJavaScriptEnabled(true);
-            webContent.setBackgroundColor(0);
-
-            // m_Cookie 를 각각 배열로 구분하여 처리
-            String[] cookies = m_app.m_httpRequest.m_Cookie.split(";");
-            for (int i = 0; i < cookies.length; i++) {
-                CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
-            }
 
             webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", "utf-8", "");
 
