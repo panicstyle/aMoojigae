@@ -28,4 +28,14 @@
     <string name="show_dialog">Show Dialog</string>
     <string name="undo">Undo</string>
 
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">FCM Message</string>
+
+    <string name="app_id">ca-app-pub-9032980304073628~9650194793</string>
+    <string name="app_unit_id">ca-app-pub-9032980304073628/8033860795</string>
+
+    <string name="title_recent">최신글</string>
+    <string name="title_board">게시판</string>
+    <string name="title_sites">사이트</string>
+    <string name="title_setting">설정</string>
 </resources>

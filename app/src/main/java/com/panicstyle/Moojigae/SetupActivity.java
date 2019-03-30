@@ -12,9 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity implements Runnable {
+public class SetupActivity extends AppCompatActivity implements Runnable {
 	static final int SETUP_CODE = 1234;
 	private SetInfo m_setInfo;
 	private ProgressDialog m_pd;
@@ -25,27 +24,23 @@ public class LoginActivity extends AppCompatActivity implements Runnable {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
-		setTitle("로그인설정...");
+		setContentView(R.layout.activity_setup);
+		setTitle("로그인 설정하기");
 
 		m_app = (MoojigaeApplication)getApplication();
 
 		m_setInfo = new SetInfo();
-		boolean isSuccess = false;
 		if (m_setInfo.GetUserInfo(this)) {
-			isSuccess = true;
-		} else if (m_setInfo.GetUserInfoXML(this)) {
-			isSuccess = true;
+			String userID = m_setInfo.m_userID;
+			String userPW = m_setInfo.m_userPW;
+			boolean pushYN = m_setInfo.m_pushYN;
+			EditText tID = (EditText) findViewById(R.id.id);
+			tID.setText(userID);
+			EditText tPW = (EditText) findViewById(R.id.password);
+			tPW.setText(userPW);
+			Switch switchYN = (Switch) findViewById(R.id.pusy_yn);
+			switchYN.setChecked(pushYN);
 		}
-		String userID = m_setInfo.m_userID;
-		String userPW = m_setInfo.m_userPW;
-		boolean pushYN = m_setInfo.m_pushYN;
-		EditText tID = (EditText) findViewById(R.id.id);
-		tID.setText(userID);
-		EditText tPW = (EditText) findViewById(R.id.password);
-		tPW.setText(userPW);
-		Switch switchYN = (Switch) findViewById(R.id.pusy_yn);
-		switchYN.setChecked(pushYN);
 
 		findViewById(R.id.sign_in_button).setOnClickListener(mClickListener);
 	}

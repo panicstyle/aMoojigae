@@ -13,7 +13,7 @@ public class AboutActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        setTitle("무지개교육마을앱에 대해서...");
+        setTitle("앱정보 보기");
 
         Context context = AboutActivity.this;
         String version;
