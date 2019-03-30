@@ -121,7 +121,10 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         webContent.getSettings().setJavaScriptEnabled(true);
         webContent.setBackgroundColor(0);
 
-        String htmlData = "<h3 align='center'>읽고 있는 중입니다....</h3>";
+        webContent.clearView();
+        webContent.requestLayout();
+
+        String htmlData = "<h3 align='center'>Loading....</h3>";
         webContent.loadData(htmlData, "text/html", "utf-8");
 
         // m_Cookie 를 각각 배열로 구분하여 처리
@@ -129,9 +132,6 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         for (int i = 0; i < cookies.length; i++) {
             CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
         }
-        webContent.clearView();
-        webContent.requestLayout();
-
         m_nThreadMode = 1;
         LoadData("로딩중");
     }
@@ -264,8 +264,8 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
             tvHit = (TextView) findViewById(R.id.hit);
             tvHit.setText(m_strHit);
 
-
-
+            webContent.clearView();
+            webContent.requestLayout();
             webContent.loadDataWithBaseURL(GlobalConst.m_strServer, m_strHTML, "text/html", "utf-8", "");
 
             tvProfile = (TextView) findViewById(R.id.profile);
