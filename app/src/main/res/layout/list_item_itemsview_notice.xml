@@ -23,8 +23,10 @@
 	<ImageView
 		android:id="@+id/iconnew"
 		android:layout_gravity="center"
-		android:layout_width="20dip"
-		android:layout_height="20dip" >
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"
+		android:layout_width="6dip"
+		android:layout_height="6dip" >
 	</ImageView>
 
 	<LinearLayout

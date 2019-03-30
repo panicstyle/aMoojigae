@@ -22,15 +22,17 @@
 	<ImageView
 		android:id="@+id/iconnew"
 		android:layout_gravity="center"
-		android:layout_width="20dip"
-		android:layout_height="20dip" >
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"
+		android:layout_width="6dip"
+		android:layout_height="6dip" >
 	</ImageView>
 
 	<ImageView android:id="@+id/iconreply"
 			   android:layout_gravity="center"
 			   android:layout_width="20dip"
 			   android:layout_height="20dip"
-			   android:src="@drawable/ic_keyboard_arrow_right_black_24dp">
+			   android:src="@drawable/ic_subdirectory_arrow_right_black_24dp">
 	</ImageView>
 
 	<LinearLayout

@@ -115,7 +115,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
             holder.comment.setText(comment);
             holder.boardName.setText(boardName);
             if (isNew == 1) {
-                holder.iconnew.setImageResource(R.drawable.circle);
+                holder.iconnew.setImageResource(R.drawable.ic_brightness_1_red_6dp);
             } else {
                 holder.iconnew.setImageResource(0);
             }
