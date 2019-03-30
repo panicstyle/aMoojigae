@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context="com.panicstyle.Moojigae.BoardActivity">
+    tools:context=".BoardActivity">
 
     <ListView
         android:id="@+id/listView"

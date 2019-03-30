@@ -88,7 +88,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                 convertView.setTag(holder);
                 holder.title.setText(title);
                 if (isNew == 1) {
-                    holder.iconnew.setImageResource(R.drawable.circle);
+                    holder.iconnew.setImageResource(R.drawable.ic_brightness_1_red_6dp);
                 } else {
                     holder.iconnew.setImageResource(0);
                 }

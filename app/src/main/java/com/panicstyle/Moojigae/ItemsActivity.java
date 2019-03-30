@@ -171,7 +171,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					holderNotice.subject.setText(subject);
 					holderNotice.comment.setText(comment);
 					if (isNew == 1) {
-						holderNotice.iconnew.setImageResource(R.drawable.circle);
+						holderNotice.iconnew.setImageResource(R.drawable.ic_brightness_1_red_6dp);
 					} else {
 						holderNotice.iconnew.setImageResource(0);
 					}
@@ -187,7 +187,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 						holder.subject.setText(subject);
 						holder.comment.setText(comment);
 						if (isNew == 1) {
-							holder.iconnew.setImageResource(R.drawable.circle);
+							holder.iconnew.setImageResource(R.drawable.ic_brightness_1_red_6dp);
 						} else {
 							holder.iconnew.setImageResource(0);
 						}
@@ -202,7 +202,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 						holderRe.subject.setText(subject);
 						holderRe.comment.setText(comment);
 						if (isNew == 1) {
-							holderRe.iconnew.setImageResource(R.drawable.circle);
+							holderRe.iconnew.setImageResource(R.drawable.ic_brightness_1_red_6dp);
 						} else {
 							holderRe.iconnew.setImageResource(0);
 						}
