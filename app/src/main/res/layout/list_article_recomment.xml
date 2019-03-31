@@ -28,7 +28,7 @@
 		<ImageView android:id="@+id/iconreply"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:src="@drawable/ic_more_vert_black_24dp">
+			android:src="@drawable/ic_subdirectory_arrow_right_black_24dp">
 		</ImageView>
 
 		<LinearLayout

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,11 +47,10 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 	protected String m_itemsLink;
     private List<HashMap<String, Object>> m_arrayItems;
     private int m_nPage;
-    static final int REQUEST_WRITE = 1;
-    static final int REQUEST_VIEW = 2;
     protected int m_LoginStatus;
 	public static int m_nMode;
 	private EfficientAdapter m_adapter;
+	private int last_position = 0;
 
 	private MoojigaeApplication m_app;
 
@@ -101,6 +101,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				String comment = (String) item.get("comment");
 				String hit = (String) item.get("hit");
 				int isNew = (Integer) item.get("isNew");
+				int isRead = (Integer) item.get("read");
 				name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
 
 				if (convertView != null) {
@@ -180,6 +181,11 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					} else {
 						holderNotice.comment.setBackgroundResource(R.drawable.layout_circle);
 					}
+					if (isRead == 1) {
+						holderNotice.subject.setTextColor(Color.parseColor("#AAAAAA"));
+					} else {
+						holderNotice.subject.setTextColor(Color.parseColor("#000000"));
+					}
 				} else {
 					if (boardDep.equals("1")) {
 						// Bind the data efficiently with the holder.
@@ -196,6 +202,11 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 						} else {
 							holder.comment.setBackgroundResource(R.drawable.layout_circle);
 						}
+						if (isRead == 1) {
+							holder.subject.setTextColor(Color.parseColor("#AAAAAA"));
+						} else {
+							holder.subject.setTextColor(Color.parseColor("#000000"));
+						}
 					} else {
 						// Bind the data efficiently with the holder.
 						holderRe.name.setText(Html.fromHtml(name));
@@ -210,6 +221,11 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 							holderRe.comment.setBackgroundResource(0);
 						} else {
 							holderRe.comment.setBackgroundResource(R.drawable.layout_circle);
+						}
+						if (isRead == 1) {
+							holderRe.subject.setTextColor(Color.parseColor("#AAAAAA"));
+						} else {
+							holderRe.subject.setTextColor(Color.parseColor("#000000"));
 						}
 					}
 				}
@@ -259,6 +275,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					Thread thread = new Thread(ItemsActivity.this);
 					thread.start();
 				} else {
+					last_position = position;
 					HashMap<String, Object> item;
 					item = m_arrayItems.get(position);
 					Intent intent = new Intent(ItemsActivity.this, ArticleViewActivity.class);
@@ -272,7 +289,7 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 					intent.putExtra("HIT", (String) item.get("hit"));
 					intent.putExtra("BOARDID", m_itemsLink);
 					intent.putExtra("boardName", m_itemsTitle);
-					startActivityForResult(intent, REQUEST_VIEW);
+					startActivityForResult(intent, GlobalConst.REQUEST_VIEW);
 				}
 			}
 		});
@@ -392,6 +409,9 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 		// 각 항목 찾기
 		HashMap<String, Object> item;
 
+		// DB에 해당 글 번호를 확인한다.
+		final DBHelper db = new DBHelper(this);
+
 		try {
 			JSONObject boardObject = new JSONObject(result);
 			JSONArray arrayItem = boardObject.getJSONArray("item");
@@ -441,7 +461,14 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 				// 조회수
 				item.put("hit", jsonItem.getString("boardRead_cnt"));
 
+				if (db.exist(boardNo)) {
+					item.put("read", 1);
+				} else {
+					item.put("read", 0);
+				}
+
 				m_arrayItems.add(item);
+
 			}
 		} catch (Exception e) {
 				e.printStackTrace();
@@ -477,16 +504,15 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 	    intent.putExtra("BOARDNO",  "");
 		intent.putExtra("TITLE", "");
 		intent.putExtra("CONTENT", "");
-        startActivityForResult(intent, REQUEST_WRITE);
+        startActivityForResult(intent, GlobalConst.REQUEST_WRITE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);
-    	switch(requestCode) {
-    		case REQUEST_WRITE:
-			case REQUEST_VIEW:
-				if (resultCode == RESULT_OK) {
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+				case GlobalConst.REQUEST_WRITE:
 					m_arrayItems.clear();
 					m_adapter.notifyDataSetChanged();
 					m_nPage = 1;
@@ -496,11 +522,18 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 
 					Thread thread = new Thread(this);
 					thread.start();
-				}
-				break;
-			default:
-				break;
+					break;
+				case GlobalConst.REQUEST_VIEW:
+					HashMap<String, Object> item;
+					item = m_arrayItems.get(last_position);
+					item.put("read", 1);
+					m_arrayItems.set(last_position, item);
+					m_adapter.notifyDataSetChanged();
+					break;
+				default:
+					break;
 
-    	}
+			}
+		}
     }
 }

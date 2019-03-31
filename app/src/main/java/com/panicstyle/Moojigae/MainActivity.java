@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -169,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // DB Create
+        final DBHelper db = new DBHelper(this);
+        db.delete();
 
         m_listView = (ListView) findViewById(R.id.listView);
         m_arrayItems = new ArrayList<HashMap<String, String>>();
@@ -389,13 +392,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        switch(requestCode) {
-            case SETUP_CODE:
-                if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case SETUP_CODE:
                     loadContent();
-                }
-                break;
+                    break;
+            }
         }
     }
-
 }

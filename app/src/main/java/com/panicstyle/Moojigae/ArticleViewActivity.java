@@ -56,14 +56,6 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     private boolean m_bDeleteStatus;
     private String m_strErrorMsg;
 
-    static final int REQUEST_WRITE = 1;
-    static final int REQUEST_MODIFY = 2;
-    static final int REQUEST_COMMENT_WRITE = 3;
-    static final int REQUEST_COMMENT_MODIFY = 4;
-    static final int REQUEST_COMMENT_REPLY_VIEW = 5;
-    static final int REQUEST_COMMENT_MODIFY_VIEW = 6;
-    static final int REQUEST_COMMENT_DELETE_VIEW = 7;
-
     private String m_strCommID;
     private String m_strBoardID;
     private String m_strBoardNo;
@@ -206,9 +198,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 } else {
                     if (m_nThreadMode == 2) {
                         if (getParent() == null) {
-                            setResult(Activity.RESULT_OK, new Intent());
+                            setResult(RESULT_OK, new Intent());
                         } else {
-                            getParent().setResult(Activity.RESULT_OK, new Intent());
+                            getParent().setResult(RESULT_OK, new Intent());
                         }
                         finish();
                     } else {
@@ -311,6 +303,17 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 iconMore.setContentDescription(cnt);
 
                 ll.addView(view);
+            }
+
+            // DB에 해당 글 번호를 저장한다.
+            final DBHelper db = new DBHelper(this);
+            ArticleRead read = new ArticleRead(m_strBoardNo, m_strBoardID);
+            db.add(read);
+
+            if (getParent() == null) {
+                setResult(RESULT_OK, new Intent());
+            } else {
+                getParent().setResult(RESULT_OK, new Intent());
             }
 		}
     }
@@ -416,7 +419,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         String url = GlobalConst.m_strServer + "/board-api-read.do?boardId=" + m_strBoardID + "&boardNo=" + m_strBoardNo + "&command=READ&categoryId=-1";
         String result = m_app.m_httpRequest.requestGet(url, "");
 
-        if (result.indexOf("<title>시스템 메세지입니다</title>") > 0) {
+        if (result.indexOf("<b>시스템 메세지입니다</b>") > 0) {
             return false;
         }
 
@@ -590,7 +593,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         intent.putExtra("BOARDNO", m_strBoardNo);
         intent.putExtra("TITLE", "");
         intent.putExtra("CONTENT", "");
-        startActivityForResult(intent, REQUEST_WRITE);
+        startActivityForResult(intent, GlobalConst.REQUEST_WRITE);
     }
 
     public void modifyArticle() {
@@ -602,7 +605,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         intent.putExtra("BOARDNO", m_strBoardNo);
         intent.putExtra("TITLE", m_strSubject);
         intent.putExtra("CONTENT", m_strContent);
-        startActivityForResult(intent, REQUEST_MODIFY);
+        startActivityForResult(intent, GlobalConst.REQUEST_MODIFY);
     }
 
     public void addComment() {
@@ -615,7 +618,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         intent.putExtra("BOARDNO", m_strBoardNo);
         intent.putExtra("COMMENTNO", "");
         intent.putExtra("COMMENT", "");
-        startActivityForResult(intent, REQUEST_COMMENT_WRITE);
+        startActivityForResult(intent, GlobalConst.REQUEST_COMMENT_WRITE);
     }
 
     protected void DeleteArticleConfirm() {
@@ -748,7 +751,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         intent.putExtra("BOARDNO", m_strBoardNo);
         intent.putExtra("COMMENTNO", m_strCommentNo);
         intent.putExtra("COMMENT", "");
-        startActivityForResult(intent, REQUEST_COMMENT_WRITE);
+        startActivityForResult(intent, GlobalConst.REQUEST_COMMENT_WRITE);
     }
 
 
@@ -843,25 +846,25 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	super.onActivityResult(requestCode, resultCode, intent);
-    	switch(requestCode) {
-            case REQUEST_MODIFY:
-            case REQUEST_COMMENT_WRITE:
-            case REQUEST_COMMENT_MODIFY:
-                if (resultCode == RESULT_OK) {
+    	if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GlobalConst.REQUEST_MODIFY:
+                case GlobalConst.REQUEST_COMMENT_WRITE:
+                case GlobalConst.REQUEST_COMMENT_MODIFY:
                     m_nThreadMode = 1;
                     LoadData("로딩중");
-                }
-                break;
-            case REQUEST_WRITE:
-                if (getParent() == null) {
-                    setResult(Activity.RESULT_OK, new Intent());
-                } else {
-                    getParent().setResult(Activity.RESULT_OK, new Intent());
-                }
-                finish();
-                break;
-            default:
-                break;
-    	}
+                    break;
+                case GlobalConst.REQUEST_WRITE:
+                    if (getParent() == null) {
+                        setResult(RESULT_OK, new Intent());
+                    } else {
+                        getParent().setResult(RESULT_OK, new Intent());
+                    }
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
