@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,11 +49,10 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     protected String m_itemsType;
     protected String m_itemsLink;
     private List<HashMap<String, Object>> m_arrayItems;
-    static final int REQUEST_WRITE = 1;
-    static final int REQUEST_VIEW = 2;
     protected int m_LoginStatus;
     public static int m_nMode;
     private EfficientAdapter m_adapter;
+    private int last_position = 0;
 
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
@@ -107,6 +107,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
             String hit = (String) item.get("hit");
             int isNew = (Integer) item.get("isNew");
             int isReply = (Integer) item.get("isReply");
+            int isRead = (Integer) item.get("read");
             String boardName = (String) item.get("boardName");
             // Bind the data efficiently with the holder.
             name = "<b>" + name + "</b>&nbsp;" + date + "&nbsp;(" + hit + "&nbsp;읽음)" ;
@@ -123,6 +124,11 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 holder.comment.setBackgroundResource(0);
             } else {
                 holder.comment.setBackgroundResource(R.drawable.layout_circle);
+            }
+            if (isRead == 1) {
+                holder.subject.setTextColor(Color.parseColor("#AAAAAA"));
+            } else {
+                holder.subject.setTextColor(Color.parseColor("#000000"));
             }
 
             return convertView;
@@ -145,6 +151,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                last_position = position;
                 HashMap<String, Object> item;
                 item = m_arrayItems.get(position);
                 Intent intent = new Intent(RecentItemsActivity.this, ArticleViewActivity.class);
@@ -158,7 +165,7 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 intent.putExtra("HIT", (String) item.get("hit"));
                 intent.putExtra("BOARDID", (String) item.get("boardId"));
                 intent.putExtra("boardName", (String) item.get("boardName"));
-                startActivityForResult(intent, REQUEST_VIEW);
+                startActivityForResult(intent, GlobalConst.REQUEST_VIEW);
             }
         });
 
@@ -270,6 +277,9 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
 
         HashMap<String, Object> item;
 
+        // DB에 해당 글 번호를 확인한다.
+        final DBHelper db = new DBHelper(this);
+
         try {
             JSONObject boardObject = new JSONObject(result);
             JSONArray arrayItem = boardObject.getJSONArray("item");
@@ -320,6 +330,12 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
                 item.put("hit", jsonItem.getString("boardRead_cnt"));
                 item.put("isReply", 0);
 
+                if (db.exist(strBoardNo)) {
+                    item.put("read", 1);
+                } else {
+                    item.put("read", 0);
+                }
+
                 m_arrayItems.add( item );
             }
         } catch (Exception e) {
@@ -342,10 +358,19 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        switch(requestCode) {
-            default:
-                break;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GlobalConst.REQUEST_VIEW:
+                    HashMap<String, Object> item;
+                    item = m_arrayItems.get(last_position);
+                    item.put("read", 1);
+                    m_arrayItems.set(last_position, item);
+                    m_adapter.notifyDataSetChanged();
+                    break;
+                default:
+                    break;
 
+            }
         }
     }
 }

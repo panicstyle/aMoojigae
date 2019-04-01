@@ -26,8 +26,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BoardActivity extends AppCompatActivity implements Runnable {
     Toolbar toolbar;
@@ -122,7 +120,7 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                 String link = (String) item.get("link");
 
                 if (type.contains("link")) {
-                    Intent intent = new Intent(BoardActivity.this, CalendarActivity.class);
+                    Intent intent = new Intent(BoardActivity.this, WebActivity.class);
                     intent.putExtra("ITEMS_TITLE", title);
                     intent.putExtra("ITEMS_LINK", link);
                     startActivity(intent);
