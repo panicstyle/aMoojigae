@@ -198,9 +198,9 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 } else {
                     if (m_nThreadMode == 2) {
                         if (getParent() == null) {
-                            setResult(RESULT_OK, new Intent());
+                            setResult(GlobalConst.RESULT_DELETE, new Intent());
                         } else {
-                            getParent().setResult(RESULT_OK, new Intent());
+                            getParent().setResult(GlobalConst.RESULT_DELETE, new Intent());
                         }
                         finish();
                     } else {

@@ -129,6 +129,8 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
     }
 
     public void run() {
+        Login login = new Login();
+        login.LoginTo(ArticleWriteActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
         PostData();
     	handler.sendEmptyMessage(0);
     }

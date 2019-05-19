@@ -20,4 +20,6 @@ public class GlobalConst {
     public static final int REQUEST_COMMENT_REPLY_VIEW = 6;
     public static final int REQUEST_COMMENT_MODIFY_VIEW = 7;
     public static final int REQUEST_COMMENT_DELETE_VIEW = 8;
+
+    public static final int RESULT_DELETE = 2;
 }
