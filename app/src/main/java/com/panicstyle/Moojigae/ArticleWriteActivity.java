@@ -39,6 +39,7 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,34 +129,47 @@ public class ArticleWriteActivity extends AppCompatActivity implements Runnable 
         thread.start();
     }
 
+    private static class MyHandler extends Handler {
+        private final WeakReference<ArticleWriteActivity> mActivity;
+        public MyHandler(ArticleWriteActivity activity) {
+            mActivity = new WeakReference<ArticleWriteActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            ArticleWriteActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+    }
+
+    private final MyHandler mHandler = new MyHandler(this);
+
     public void run() {
         Login login = new Login();
         login.LoginTo(ArticleWriteActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
         PostData();
-    	handler.sendEmptyMessage(0);
+        mHandler.sendEmptyMessage(0);
     }
 
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
+    private void handleMessage(Message msg) {
+        if(m_pd != null){
+            if(m_pd.isShowing()){
+                m_pd.dismiss();
             }
-    		if (!m_bSaveStatus) {
-	    		AlertDialog.Builder ab = null;
-				ab = new AlertDialog.Builder( ArticleWriteActivity.this );
-				String strErrorMsg = "글 저장중 오류가 발생했습니다. \n" + m_ErrorMsg;
-				ab.setMessage(strErrorMsg);
-				ab.setPositiveButton(android.R.string.ok, null);
-				ab.setTitle( "확인" );
-				ab.show();
-				return;
-    		}
-            finish();
-    	}
-    };
+        }
+        if (!m_bSaveStatus) {
+            AlertDialog.Builder ab = null;
+            ab = new AlertDialog.Builder( ArticleWriteActivity.this );
+            String strErrorMsg = "글 저장중 오류가 발생했습니다. \n" + m_ErrorMsg;
+            ab.setMessage(strErrorMsg);
+            ab.setPositiveButton(android.R.string.ok, null);
+            ab.setTitle( "확인" );
+            ab.show();
+            return;
+        }
+        finish();
+    }
 
     protected boolean PostData() {
 

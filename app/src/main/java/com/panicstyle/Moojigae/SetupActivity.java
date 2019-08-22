@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 
+import java.lang.ref.WeakReference;
+
 public class SetupActivity extends AppCompatActivity implements Runnable {
 	static final int SETUP_CODE = 1234;
 	private SetInfo m_setInfo;
@@ -51,22 +53,35 @@ public class SetupActivity extends AppCompatActivity implements Runnable {
 		thread.start();
 	}
 
-	public void run() {
-		LoadData(this);
-		handler.sendEmptyMessage(0);
-	}
-
-	private Handler handler = new Handler() {
+	private static class MyHandler extends Handler {
+		private final WeakReference<SetupActivity> mActivity;
+		public MyHandler(SetupActivity activity) {
+			mActivity = new WeakReference<SetupActivity>(activity);
+		}
 		@Override
 		public void handleMessage(Message msg) {
-			if(m_pd != null){
-				if(m_pd.isShowing()){
-					m_pd.dismiss();
-				}
+			SetupActivity activity = mActivity.get();
+			if (activity != null) {
+				activity.handleMessage(msg);
 			}
-			displayData();
 		}
-	};
+	}
+
+	private final MyHandler mHandler = new MyHandler(this);
+
+	public void run() {
+		LoadData(this);
+		mHandler.sendEmptyMessage(0);
+	}
+
+	private void handleMessage(Message msg) {
+		if (m_pd != null) {
+			if (m_pd.isShowing()) {
+				m_pd.dismiss();
+			}
+		}
+		displayData();
+	}
 
 	public void displayData() {
 		if (m_loginStatus == 1) {

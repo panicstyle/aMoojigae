@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,12 +28,10 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ItemsActivity extends AppCompatActivity implements Runnable {
 	private ListView m_listView;
@@ -318,9 +313,25 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
         thread.start();
     }
 
-    public void run() {
-    	if (!getData()) {
-            // Login
+	private static class MyHandler extends Handler {
+		private final WeakReference<ItemsActivity> mActivity;
+		public MyHandler(ItemsActivity activity) {
+			mActivity = new WeakReference<ItemsActivity>(activity);
+		}
+		@Override
+		public void handleMessage(Message msg) {
+			ItemsActivity activity = mActivity.get();
+			if (activity != null) {
+				activity.handleMessage(msg);
+			}
+		}
+	}
+
+	private final MyHandler mHandler = new MyHandler(this);
+
+	public void run() {
+		if (!getData()) {
+			// Login
 			SetInfo setInfo = new SetInfo();
 			if (!setInfo.GetUserInfo(ItemsActivity.this)) {
 				m_app.m_strUserID = "";
@@ -336,28 +347,25 @@ public class ItemsActivity extends AppCompatActivity implements Runnable {
 			m_LoginStatus = login.LoginTo(ItemsActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
 			m_strErrorMsg = login.m_strErrorMsg;
 
-    		if (m_LoginStatus > 0) {
-    			if (getData()) {
-    				m_LoginStatus = 1;
-    			}
-    		}
-    	} else {
+			if (m_LoginStatus > 0) {
+				if (getData()) {
+					m_LoginStatus = 1;
+				}
+			}
+		} else {
 			m_LoginStatus = 1;
-    	}
-   		handler.sendEmptyMessage(0);
-    }
+		}
+		mHandler.sendEmptyMessage(0);
+	}
 
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
-            }
-    		displayData();
-    	}
-    };
+	private void handleMessage(Message msg) {
+		if (m_pd != null) {
+			if (m_pd.isShowing()) {
+				m_pd.dismiss();
+			}
+		}
+		displayData();
+	}
 
     public void displayData() {
 		if (m_LoginStatus == -1) {

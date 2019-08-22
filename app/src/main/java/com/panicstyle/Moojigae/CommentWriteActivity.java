@@ -19,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,32 +103,45 @@ public class CommentWriteActivity extends AppCompatActivity implements Runnable 
         thread.start();
     }
 
-    public void run() {
-        PostData();
-    	handler.sendEmptyMessage(0);
+    private static class MyHandler extends Handler {
+        private final WeakReference<CommentWriteActivity> mActivity;
+        public MyHandler(CommentWriteActivity activity) {
+            mActivity = new WeakReference<CommentWriteActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            CommentWriteActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
     }
 
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
+    private final MyHandler mHandler = new MyHandler(this);
+
+    public void run() {
+        PostData();
+        mHandler.sendEmptyMessage(0);
+    }
+
+    private void handleMessage(Message msg) {
+        if(m_pd != null){
+            if(m_pd.isShowing()){
+                m_pd.dismiss();
             }
-    		if (!m_bSaveStatus) {
-	    		AlertDialog.Builder ab = null;
-				ab = new AlertDialog.Builder( CommentWriteActivity.this );
-				String strErrorMsg = "댓글 저장중 오류가 발생했습니다. \n" + m_ErrorMsg;
-				ab.setMessage(strErrorMsg);
-				ab.setPositiveButton(android.R.string.ok, null);
-				ab.setTitle( "확인" );
-				ab.show();
-				return;
-    		}
-    		finish();
-    	}
-    };
+        }
+        if (!m_bSaveStatus) {
+            AlertDialog.Builder ab = null;
+            ab = new AlertDialog.Builder( CommentWriteActivity.this );
+            String strErrorMsg = "댓글 저장중 오류가 발생했습니다. \n" + m_ErrorMsg;
+            ab.setMessage(strErrorMsg);
+            ab.setPositiveButton(android.R.string.ok, null);
+            ab.setTitle( "확인" );
+            ab.show();
+            return;
+        }
+        finish();
+    }
 
     protected boolean PostData() {
         String url = GlobalConst.m_strServer + "/memo-save.do";

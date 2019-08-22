@@ -40,6 +40,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,6 +141,22 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
 
     }
 
+    private static class MyHandler extends Handler {
+        private final WeakReference<ArticleViewActivity> mActivity;
+        public MyHandler(ArticleViewActivity activity) {
+            mActivity = new WeakReference<ArticleViewActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            ArticleViewActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+    }
+
+    private final MyHandler mHandler = new MyHandler(this);
+
     public void run() {
         if (m_nThreadMode == 1) {         // LoadData
 
@@ -181,44 +198,41 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         } else if (m_nThreadMode == 3) {      // DeleteComment
             runDeleteComment();
         }
-        handler.sendEmptyMessage(0);
+        mHandler.sendEmptyMessage(0);
     }
 
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-            if (m_pd != null) {
-                if (m_pd.isShowing()) {
-                    m_pd.dismiss();
-                }
+    private void handleMessage(Message msg) {
+        if (m_pd != null) {
+            if (m_pd.isShowing()) {
+                m_pd.dismiss();
             }
-            if (m_nThreadMode == 1) {
-                displayData();
+        }
+        if (m_nThreadMode == 1) {
+            displayData();
+        } else {
+            if (!m_bDeleteStatus) {
+                AlertDialog.Builder ab = null;
+                ab = new AlertDialog.Builder( ArticleViewActivity.this );
+                ab.setMessage(m_strErrorMsg);
+                ab.setPositiveButton(android.R.string.ok, null);
+                ab.setTitle( "확인" );
+                ab.show();
+                return;
             } else {
-                if (!m_bDeleteStatus) {
-                    AlertDialog.Builder ab = null;
-                    ab = new AlertDialog.Builder( ArticleViewActivity.this );
-                    ab.setMessage(m_strErrorMsg);
-                    ab.setPositiveButton(android.R.string.ok, null);
-                    ab.setTitle( "확인" );
-                    ab.show();
-                    return;
-                } else {
-                    if (m_nThreadMode == 2) {
-                        if (getParent() == null) {
-                            setResult(GlobalConst.RESULT_DELETE, new Intent());
-                        } else {
-                            getParent().setResult(GlobalConst.RESULT_DELETE, new Intent());
-                        }
-                        finish();
+                if (m_nThreadMode == 2) {
+                    if (getParent() == null) {
+                        setResult(GlobalConst.RESULT_DELETE, new Intent());
                     } else {
-                        m_nThreadMode = 1;
-                        LoadData("로딩중");
+                        getParent().setResult(GlobalConst.RESULT_DELETE, new Intent());
                     }
+                    finish();
+                } else {
+                    m_nThreadMode = 1;
+                    LoadData("로딩중");
                 }
             }
-    	}
-    };
+        }
+    }
 
     public void displayData() {
 		if (m_nLoginStatus == -1) {

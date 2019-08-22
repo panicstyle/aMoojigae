@@ -24,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -291,22 +292,35 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 });
     }
 
-    public void run() {
-        LoadData(MainActivity.this);
-        handler.sendEmptyMessage(0);
-    }
-
-    private Handler handler = new Handler() {
+    private static class MyHandler extends Handler {
+        private final WeakReference<MainActivity> mActivity;
+        public MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
+            MainActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
             }
-            displayData();
         }
-    };
+    }
+
+    private final MyHandler mHandler = new MyHandler(this);
+
+    public void run() {
+        LoadData(MainActivity.this);
+        mHandler.sendEmptyMessage(0);
+    }
+
+    private void handleMessage(Message msg) {
+        if (m_pd != null) {
+            if (m_pd.isShowing()) {
+                m_pd.dismiss();
+            }
+        }
+        displayData();
+    }
 
     public void displayData() {
         m_listView.setAdapter(new EfficientAdapter(MainActivity.this, m_arrayItems));

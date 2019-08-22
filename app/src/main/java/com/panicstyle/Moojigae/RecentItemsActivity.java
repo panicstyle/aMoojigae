@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -192,6 +193,22 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         thread.start();
     }
 
+    private static class MyHandler extends Handler {
+        private final WeakReference<RecentItemsActivity> mActivity;
+        public MyHandler(RecentItemsActivity activity) {
+            mActivity = new WeakReference<RecentItemsActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            RecentItemsActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+    }
+
+    private final MyHandler mHandler = new MyHandler(this);
+
     public void run() {
         if (!getData()) {
             // Login
@@ -218,20 +235,17 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
         } else {
             m_LoginStatus = 1;
         }
-        handler.sendEmptyMessage(0);
+        mHandler.sendEmptyMessage(0);
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
+    private void handleMessage(Message msg) {
+        if (m_pd != null) {
+            if (m_pd.isShowing()) {
+                m_pd.dismiss();
             }
-            displayData();
         }
-    };
+        displayData();
+    }
 
     public void displayData() {
         if (m_LoginStatus == -1) {

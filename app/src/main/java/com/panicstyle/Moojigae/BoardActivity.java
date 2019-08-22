@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,23 +158,36 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
         thread.start();
     }
 
-    public void run() {
-    	getData();
-    	handler.sendEmptyMessage(0);
+    private static class MyHandler extends Handler {
+        private final WeakReference<BoardActivity> mActivity;
+        public MyHandler(BoardActivity activity) {
+            mActivity = new WeakReference<BoardActivity>(activity);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            BoardActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
     }
 
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-            if(m_pd != null){
-                if(m_pd.isShowing()){
-                    m_pd.dismiss();
-                }
+    private final MyHandler mHandler = new MyHandler(this);
+
+    public void run() {
+        getData();
+        mHandler.sendEmptyMessage(0);
+    }
+
+    private void handleMessage(Message msg) {
+        if (m_pd != null) {
+            if (m_pd.isShowing()) {
+                m_pd.dismiss();
             }
-    		displayData();
-    	}
-    };
-    
+        }
+        displayData();
+    }
+
     public void displayData() {
         m_listView.setAdapter(new EfficientAdapter(BoardActivity.this, m_arrayItems));
     }
