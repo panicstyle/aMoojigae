@@ -358,19 +358,22 @@ public class RecentItemsActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case GlobalConst.REQUEST_VIEW:
+        switch (requestCode) {
+            case GlobalConst.REQUEST_VIEW:
+                if (resultCode == RESULT_OK) {
                     HashMap<String, Object> item;
                     item = m_arrayItems.get(last_position);
                     item.put("read", 1);
                     m_arrayItems.set(last_position, item);
                     m_adapter.notifyDataSetChanged();
-                    break;
-                default:
-                    break;
+                } else if (resultCode == GlobalConst.RESULT_DELETE) {
+                    m_arrayItems.remove(last_position);
+                    m_adapter.notifyDataSetChanged();
+                }
+                break;
+            default:
+                break;
 
-            }
         }
     }
 }
