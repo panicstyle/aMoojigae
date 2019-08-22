@@ -120,9 +120,11 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         webContent.loadData(htmlData, "text/html", "utf-8");
 
         // m_Cookie 를 각각 배열로 구분하여 처리
-        String[] cookies = m_app.m_httpRequest.m_Cookie.split(";");
-        for (int i = 0; i < cookies.length; i++) {
-            CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
+        if (m_app.m_httpRequest.m_Cookie != null) {
+            String[] cookies = m_app.m_httpRequest.m_Cookie.split(";");
+            for (int i = 0; i < cookies.length; i++) {
+                CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
+            }
         }
         m_nThreadMode = 1;
         LoadData("로딩중");
@@ -157,7 +159,13 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
                 Login login = new Login();
 
                 m_nLoginStatus = login.LoginTo(ArticleViewActivity.this, m_app.m_httpRequest, m_app.m_strUserID, m_app.m_strUserPW);
-
+                // m_Cookie 를 각각 배열로 구분하여 처리
+                if (m_app.m_httpRequest.m_Cookie != null) {
+                    String[] cookies = m_app.m_httpRequest.m_Cookie.split(";");
+                    for (int i = 0; i < cookies.length; i++) {
+                        CookieManager.getInstance().setCookie(GlobalConst.m_strServer, cookies[i]);
+                    }
+                }
                 if (m_nLoginStatus > 0) {
                     if (getData()) {
                         m_nLoginStatus = 1;

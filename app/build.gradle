@@ -6,8 +6,8 @@ android {
         applicationId "com.panicstyle.Moojigae"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 59
-        versionName "4.1.1"
+        versionCode 60
+        versionName "4.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     useLibrary 'org.apache.http.legacy'
