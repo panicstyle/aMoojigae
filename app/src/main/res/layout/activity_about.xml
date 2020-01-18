@@ -48,7 +48,7 @@
             android:layout_marginTop="16dip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="문의 메일 : panicstyle@gmail.com"
+            android:text="문의메일 : panicstyle@gmail.com"
             android:autoLink="email"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -57,7 +57,7 @@
             android:layout_marginTop="16dip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="문의 홈페이지 : http://www.panicstyle.net/?page_id=5"
+            android:text="앱정보 : https://github.com/panicstyle/aMoojigae/wiki"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:autoLink="web" />
 
