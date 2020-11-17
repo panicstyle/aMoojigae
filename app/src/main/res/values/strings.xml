@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">무지개교육마을</string>
+    <string name="title_recent">최신글</string>
+    <string name="title_recent_memo">최신댓글</string>
+    <string name="title_board">게시판</string>
+    <string name="title_setup">설정</string>
+
     <string name="action_settings">로그인설정</string>
     <string name="action_info">앱정보</string>
 
@@ -34,8 +39,4 @@
     <string name="app_id">ca-app-pub-9032980304073628~9650194793</string>
     <string name="app_unit_id">ca-app-pub-9032980304073628/8033860795</string>
 
-    <string name="title_recent">최신글</string>
-    <string name="title_board">게시판</string>
-    <string name="title_sites">사이트</string>
-    <string name="title_setting">설정</string>
 </resources>

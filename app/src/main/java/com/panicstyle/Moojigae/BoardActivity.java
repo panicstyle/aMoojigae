@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -124,12 +125,6 @@ public class BoardActivity extends AppCompatActivity implements Runnable {
                     Intent intent = new Intent(BoardActivity.this, WebActivity.class);
                     intent.putExtra("ITEMS_TITLE", title);
                     intent.putExtra("ITEMS_LINK", link);
-                    startActivity(intent);
-                } else if (type.contains("recent")) {
-                    Intent intent = new Intent(BoardActivity.this, RecentItemsActivity.class);
-                    intent.putExtra("ITEMS_TITLE", title);
-                    intent.putExtra("ITEMS_TYPE", "list");
-                    intent.putExtra("ITEMS_LINK", m_strRecent);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(BoardActivity.this, ItemsActivity.class);

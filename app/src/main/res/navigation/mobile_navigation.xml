@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.panicstyle.Moojigae.fragment.RecentFragment"
+        android:label="@string/title_recent"
+        tools:layout="@layout/fragment_recent" />
+
+    <fragment
+        android:id="@+id/navigation_recent_memo"
+        android:name="com.panicstyle.Moojigae.fragment.RecentMemoFragment"
+        android:label="@string/title_recent_memo"
+        tools:layout="@layout/fragment_recent_memo" />
+
+    <fragment
+        android:id="@+id/navigation_board"
+        android:name="com.panicstyle.Moojigae.fragment.BoardFragment"
+        android:label="@string/title_board"
+        tools:layout="@layout/fragment_board" />
+
+    <fragment
+        android:id="@+id/navigation_setup"
+        android:name="com.panicstyle.Moojigae.fragment.SetupFragment"
+        android:label="@string/title_setup"
+        tools:layout="@layout/fragment_setup" />
+</navigation>

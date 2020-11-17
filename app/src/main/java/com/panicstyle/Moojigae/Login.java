@@ -6,18 +6,8 @@ import android.content.Context;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.CookieManager;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Login {
 	protected String m_userID;
@@ -27,7 +17,7 @@ public class Login {
 
 	public String m_strErrorMsg = "";
 
-	public int LoginTo(Context context, HttpRequest httpRequest, String userID, String userPW) {
+	public int LoginTo(Context context, CustomHttpRequest httpRequest, String userID, String userPW) {
 
 		String url = GlobalConst.m_strServer + "/login-process.do";
 		String referer = GlobalConst.m_strServer + "/MLogin.do";
@@ -60,7 +50,7 @@ public class Login {
 		}
 	}
 
-	public int Logout(Context context, HttpRequest httpRequest) {
+	public int Logout(Context context, CustomHttpRequest httpRequest) {
 
 		String referer = GlobalConst.m_strServer + "/MLogin.do";
 		String logoutURL = GlobalConst.m_strServer + "/logout.do";
@@ -72,7 +62,7 @@ public class Login {
 		return 1;
 	}
 
-	public int PushRegister(Context context, HttpRequest httpRequest, String userID, String regId) {
+	public int PushRegister(Context context, CustomHttpRequest httpRequest, String userID, String regId) {
 
 		if (userID.isEmpty() || regId.isEmpty()) {
 			return 0;
@@ -101,7 +91,7 @@ public class Login {
 		return 1;
 	}
 
-	public int PushRegisterUpdate(Context context, HttpRequest httpRequest, String userID, String regId, boolean pushYN) {
+	public int PushRegisterUpdate(Context context, CustomHttpRequest httpRequest, String userID, String regId, boolean pushYN) {
 
 		if (userID.isEmpty() || regId.isEmpty()) {
 			return 0;

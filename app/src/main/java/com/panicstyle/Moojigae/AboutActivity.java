@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AboutActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class AboutActivity extends AppCompatActivity {
         
         String versionInfo = "버전 : " + version;
 
-        TextView t = (TextView)findViewById(R.id.textVersion); 
+        TextView t = (TextView)findViewById(R.id.textVersion);
         t.setText(versionInfo);        
                 
     }

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context=".ArticleWriteActivity">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,14 +20,14 @@
         android:hint="제목"
         android:id="@+id/editTitle" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -38,7 +38,7 @@
             android:inputType="textMultiLine"
             android:id="@+id/editContent" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </ScrollView>
     <LinearLayout

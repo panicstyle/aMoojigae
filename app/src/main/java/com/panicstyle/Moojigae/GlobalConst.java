@@ -7,6 +7,10 @@ public class GlobalConst {
     public static String m_strServerName = "jumin.moojigae.or.kr";
     public static String m_strServer = "http://" + m_strServerName;
 
+    public static final String SET_COOKIE_KEY = "Set-Cookie";
+    public static final String COOKIE_KEY = "Cookie";
+    public static final String SESSION_COOKIE = "sessionid";
+
     public static final int NAVI_RECENT = 1;
     public static final int NAVI_BOARD = 2;
     public static final int NAVI_SITE = 3;

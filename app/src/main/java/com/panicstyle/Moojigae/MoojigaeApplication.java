@@ -3,19 +3,16 @@ package com.panicstyle.Moojigae;
 import android.app.Activity;
 import android.app.Application;
 
+import org.apache.http.HttpRequest;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-
 public class MoojigaeApplication extends Application {
 
-    public static HttpRequest m_httpRequest = null;
+    public static CustomHttpRequest m_httpRequest = null;
     public static String m_strUserID = null;
     public static String m_strUserPW = null;
     public static String m_strRegId = null;
@@ -32,12 +29,11 @@ public class MoojigaeApplication extends Application {
 //        PreferenceManager.setDefaultValues(this, android.R.xml.default_values, false);
         super.onCreate();
 
-        m_httpRequest = new HttpRequest();
+        m_httpRequest = new CustomHttpRequest();
         m_httpRequest.httpClient = new DefaultHttpClient();
         m_httpRequest.httpContext = new BasicHttpContext();
         CookieStore cookieStore = new BasicCookieStore();
         m_httpRequest.httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-
     }
 
     @Override
