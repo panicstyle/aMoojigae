@@ -395,7 +395,7 @@ public class ArticleViewActivity extends AppCompatActivity implements Runnable {
         ArticleViewActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webContent.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels - 120, (int) (height * getResources().getDisplayMetrics().density)));
+                webContent.setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels - 60, (int) (height * getResources().getDisplayMetrics().density)));
             }
         });
     }
